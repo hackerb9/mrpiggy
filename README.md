@@ -5,6 +5,6 @@ Just an experimental fork of
 
 ## Todo
 
-[_] Get it to compile under GNU/Linux
+- [ ] Get it to compile under GNU/Linux
 
-[_] Trim it down to run on retro PCs
+- [ ] Trim it down to run on retro PCs
