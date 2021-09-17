@@ -32,9 +32,9 @@
 	bcc -ansi -Md -c $*.c
 #	gcc /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
-# -Cp means Casemap=none
+# -Cp means Casemap=none, -Cu means Casemap=all
 %.o : %.asm
-	jwasm -ms -c -q -Cu $< 
+	jwasm -W0 -ms -c -nologo -Cp $< 
 
 
 # kermit.exe is the first and hence the implied target if none is specified
