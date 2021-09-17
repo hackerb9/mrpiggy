@@ -15,13 +15,14 @@
 ; Last edit
 ; 12 Jan 1995
 
- 	public COMND, comand, ISDEV, ISEOF, PROMPT, TOLOWR, TOUPR, valtab
+ 	public comnd, comand, isdev, iseof, prompt, tolowr, toupr, valtab
 	public parstate, pardone, parfail, nparam, param, lparam, ninter
-	public inter, atparse, atpclr, atdispat, cspb, dspb, MPROMPT, nvaltoa
+	public inter, atparse, atpclr, atdispat, cspb, dspb, mprompt, nvaltoa
 	public savepoff, saveplen, keyboard, fwrtdir, cspb1, filetdate
 	public	fqryenv, ifelse, oldifelse, retbuf, vfile
 	public	rfprep, rgetfile, findkind, rfileptr, rpathname, rfilename
 
+dos	equ	21h
 env	equ	2CH			; environment address in psp
 braceop	equ	7bh			; opening curly brace
 bracecl	equ	7dh			; closing curly brace
@@ -153,18 +154,18 @@ keyboard dw	88			; \v(keyboard) kind of keybd 88/101
 ten	db	10			; for times ten
 
 comand	cmdinfo	<>
-cmer00  db      CR,LF,'?Program internal error, recovering$'
-cmer01	db	CR,LF,'?More parameters are needed$'
-cmer02	db	CR,LF,'?Word "$'
+cmer00  db      cr,lf,'?Program internal error, recovering$'
+cmer01	db	cr,lf,'?More parameters are needed$'
+cmer02	db	cr,lf,'?Word "$'
 cmer03	db	'" is not usable here$'
 cmer04	db	'" is ambiguous$'
-cmer07	db	CR,LF,'?Ignoring extra characters "$'
+cmer07	db	cr,lf,'?Ignoring extra characters "$'
 cmer08	db	'"$'			; "
-cmer09	db	CR,LF,'?Text exceeded available buffer capacity$'
-cmin01	db	' Use one of the following words in this position:',CR,LF,'$'
-stkmsg	db	CR,LF,BELL,'?Exhausted work space! Circular definition?$'
+cmer09	db	cr,lf,'?Text exceeded available buffer capacity$'
+cmin01	db	' Use one of the following words in this position:',cr,lf,'$'
+stkmsg	db	cr,lf,bell,'?Exhausted work space! Circular definition?$'
 moremsg	db	'... more, press a key to continue ...$'
-crlf    db      CR,LF,'$'
+crlf    db      cr,lf,'$'
 ctcmsg	db	5eh,'C$'
 cmunk	db	'unknown'
 errflag	db	0			; non-zero to suppress cmcfrm errors
@@ -502,10 +503,10 @@ cm4:	cmp	ah,cmword		; parse arbitrary word
 	jne	cm5
 	call	cmtxt
 	ret
-cm5:	mov	ah,PRSTR		; else give error
+cm5:	mov	ah,prstr		; else give error
 	mov	dx,offset cmer00	; "?Program internal error"
-	int	DOS
-	jmp	PRSERR			; reparse
+	int	dos
+	jmp	prserr			; reparse
 					; Control-C exit path (far to near)
 cmexit	label	far
 	mov	sp,cmdstk		; restore command entry stack pointer
@@ -564,8 +565,8 @@ cmky2:	call	cmgtch			; read until terminator
 cmky3:	cmp	ah,'?'              	; need help?
 	jne	cmky4			; ne = no
 	call	cmkyhlp			; display help
-	jmp	REPARS
-cmky4:	cmp	ah,ESCAPE		; escape?
+	jmp	repars
+cmky4:	cmp	ah,escape		; escape?
 	jne	cmky6			; ne = no
 	call	cmkyesc			; process escape
 	jc	cmky5			; c = failure (no unique keyword yet)
@@ -580,7 +581,7 @@ cmky4:	cmp	ah,ESCAPE		; escape?
 cmky5:	cmp	cmsiz,0			; started a word yet?
 	je	cmky1			; e = no, ignore escape, keep looking
 	call	cmkyhlp			; display help
-	jmp	REPARS
+	jmp	repars
 
 cmky6:	cmp	cmsiz,0			; length of user's text, empty?
 	je	cmky7			; e = yes, parse error
@@ -605,9 +606,9 @@ cmky7:	cmp	cmsiz,0			; empty table or empty user's text?
 	cmp	comand.cmcr,0		; empty lines allowed?
 	jne	cmky10			; ne = yes, do not complain
 	push	dx
-	mov	ah,PRSTR
+	mov	ah,prstr
 	mov	dx,offset cmer01	; command word expected
-	int	DOS
+	int	dos
 	pop	dx
 	xor	al,al
 	mov	comand.cmquiet,al	; permit echoing again
@@ -646,10 +647,10 @@ cmky8b:	mov	errflag,1		; say already doing error recovery
 	dec	cmrptr			; interactive, backup to terminator
 	mov	bx,cmrptr		; look at it
 	cmp	byte ptr [bx],' '	; got here on space terminator?
-	jne	cmky10			; ne = no, (CR,LF,ff) exit failure
-	mov	ah,PRSTR    		; start a fresh line
+	jne	cmky10			; ne = no, (cr,lf,ff) exit failure
+	mov	ah,prstr		; start a fresh line
 	mov	dx,offset crlf
-	int	DOS
+	int	dos
 	call	bufdel			; cut back buffer to last good char
 	jmp	repars			; reparse interactive lines
 
@@ -706,7 +707,7 @@ esceoc	proc	near			; do normal escape end-of-command
 	push	dx
 	mov	ah,conout		; ring the bell
 	mov	dl,bell
-	int	DOS
+	int	dos
 	pop	dx
 	pop	ax
 	call	bufreset		; reset buffer
@@ -741,17 +742,17 @@ cmkyh3:	mov	ax,[bx]			; length of table keyword
 	mov	byte ptr temp,al	; reset the count
 	mov	ah,prstr
 	mov	dx,offset crlf		; break the line
-	int	DOS
+	int	dos
 cmkyh4:	or	cl,cl			; any keywords found yet?
 	jnz	cmkyh4a			; nz = yes
 	mov	dx,offset cmin01	; start with One of the following: msg
 	mov	ah,prstr
-	int	DOS
+	int	dos
 	inc	cl			; say one keyword has been found
 cmkyh4a:mov	dl,spc			; put two spaces before each keyword
 	mov	ah,conout
-	int	DOS
-	int	DOS
+	int	dos
+	int	dos
 	add	temp,2			; count output chars
 	mov	di,bx			; get current keyword structure
 	add	di,2			; text part
@@ -777,7 +778,7 @@ cmkyh10:mov	al,es:[si]		; read a help msg byte
 	je	cmkyh14			; e = yes, stop
 cmkyh11:mov	ah,conout
 	mov	dl,al
-	int	DOS			; display byte
+	int	dos			; display byte
 	cmp	dl,LF			; line break?
 	jne	cmkyh10			; ne = no
 	inc	bl			; count line
@@ -788,9 +789,9 @@ cmkyh11:mov	ah,conout
 	jc	cmkyh10			; c = yes, ignore more msg
 	mov	ah,prstr
 	mov	dx,offset moremsg	; "... more..." msg
-	int	DOS
+	int	dos
 cmkyh13:mov	ah,coninq		; read the char from file, not device
-	int	DOS
+	int	dos
 	cmp	al,3			; a ^C?
 	je	short cmkyh14		; e = yes, stop the display
 	push	bx			; save line counter
@@ -812,14 +813,14 @@ cmkyh7:	or	cl,cl			; found any keywords?
 	push	dx
 	mov	ah,prstr
 	mov	dx,offset cmer01	; command word expected
-	int	DOS
+	int	dos
 	pop	dx
 	jmp	prserr
 cmkyh8:	mov	kwstat,0		; set keyword not-found status
 	call	cmskw			; display offending keyword
 cmkyh9:	mov	ah,prstr		; start a fresh line
 	mov	dx,offset crlf
-	int	DOS
+	int	dos
 	call	bufdel			; unwrite the "?" (cmrptr is there)
 	ret
 cmkyhlp	endp
@@ -941,7 +942,7 @@ cmskw	proc	near
 	ret				; else say nothing
 cmskw0:	mov	ah,prstr		; not one of the above terminators
 	mov	dx,offset cmer02	; '?Word "'
-	int	DOS
+	int	dos
 	mov	ah,conout
 	mov	cx,cmsiz		; length of word
 	jcxz	cmskw3			; z = null
@@ -954,11 +955,11 @@ cmskw1:	lodsb
 	jae	cmskw2			; ae = no
 	push	ax
 	mov	dl,5eh			; caret
-	int	DOS
+	int	dos
 	pop	ax
 	add	al,'A'-1		; plus ascii bias
 cmskw2:	mov	dl,al			; display chars in word
-	int	DOS
+	int	dos
 	loop	cmskw1
 	pop	si
 cmskw3:	mov	dx,offset cmer03	; '" not usable here.'
@@ -966,7 +967,7 @@ cmskw3:	mov	dx,offset cmer03	; '" not usable here.'
 	jb	cmskw4			; b = not found, a = ambiguous
 	mov	dx,offset cmer04	; '" ambiguous'
 cmskw4:	mov	ah,prstr
-        int	DOS
+        int	dos
 	ret
 cmskw	endp
 ;;;;;;;;;; end of support routines for keyword parsing.
@@ -1097,14 +1098,14 @@ cmtxt12a:
 	jb	cmtxt13			; a = not filled yet
 	mov	ah,conout		; notify user that the buffer is full
 	mov	dl,bell
-	int	DOS
+	int	dos
 	jmp	cmtxt6			; quit
 
 cmtxt13:jmp	cmtxt2
 
 cmtxt14:mov	ah,prstr
 	mov	dx,offset cmer09
-	int	DOS
+	int	dos
 	jmp	prserr			; declare parse error
 cmtxt	endp
 
@@ -1157,14 +1158,14 @@ cmcfr6:	cmp	ah,cr			; the confirmation char?
 	push	dx			; save source pointer
 	mov	ah,prstr
 	mov	dx,offset cmer07	; ?Ignoring extras
-	int	DOS
+	int	dos
 	pop	dx
 	mov	bx,1			; stdout handle, cx=count, dx=src ptr
 	mov	ah,write2		; allow embedded dollar signs
-	int	DOS
+	int	dos
 	mov	ah,prstr
 	mov	dx,offset cmer08	; trailer msg
-	int	DOS
+	int	dos
 cmcfr7:	xor	ax,ax
 	mov	errflag,al
 	call	optionclr		; clear parser options
@@ -1456,7 +1457,7 @@ subst14:cmp	taklev,maxtak		; room in take level?
 	jb	subst15			; b = yes
 	mov	dx,offset stkmsg	; out of work space msg
 	mov	ah,prstr		; display error message
-	int	DOS
+	int	dos
 	jmp	subst17
 
 					; \&char[..]
@@ -1662,7 +1663,7 @@ valtoa	proc	near
 	mov	ax,[bx].takbuf		; old buffer
 	mov	es,ax			; new ES from above
 	mov	ah,freemem		; free it
-	int	DOS
+	int	dos
 	mov	ax,cx			; bytes wanted
 	call	malloc			; get more space
 	mov	bx,takadr
@@ -1783,7 +1784,7 @@ endif	; no_tcp
 valtoa18:cmp	bx,V_ntime		; \v(ntime) (seconds in day)?
 	jne	valtoa19		; ne = no
 	mov	ah,gettim		; get DOS time of day
-	int	DOS			; ch=hh, cl=mm, dh=ss, dl=0.01 sec
+	int	dos			; ch=hh, cl=mm, dh=ss, dl=0.01 sec
 	mov	bx,60
 	mov	al,ch			; hours
 	mul	bl			; to minutes
@@ -2009,7 +2010,7 @@ valtoa31:cmp	bx,V_query		; \v(query)?
 	mov	ax,[bx].takbuf		; old buffer
 	mov	es,ax			; new ES from above
 	mov	ah,freemem		; free it
-	int	DOS
+	int	dos
 	mov	ax,cx			; bytes wanted
 	call	malloc			; get more space
 	mov	bx,takadr
@@ -2064,7 +2065,7 @@ valtoa34b:jmp	valtoa90
 valtoa35:cmp	bx,V_disk		; \v(disk)?
 	jne	valtoa36		; ne = no
 	mov	ah,gcurdsk		; get current disk
-	int	DOS
+	int	dos
 	add	al,'A'			; make 1 == A (not zero)
 	cld
 	stosb
@@ -2166,7 +2167,7 @@ valtoa45:cmp	bx,V_nday		; \v(nday)?
 	jne	valtoa80		; ne = no
 valtoa45a:
 	mov	ah,getdate		; DOS date (cx= yyyy, dh= mm, dl= dd)
-	int	DOS
+	int	dos
 	sub	cx,1900			; make 1900 be zero
 	cmp	dh,3			; month
 	jge	valtoa45b		; ge = beyond Feb
@@ -2235,7 +2236,7 @@ valtoa80:push	bx			; \m(macro_name)
 	jz	valtoa80b		; z = none
 	mov	es,ax
 	mov	ah,freemem		; free it
-	int	DOS
+	int	dos
 valtoa80b:and	[bx].takattr,not take_malloc ; say no more freeing needed
 	pop	es
 valtoa80a:
@@ -2850,7 +2851,7 @@ evalt20e:call	rgetfile		; get item from directory structure
 	mov	[bx].filename,0		; clear name so do search for first
 	mov	dx,offset buff		; restore default dta
 	mov	ah,setdma		; set the dta address
-	int	DOS
+	int	dos
 	mov	ax,filecnt		; report file count
 	call	fdec2di			; convert to ASCII string
 	mov	bx,takadr
@@ -2867,7 +2868,7 @@ evalt21:cmp	evaltype,F_nextfile	; \fnextfile()?
 	pushf				; preserve carry status
 	mov	dx,offset buff		; point at dta
 	mov	ah,setdma		; set the dta address
-	int	DOS
+	int	dos
 	popf
 	jc	evalt21a		; c = failure
 	mov	si,offset rpathname	; report path\filename
@@ -3354,7 +3355,7 @@ evarg22:call	bufreset		; reset cmwptr
 	push	dx
 	mov	ah,conout		; ring the bell
 	mov	dl,bell
-	int	DOS
+	int	dos
 	pop	dx
 	pop	ax
 	jmp	evarg12			; get next arg byte
@@ -3444,7 +3445,7 @@ evmem	proc	near
 	shr	bx,cl			; convert to paragraphs (divide by 16)
 	mov	cx,bx			; remember desired paragraphs
 	mov	ah,alloc		; allocate a memory block
-	int	DOS			; ax=seg, bx=paragraphs
+	int	dos			; ax=seg, bx=paragraphs
 	jc	evmem3			; c = error, not enough memory
  	cmp	bx,cx			; obtained vs wanted
 	jae	evmem2			; ae = enough
@@ -3461,7 +3462,7 @@ evmem	proc	near
 	push	es
 	mov	es,ax			; new allocated segment
 	mov	ah,freemem		; free it
-	int	DOS
+	int	dos
 	pop	es
 	jmp	short evmem3		; use original segment
 
@@ -3477,7 +3478,7 @@ evmem2:	mov	cl,4
 	push	es
 	mov	es,ax			; old allocated segment
 	mov	ah,freemem		; free old segment
-	int	DOS
+	int	dos
 	pop	es
 evmem2a:mov	di,2			; new offset
 	mov	bx,takadr
@@ -3569,11 +3570,11 @@ filedate proc	near
 	push	dx
 	mov	dx,offset buff		; use default dta
 	mov	ah,setdma		; set the dta address
-	int	DOS
+	int	dos
 	pop	dx
 	mov	cx,10h			; find dir and files
 	mov	ah,first2		; DOS 2.0 search for first
-	int	DOS			; get file's characteristics
+	int	dos			; get file's characteristics
 	jnc	filed1			; nc = success
 	ret				; fail
 filed1:	mov	bx,offset buff		; default dta
@@ -3687,12 +3688,12 @@ rfprep5:push	cx			; see if pattern is a directory
 	push	dx
 	mov	dx,offset buff		; default dta
 	mov	ah,setdma
-	int	DOS
+	int	dos
 	pop	dx			; filename to ds:dx
 	push	dx			; save again
 	mov	cx,10h			; find dir and files
 	mov	ah,first2		; DOS 2.0 search for first
-	int	DOS
+	int	dos
 	pop	dx
 	pop	cx
 	jc	rfprep1			; c = nothing found
@@ -3743,7 +3744,7 @@ rgetfile proc far
 	mov	bx,rfileptr		; current dta pointer
 	mov	dx,bx			; point at dta
 	mov	ah,setdma		; set the dta address
-	int	DOS
+	int	dos
 rgfile1:cmp	[bx].filename,0		; filename established?
 	jnz	rgfile5			; nz = yes, do search for next
 	push	di
@@ -3759,7 +3760,7 @@ rgfile1:cmp	[bx].filename,0		; filename established?
 	jnz	rgfile2			; nz = yes
 	mov	cx,10h			; directories and files
 rgfile2:mov	ah,first2		; DOS 2.0 search for first
-	int	DOS			; get file's characteristics
+	int	dos			; get file's characteristics
 	jc	rgfile6			; c = failed
 					; separate files from directories
 rgfile3:test	findkind,1		; want files only?
@@ -3774,7 +3775,7 @@ rgfile4:inc	filecnt			; file count
 					; search for next
 rgfile5:mov	dx,bx			; dta pointer
 	mov	ah,next2		; DOS 2.0 search for next
-	int	DOS
+	int	dos
 	jnc	rgfile3			; nc = success, found entry, filter
 
 					; walk tree when out of items
@@ -3810,7 +3811,7 @@ rnxtdir proc	near
 	mov	word ptr [di+2],0+'*'
 	mov	cx,10h			; find dir and files
 	mov	ah,first2		; DOS 2.0 search for first
-	int	DOS
+	int	dos
 	mov	byte ptr [di],0		; remove the '*.*'
 	pop	di
 	jnc	rnxtdir2		; nc = success
@@ -3825,7 +3826,7 @@ rnxtdir2:test	byte ptr [bx]+21,10h	; directory?
 
 rnxtdir3:mov	dx,bx			; dta pointer
 	mov	ah,next2		; DOS 2.0 search for next
-	int	DOS
+	int	dos
 	jnc	rnxtdir2		; nc = success
 	ret				; failure to find another
 rnxtdir	endp
@@ -3861,7 +3862,7 @@ rprvdir3:mov	byte ptr [di+1],0	; terminate
 	mov	dx,rfileptr
 	mov	bx,dx
 	mov	ah,setdma		; set the dta address
-	int	DOS
+	int	dos
 	pop	di
 	clc
 	ret
@@ -3898,7 +3899,7 @@ rsubdir1:cmp	rfileptr,offset fileio + (maxdepth - 1) * size fileiost
 	add	rfileptr,size fileiost	; size of structure
 	mov	dx,rfileptr		; point at dta
 	mov	ah,setdma		; set the dta address
-	int	DOS
+	int	dos
 	mov	bx,dx
 	mov	[bx].filename,0		; clear filename field
 	clc				; success
@@ -4041,7 +4042,7 @@ fqryenv	endp
 ; BS & DEL, Tab becomes space, act on Control-C, pass Control-U and Control-W.
 ; Do echoing unless comand.cmquiet is non-zero. Do semicolon comments in Take
 ; and indirect stdin files (\; means literal semicolon). Return char in AL.
-cmgetc	proc	near			; Basic raw character reader
+CMGETC	proc	near			; Basic raw character reader
 	mov	read_source,0		; assume direct reading
 	mov	endedbackslash,0	; clear end of sub scan flag
 cmget01:cmp	comand.cmdirect,0	; read directly?
@@ -4055,7 +4056,7 @@ cmget02:call	isdev			; is stdin a device or a file?
 cmget20:call	iseof			; see if file is empty
 	jc	cmget21			; c = EOF on disk file
 	mov	ah,coninq		; read the char from file, not device
-	int	DOS
+	int	dos
 	cmp	al,cr			; is it a cr?
 	je	cmget01			; yes, ignore and read next char
 	cmp	al,ctlz			; Control-Z?
@@ -4141,10 +4142,10 @@ cmget5b:mov	al,CR			; report CR as last char
 	jmp	short cmget12
 					; read from tty device
 cmget10:mov	ah,coninq		; Get a char from device, not file
-	int	DOS			;  with no echoing
+	int	dos			;  with no echoing
 	or	al,al
 	jnz	cmget11			; ignore null bytes of special keys
-	int	DOS			; read and discard scan code byte
+	int	dos			; read and discard scan code byte
 	jmp	short cmget10		; try again
 cmget11:cmp	al,LF			; LF?
 	jne	cmget12			; ne = no
@@ -4165,7 +4166,7 @@ cmget14:cmp	in_showprompt,0		; Non-zero when in showprompt
 	mov	ah,prstr		; Control-C handler
 	push	dx
 	mov	dx,offset ctcmsg	; show Control-C
-	int	DOS
+	int	dos
 	pop	dx
 	mov	flags.cxzflg,'C'	; tell others the news
 	jmp	cmexit			; fail immediately via longjmp
@@ -4177,13 +4178,13 @@ cmgetc	endp
 ; terminators). Do ^U, ^W editing, convert FF to CR plus clear screen.
 ; Edit "-<cr>" as line continuation, "\-<cr>" as "-<end of line>".
 ; Return char in AH.
-cminbf	proc	near			; Buffer reader, final editor
+CMINBF	proc	near			; Buffer reader, final editor
 	cmp	cmwptr,offset cmdbuf+size cmdbuf-3 ; max buffer size - 3
 	jb	cminb1			; b = not full for writing
 	mov	ah,conout		; almost full, notify user
 	push	dx
 	mov	dl,bell
-	int	DOS
+	int	dos
 	pop	dx
 	cmp	cmrptr,offset cmdbuf+size cmdbuf ; reading beyond buffer?
 	jb	cminb1			; b = no
@@ -4194,7 +4195,7 @@ cminb0:	mov	al,taklev		; current Take level
 	jmp	short cminb0		; do all
 cminb0a:mov	ah,prstr
 	mov	dx,offset cmer09	; command too long
-	int	DOS
+	int	dos
 	jmp	prserr			; overflow = parse error
 
 cminb1:	push	bx
@@ -4281,10 +4282,10 @@ cminb4f:
 	push	dx
 	mov	dl,ah
 	mov	ah,conout		; echo comma to screen now
-	int	DOS
+	int 	dos
 	mov	ah,prstr		; and then visually break the line
 	mov	dx,offset crlf
-	int	DOS
+	int	dos
 	pop	dx
 	pop	ax
 cminb4g:pop	bx
@@ -4329,14 +4330,14 @@ cminb4a:push	ax			; save the char
 	push	dx
 	mov	dl,5eh			; caret
 	mov	ah,conout
-	int	DOS
+	int	dos
 	pop	dx
 	pop	ax
 	add	ah,'A'-1		; make control code printable
 cminb4c:push	dx
 	mov	dl,ah
 	mov	ah,conout
-	int	DOS			; echo it ourselves
+	int	dos			; echo it ourselves
 	pop	dx
 cminb4d:pop	ax			; and return char in ah
 
@@ -4374,7 +4375,7 @@ cminbf	endp
 ; If a \blah parse fails then report the \ to the caller and start over, 
 ; without echo, on the char following that \. Replay_skip does the \
 ; passage without calling subst, replay_cnt rereads bytes after it.
-cmgtch	proc	near			; return char in AH, from rescan buf
+CMGTCH	proc	near			; return char in AH, from rescan buf
 	cmp	replay_cnt,0		; starting a replay?
 	je	cmgtc5			; e = no
 	mov	replay_skip,1		; set latch to skip subst on 1st byte
@@ -4686,7 +4687,7 @@ PRSERR	PROC FAR
 	mov	cmwptr,offset cmdbuf	; initialize write pointer
 	mov	ah,prstr
 	mov	dx,offset crlf		; leave old line, start a new one
-	int	DOS
+	int	dos
 	call	rprompt			; restore master prompt level
 					; reparse current line
 REPARS:	mov	cmrptr,offset cmdbuf	; reinit read pointer
@@ -4779,7 +4780,7 @@ wrtdate	proc	near
 	push	cx
 	push	dx
 	mov	ah,getdate		; DOS date (cx= yyyy, dh= mm, dl= dd)
-	int	DOS
+	int	dos
 	xor	ah,ah
 	mov	al,dl			; day
 	call	wrtdat5
@@ -4831,7 +4832,7 @@ wrtkbd	endp
 ; where NDATE is YYYYMMDD
 wrtndate proc	near
 	mov	ah,getdate		; DOS date (cx= yyyy, dh= mm, dl= dd)
-	int	DOS
+	int	dos
 	push	dx			; save dx
 	mov	ax,cx			; year
 	call	fdec2di			; convert it
@@ -4860,7 +4861,7 @@ wrtndate endp
 wrtdir	proc	near
 	push	si
 	mov	ah,gcurdsk		; get current disk
-	int	DOS
+	int	dos
 	add	al,'A'			; make al = 0 == 'A'
 	stosb
 	mov	ax,'\:'
@@ -4871,7 +4872,7 @@ wrtdir	proc	near
 	mov	ds,cx
 	mov	ah,gcd			; get current directory
 	xor	dl,dl			; use current drive
-	int	DOS			; get ds:si = asciiz path (no drive)
+	int	dos			; get ds:si = asciiz path (no drive)
 	pop	ds
 	mov	dx,si
 	push	ds
@@ -4969,7 +4970,7 @@ wrtsystem endp
 ; write \v(TIME) text to ds:di
 wrttime	proc	near
 	mov	ah,gettim		; DOS tod (ch=hh, cl=mm, dh=ss, dl=.s)
-	int	DOS
+	int	dos
 	push	dx			; save dx
 	xor	ah,ah
 	mov	al,ch			; Hours
@@ -5108,7 +5109,7 @@ PROMPT	PROC  NEAR
 	ret				; yes, return
 promp1:	mov	ah,prstr
 	mov	dx,offset crlf
-	int	DOS
+	int	dos
 	mov	dx,comand.cmprmp	; prompt pointer
 	call	prtasz			; show asciiz prompt string
 	clc
@@ -5219,7 +5220,7 @@ ISDEV	PROC	FAR			; Set carry if STDIN is non-disk
 	xor	bx,bx			; handle 0 is stdin
 	xor	al,al			; get device info
 	mov	ah,ioctl
-	int	DOS
+	int	dos
 	rcl	dl,1			; put ISDEV bit into the carry bit
 	pop	dx			; carry is set if device
 	pop	bx
@@ -5234,12 +5235,12 @@ ISEOF	PROC	FAR			; Set carry if STDIN is at EOF
 	xor	bx,bx			; handle 0 is stdin
 	xor	al,al			; get device info
 	mov	ah,ioctl
-	int	DOS
+	int	dos
 	mov	ah,ioctl
 	mov	al,6			; get handle input status, set al
 	test	dl,80h			; bit set if handle is for a device
 	jnz	iseof1			; nz = device, always ready (al != 0)
-	int	DOS
+	int	dos
 iseof1:	or	al,al			; EOF?
 	pop	dx
 	pop	bx
