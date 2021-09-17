@@ -1,4 +1,7 @@
+# Makefile: Beginning to port this to GNU Make. Sept 2021
+
 # File	MSVIBM.MAK						2 Feb 1991
+
 # Make file for MS Kermit using Microsoft's Make v4 and later and NMK.
 # Written by Joe R. Doupnik
 #
@@ -21,91 +24,51 @@
 #    /Zl to say no default library
 #    /Of for p-code quoting (supposed to be the default, but is broken)
 #    /nologo stops displaying MSC copyright notice on every compile
-# The inference macros below call CL and MASM to create .obj modules.
+# The inference macros below call CL and MASM to create .o modules.
 
-.c.obj:
- 	cl /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
+#    -Md for small memory model 64KB MSDOS executable COM file.
+#    -L  don't add default library to search list
+%.o : %.c
+	bcc -ansi -Md -c $*.c
+#	gcc /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
-.asm.obj:
- 	masm /mx $*.asm;
+# -Cp means Casemap=none
+%.o : %.asm
+	jwasm -ms -c -q -Cu $< 
+
 
 # kermit.exe is the first and hence the implied target if none is specified
 
-kermit.exe:	msscmd.obj msscom.obj mssfil.obj mssker.obj mssrcv.obj\
-		mssscp.obj msssen.obj mssser.obj mssset.obj msssho.obj\
-		msster.obj msuibm.obj msgibm.obj msxibm.obj msyibm.obj\
-		mszibm.obj msntni.obj msnpdi.obj msntnd.obj msntcp.obj\
- 		msnsed.obj msndns.obj msnarp.obj msnbtp.obj msnicm.obj\
-		msnpkt.obj msnlib.obj msnut1.obj
-	LINK @ker.lnk
+objects = commandparser.o communication.o filehandling.o main.o		\
+	receive.o script.o send.o server.o setcommand.o showcommand.o	\
+	terminalemulation.o ibmkeyboard.o graphics.o ibmspecificx.o	\
+	ibmspecificy.o ibmspecificz.o telnetinterface.o pdi.o		\
+	telnetdriver.o tcp.o ethsupport.o dns.o arp.o bootp.o icmp.o	\
+	packetdriver.o netlibc.o netutil.o
 
-# These are the dependency relations (.obj depends on .asm/.c and .h):
 
-msscmd.obj:	msscmd.asm mssdef.h
+kermit.exe:	$(objects)
+	bcc -L -o $@ $^
 
-msscom.obj:	msscom.asm mssdef.h
+# These are the dependency relations (.o depends on .asm/.c and .h):
 
-mssfil.obj:	mssfil.asm mssdef.h
+commandparser.o communication.o filehandling.o main.o receive.o script.o send.o server.o setcommand.o showcommand.o terminalemulation.o ibmkeyboard.o graphics.o ibmspecificx.o ibmspecificy.o ibmspecificz.o :	symboldefs.h
 
-mssker.obj:	mssker.asm mssdef.h
-
-mssrcv.obj:	mssrcv.asm mssdef.h
-
-mssscp.obj:	mssscp.asm mssdef.h
-
-msssen.obj:	msssen.asm mssdef.h
-
-mssser.obj:	mssser.asm mssdef.h
-
-mssset.obj:	mssset.asm mssdef.h
-
-msssho.obj:	msssho.asm mssdef.h
-
-msster.obj:	msster.asm mssdef.h
-
-msuibm.obj:	msuibm.asm mssdef.h
-
-msgibm.obj:	msgibm.asm mssdef.h
-
-msxibm.obj:	msxibm.asm mssdef.h
-
-msyibm.obj:	msyibm.asm mssdef.h
-
-mszibm.obj:	mszibm.asm mssdef.h
 
 # Files below are for TCP/IP support
 
-msntni.obj:	msntni.asm mssdef.h
 
-msnpdi.obj:	msnpdi.asm
+telnetinterface.o:	symboldefs.h
 
-msnut1.obj:	msnut1.asm
 
-msntnd.obj:	msntnd.c msntcp.h msnlib.h
+telnetdriver.o tcp.o ethsupport.o dns.o arp.o bootp.o icmp.o packetdriver.o netlibc.o:	netlibc.h
 
-msntcp.obj:	msntcp.c msntcp.h msnlib.h
 
-msnsed.obj:	msnsed.c msntcp.h msnlib.h
 
-msndns.obj:	msndns.c msntcp.h msnlib.h
+.PHONY : clean
+clean :
+	rm kermit.exe $(objects) 2>/dev/null || true
 
-msnarp.obj:	msnarp.c msntcp.h msnlib.h
 
-msnbtp.obj:	msnbtp.c msntcp.h msnlib.h
 
-msnicm.obj:	msnicm.c msntcp.h msnlib.h
-
-msnpkt.obj:	msnpkt.c msntcp.h msnlib.h
-
-msnlib.obj:	msnlib.c msnlib.h
-
-# Do the items above when Kermit.exe is rebuilt. Notice the use of a command
-# file for Link because the list of object files is too long for one line.
-# A sample command file ker.lnk is:
-# msscmd+msscom+mssfil+mssker+mssrcv+mssscp+msssen+mssser+
-# mssset+msssho+msster+msgibm+msuibm+msxibm+msyibm+mszibm+
-# msntni+msnpdi+msntnd+msntcp+msnsed+msndns+msnarp+msnbtp+
-# msnicm+msnpkt+msnlib+msnut1
-# Kermit/nodefaultlib;
-#
 # End of Kermit Make file.
