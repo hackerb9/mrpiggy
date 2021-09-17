@@ -1,4 +1,4 @@
-   	NAME	msscmd
+;   	NAME	msscmd
 ; File MSSCMD.ASM
 	include mssdef.h
 ;	Copyright (C) 1982, 1999, Trustees of Columbia University in the 
@@ -22,6 +22,7 @@
 	public	fqryenv, ifelse, oldifelse, retbuf, vfile
 	public	rfprep, rgetfile, findkind, rfileptr, rpathname, rfilename
 
+dos	equ	21h
 env	equ	2CH			; environment address in psp
 braceop	equ	7bh			; opening curly brace
 bracecl	equ	7dh			; closing curly brace
@@ -159,7 +160,7 @@ cmer02	db	cr,lf,'?Word "$'
 cmer03	db	'" is not usable here$'
 cmer04	db	'" is ambiguous$'
 cmer07	db	cr,lf,'?Ignoring extra characters "$'
-cmer08	db	'"$'
+cmer08	db	'"$'			; "
 cmer09	db	cr,lf,'?Text exceeded available buffer capacity$'
 cmin01	db	' Use one of the following words in this position:',cr,lf,'$'
 stkmsg	db	cr,lf,bell,'?Exhausted work space! Circular definition?$'
@@ -4091,7 +4092,7 @@ cmget4:	push	si			; read from Take non-empty buffer
 	inc	si
 	mov	[bx].takptr,si		; move buffer pointer
 	pop	si
-	dec	[bx].takcnt		; decrease number of bytes remaining
+	dec	WORD PTR [bx].takcnt  	; decrease number of bytes remaining
 	cmp	read_source,take_sub	; substitution macro?
 	jne	cmget4b			; ne = no
 	cmp	[bx].takcnt,0		; read last byte?
