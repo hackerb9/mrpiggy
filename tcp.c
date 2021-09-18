@@ -767,8 +767,19 @@ include:
 	return (&slot->iphdr); 		/* use this datagram pointer */
 }
 
+/* XXXXX
+
+   Note from hackerb9: It is going to be tricky to use bcc for the
+   tcp.c routine as it does not support FAR pointers. As a test, let's
+   just remove the keyword FAR and see what happens.
+
+   In symboldefs.h: #define FAR _far, which is no better.
+*/
+#define FAR
+
 static int
-udp_write(udp_Socket *s, byte FAR *datap, int len)
+//udp_write(udp_Socket *s, byte FAR *datap, int len)
+udp_write(udp_Socket *s, byte *datap, int len)
 {
 	tcp_PseudoHeader ph;
 	struct pkt
