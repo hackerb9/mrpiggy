@@ -1728,7 +1728,7 @@ valtoa11:cmp	bx,V_speed		; \v(speed)?
 	call	fgetbaud		; read baud rate from hardware
 	pop	di
 	mov	bx,portval
-	mov	ax,[bx].baud
+	mov	ax,[bx].prtinfo.baud
 	cmp	al,byte ptr bdtab	; index versus number of table entries
 	jb	valtoa11a		; b = index is in the table
 	mov	si,offset cmunk-2	; unrecognized value, say "unknown"
@@ -1848,7 +1848,7 @@ endif	; no_tcp
 valtoa21:cmp	bx,V_parity		; \v(parity)?
 	jne	valtoa22		; ne = no
 	mov	bx,portval
-	mov	bl,[bx].parflg		; parity
+	mov	bl,[bx].prtinfo.parflg		; parity
 	xor	bh,bh
 	shl	bx,1			; address words
 	cld
@@ -1862,7 +1862,7 @@ valtoa21a:lodsb
 
 valtoa22:cmp	bx,V_carrier		; \v(carrier)?
 	jne	valtoa23		; ne = no
-	mov	bl,flags.carrier	; carrier
+	mov	bl,flags.flginfo.carrier	; carrier
 	and	bl,1			; just one bit
 	xor	bh,bh
 	shl	bx,1			; address words
@@ -2039,7 +2039,7 @@ valtoa33:cmp	bx,V_charset		; \v(charset)?
 	jne	valtoa34		; ne = no
 	mov	ax,'PC'
 	stosw				; CP prefix
-	mov	ax,flags.chrset		; get current Code Page
+	mov	ax,flags.flginfo.chrset		; get current Code Page
 	call	fdec2di
 	jmp	valtoa90
 
@@ -2848,7 +2848,7 @@ evalt20e:call	rgetfile		; get item from directory structure
 	mov	dx,argptr		; filename
 	mov	cx,arglen		; length of it
 	call	rfprep			; prepare filespec for \fnextfile()
-	mov	[bx].filename,0		; clear name so do search for first
+	mov	[bx].fileiost.filename,0		; clear name so do search for first
 	mov	dx,offset buff		; restore default dta
 	mov	ah,setdma		; set the dta address
 	int	dos
@@ -2879,7 +2879,7 @@ evalt21:cmp	evaltype,F_nextfile	; \fnextfile()?
 	push	ax			; save AH slash counter
 	mov	temp,dx			; byte count
 	mov	si,rfileptr 		; current filename from DOS
-	lea	dx,[si].filename
+	lea	dx,[si].fileiost.filename
 	mov	si,dx			; for ev21wrk etc below
 	call	strlen			; length of name
 	pop	ax			; recover AH slash counter
@@ -3731,7 +3731,7 @@ rfprep3:push	dx
 rfprep4:pop	di
 	mov	bx,offset fileio
 	mov	rfileptr,bx		; point to fileio array for dta
-	mov	[bx].filename,0		; clear name to do find first
+	mov	[bx].fileiost.filename,0		; clear name to do find first
 	ret
 rfprep	endp
 
@@ -3745,7 +3745,7 @@ rgetfile proc far
 	mov	dx,bx			; point at dta
 	mov	ah,setdma		; set the dta address
 	int	dos
-rgfile1:cmp	[bx].filename,0		; filename established?
+rgfile1:cmp	[bx].fileiost.filename,0		; filename established?
 	jnz	rgfile5			; nz = yes, do search for next
 	push	di
 	mov	di,offset decbuf	; scratch buffer
@@ -3767,7 +3767,7 @@ rgfile3:test	findkind,1		; want files only?
 	jnz	rgfile4			; nz = yes, done
 	test	byte ptr [bx]+21,10h	; directory?
 	jz	rgfile5			; z = no, try again
-	cmp	[bx].filename,'.'	; dot or dot-dot?
+	cmp	[bx].fileiost.filename,'.'	; dot or dot-dot?
 	je	rgfile5			; e = yes, ignore dots, search again
 rgfile4:inc	filecnt			; file count
 	clc				; success
@@ -3781,7 +3781,7 @@ rgfile5:mov	dx,bx			; dta pointer
 					; walk tree when out of items
 rgfile6:test	findkind,4		; recursion allowed?
 	jz	rgfile9			; z = no, done (failed)
-	mov	[bx].filename,0		; clear found name, for find first
+	mov	[bx].fileiost.filename,0		; clear found name, for find first
 rgfile7:call	rnxtdir			; get next directory at this level
 	jc	rgfile8			; c = failure, none, go up tree
 	call	rsubdir			; step into this subdir
@@ -3800,7 +3800,7 @@ rgetfile endp
 ; Reuse current dta.
 rnxtdir proc	near
 	mov	bx,rfileptr		; current dta
-	cmp	byte ptr [bx].filename,0 ; any name pattern yet?
+	cmp	byte ptr [bx].fileiost.filename,0 ; any name pattern yet?
 	jne	rnxtdir3		; ne = yes, use get next
 	push	di
 	mov	di,offset rpathname	; path
@@ -3819,7 +3819,7 @@ rnxtdir proc	near
 
 rnxtdir2:test	byte ptr [bx]+21,10h	; directory?
 	jz	rnxtdir3		; z = no, must be regular file
-	cmp	[bx].filename,'.'	; dot or dot-dot?
+	cmp	[bx].fileiost.filename,'.'	; dot or dot-dot?
 	je	rnxtdir3		; e = yes, ignore, keep looking
 	clc				; say success
 	ret
@@ -3878,7 +3878,7 @@ rsubdir	proc	near
 	mov	dx,di
 	call	strlen			; get length of this part
 	mov	ax,cx			; length
-	lea	si,[bx].filename	; get new directory component
+	lea	si,[bx].fileiost.filename	; get new directory component
 	mov	dx,si
 	call	strlen			; length of addition
 	add	ax,cx			; combined length
@@ -3901,7 +3901,7 @@ rsubdir1:cmp	rfileptr,offset fileio + (maxdepth - 1) * size fileiost
 	mov	ah,setdma		; set the dta address
 	int	dos
 	mov	bx,dx
-	mov	[bx].filename,0		; clear filename field
+	mov	[bx].fileiost.filename,0		; clear filename field
 	clc				; success
 	ret
 rsubdir	endp
