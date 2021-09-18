@@ -30,11 +30,18 @@
 #    -L  don't add default library to search list
 %.o : %.c
 	bcc -ansi -Md -c $*.c
-#	gcc /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
+#	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
-# -Cp means Casemap=none, -Cu means Casemap=all
+
+# -Zm MASM v5.1 SYNTAX (don't need to qualify fields with structure names) 
+# -ms ? Small memory model?
+# -Zp1 for pack structures on one byte boundaries
+# -Cu means Casemap=all, (-Cp means Casemap=none )
+# -nologo stops displaying JWASM copyright notice on every compile
+# -e1000 show up to 1000 errors
+# -W3
 %.o : %.asm
-	jwasm -W0 -ms -c -nologo -Cp $< 
+	jwasm -Zm -ms -Zp1 -Cu -nologo -W3 -e1000 $< 
 
 
 # kermit.exe is the first and hence the implied target if none is specified
