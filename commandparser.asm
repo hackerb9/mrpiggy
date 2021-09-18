@@ -4170,7 +4170,7 @@ cmget14:cmp	in_showprompt,0		; Non-zero when in showprompt
 	pop	dx
 	mov	flags.cxzflg,'C'	; tell others the news
 	jmp	cmexit			; fail immediately via longjmp
-cmgetc	endp
+CMGETC	endp
 
 ; Read chars from user (cmgetc). Detect terminators. Reads from buffer
 ; cmbuf. Set read pointer cmrptr to next free buffer byte if
@@ -4364,7 +4364,7 @@ cminb6: cmp	cmwptr,offset cmdbuf	; parsed any chars yet?
 	jmp	prserr			; If not, just start over
 cminb7:	clc
 	ret
-cminbf	endp
+CMINBF	endp
 
 ; Read chars from cminbf. Cmrptr points to next char to be read.
 ; Compresses repeated spaces if cmsflg is non-zero. Exit with cmrptr pointing
@@ -4472,7 +4472,7 @@ cmgtc3d:clc				; carry clear for non-terminator
 cmgtc4:	dec	cmrptr			; point at terminating char
 	stc				; set carry to say it is a terminator
 	ret
-cmgtch	endp
+CMGTCH	endp
 
 ; Reset cmdbuf write pointer (cmwptr) to where the read pointer
 ; (cmrptr) is now. Discards material not yet read.
