@@ -1189,7 +1189,7 @@ subst	proc	near
 	je	subst0a			; e = no
 	push	bx
 	mov	bx,takadr
-	cmp	[bx].takper,0		; expand macros?
+	cmp	[bx].takinfo.takper,0		; expand macros?
 	pop	bx
 	je	subst0a			; e = yes
 subst0:	clc				; report out to application
@@ -1537,8 +1537,8 @@ subst20h:mov	es,ax			; string seg
 	call	takopen_sub		; open take as text substitution
 	jc	subst17			; c = cannot open
 	mov	bx,takadr		; pointer to new Take structure
-	mov	[bx].takbuf,es		; segment of Take buffer
-	mov	[bx].takcnt,cx		; number of unread bytes
+	mov	[bx].takinfo.takbuf,es		; segment of Take buffer
+	mov	[bx].takinfo.takcnt,cx		; number of unread bytes
 	jmp	subst17
 
 subst20f:pop	si			; failure
@@ -1552,21 +1552,21 @@ subst15:mov	subcnt,0		; clear match indicator
 	call	malloc
 	jc	subst17			; c = failed
 	mov	bx,takadr		; point to structure
-	or	[bx].takattr,take_malloc ; remember to dispose via takclos
-	mov	[bx].takbuf,ax		; seg of buffer
+	or	[bx].takinfo.takattr,take_malloc ; remember to dispose via takclos
+	mov	[bx].takinfo.takbuf,ax		; seg of buffer
 	mov	es,ax			; ES:DI will be buffer pointer
-	mov	di,[bx].takptr		; where to write next
-	mov	[bx].takper,0		; expand macros
+	mov	di,[bx].takinfo.takptr		; where to write next
+	mov	[bx].takinfo.takper,0		; expand macros
 cmp subtype,'v'	; \v(..)?
 je subst16b	; e = yes, don't expand macros within it
 	cmp	subtype,'m'		; \m(..)?
 	jne	subst16a		; ne = no
 subst16b:
-	mov	[bx].takper,1		; do not expand macros in \m(..)
+	mov	[bx].takinfo.takper,1		; do not expand macros in \m(..)
 subst16a:mov	bx,cx			; value command
 	call	valtoa			; make text be an internal macro
 	mov	bx,takadr
-	mov	[bx].takcnt,di		; length
+	mov	[bx].takinfo.takcnt,di		; length
 subst17:
 	pop	dx
 	mov	subtype,0
@@ -1660,16 +1660,16 @@ valtoa	proc	near
 	cmp	cx,tbufsiz-2		; greater than current buffer?
 	jbe	valtoa0a		; be = no
 	push	cx
-	mov	ax,[bx].takbuf		; old buffer
+	mov	ax,[bx].takinfo.takbuf		; old buffer
 	mov	es,ax			; new ES from above
 	mov	ah,freemem		; free it
 	int	dos
 	mov	ax,cx			; bytes wanted
 	call	malloc			; get more space
 	mov	bx,takadr
-	mov	[bx].takbuf,ax		; seg of macro def
+	mov	[bx].takinfo.takbuf,ax		; seg of macro def
 	mov	ES,ax			; new ES
-	or	[bx].takattr,take_malloc ; remember to dispose via takclos
+	or	[bx].takinfo.takattr,take_malloc ; remember to dispose via takclos
 	pop	cx
 valtoa0a:
 	push	si
@@ -2007,16 +2007,16 @@ valtoa31:cmp	bx,V_query		; \v(query)?
 	cmp	cx,tbufsiz-2		; greater than current buffer?
 	jbe	valtoa31a		; be = no
 	push	cx
-	mov	ax,[bx].takbuf		; old buffer
+	mov	ax,[bx].takinfo.takbuf		; old buffer
 	mov	es,ax			; new ES from above
 	mov	ah,freemem		; free it
 	int	dos
 	mov	ax,cx			; bytes wanted
 	call	malloc			; get more space
 	mov	bx,takadr
-	mov	[bx].takbuf,ax		; seg of macro def
+	mov	[bx].takinfo.takbuf,ax		; seg of macro def
 	mov	ES,ax			; new ES
-	or	[bx].takattr,take_malloc ; remember to dispose via takclos
+	or	[bx].takinfo.takattr,take_malloc ; remember to dispose via takclos
 	pop	cx
 
 valtoa31a:push	ds
@@ -2228,20 +2228,20 @@ valtoa80:push	bx			; \m(macro_name)
 	push	es
 	mov	di,bx			; save seg of macro def
 	mov	bx,takadr
-	test	[bx].takattr,take_malloc ; buffer already allocated?
+	test	[bx].takinfo.takattr,take_malloc ; buffer already allocated?
 	jz	valtoa80a		; z = no
 	push	es
-	mov	ax,[bx].takbuf		; old buffer
+	mov	ax,[bx].takinfo.takbuf		; old buffer
 	or	ax,ax			; if any allocated
 	jz	valtoa80b		; z = none
 	mov	es,ax
 	mov	ah,freemem		; free it
 	int	dos
-valtoa80b:and	[bx].takattr,not take_malloc ; say no more freeing needed
+valtoa80b:and	[bx].takinfo.takattr,not take_malloc ; say no more freeing needed
 	pop	es
 valtoa80a:
-	mov	[bx].takbuf,di		; seg of macro def
-	mov	[bx].takptr,2		; offset of two
+	mov	[bx].takinfo.takbuf,di		; seg of macro def
+	mov	[bx].takinfo.takptr,2		; offset of two
 	mov	es,di
 	mov	cx,es:[0]		; get length of string
 	pop	es
@@ -2294,30 +2294,30 @@ evalt5c:mov	bx,takadr		; Take structure
 	mov	ax,tbufsiz		; bytes of buffer space wanted
 	call	malloc
 	jc	evalt5b			; c = failed
-	mov	[bx].takbuf,ax		; seg of allocated buffer
-	or	[bx].takattr,take_malloc ; remember to dispose via takclos
+	mov	[bx].takinfo.takbuf,ax		; seg of allocated buffer
+	or	[bx].takinfo.takattr,take_malloc ; remember to dispose via takclos
 	mov	es,ax
 	mov	word ptr es:[0],tbufsiz
-	mov	di,[bx].takptr		; where to start writing
-	mov	[bx].takcnt,0		; number of unread bytes
-	mov	[bx].takper,0
+	mov	di,[bx].takinfo.takptr		; where to start writing
+	mov	[bx].takinfo.takcnt,0		; number of unread bytes
+	mov	[bx].takinfo.takper,0
 	cmp	evaltype,F_contents	; \fcontents(macro)?
 	je	evalt5d			; e = yes
 	cmp	evaltype,F_definition	; \fdefinition(macro)?
 	je	evalt5d			; e = yes
 	cmp	evaltype,F_literal	; \fliteral(string)?
 	jne	evalt5e			; ne = no
-evalt5d:mov	[bx].takper,1		; treat macro names as literals
+evalt5d:mov	[bx].takinfo.takper,1		; treat macro names as literals
 
 evalt5e:mov	bx,takadr
-	mov	di,[bx].takptr		; destination for replacment text
+	mov	di,[bx].takinfo.takptr		; destination for replacment text
 	cmp	evaltype,F_length	; \flength(text)?
 	jne	evalt6			; ne = no
 	mov	ax,arglen		; length of variable name
 	call	fdec2di			; convert to ASCII string
 	mov	bx,takadr
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 	jmp	evalt99
 
 evalt6:	cmp	evaltype,F_upper	; \fupper(text)?
@@ -2338,7 +2338,7 @@ evalt6d:stosb				; write byte to Take buffer
 	loop	evalt6b
 evalt6e:mov	bx,takadr
 	mov	cx,arglen		; argument length
-	mov	[bx].takcnt,cx		; count entered bytes
+	mov	[bx].takinfo.takcnt,cx		; count entered bytes
 	jmp	evalt99
 
 evalt7:	cmp	evaltype,F_char		; \fcharacter(n)?
@@ -2352,7 +2352,7 @@ evalt7:	cmp	evaltype,F_char		; \fcharacter(n)?
 	cld
 	stosb				; store single byte
 	mov	bx,takadr
-	mov	[bx].takcnt,1		; one byte as result
+	mov	[bx].takinfo.takcnt,1		; one byte as result
 evalt7d:jmp	evalt99
 
 evalt8:	cmp	evaltype,F_substr	; \fsubstr(text, n1, n2)?
@@ -2402,7 +2402,7 @@ evalt8c:mov	bx,tbufsiz-2		; unused buffer capacity (tbufsiz-2)
 	jbe	evalt8e			; be = no
 	mov	cx,ax			; limit to available memory
 evalt8e:mov	bx,takadr
-	mov	[bx].takcnt,cx		; count of bytes
+	mov	[bx].takinfo.takcnt,cx		; count of bytes
 	cld
 	rep	movsb			; copy bytes to Take buffer
 evalt8d:jmp	evalt99
@@ -2431,7 +2431,7 @@ evalt9b:mov	si,argptr		; start of 'text'
 	add	si,arglen		; point at last + 1 byte of 'text'
 	sub	si,cx			; minus bytes to be copied
 	mov	bx,takadr
-	mov	[bx].takcnt,cx		; count of bytes
+	mov	[bx].takinfo.takcnt,cx		; count of bytes
 	cld
 	rep	movsb			; copy bytes to Take buffer
 evalt9c:jmp	evalt99
@@ -2441,7 +2441,7 @@ evalt10:cmp	evaltype,F_literal	; \fliteral(text)?
 	mov	si,argptr		; start of string
 	mov	cx,arglen		; length of text (inc leading spaces)
 	mov	bx,takadr
-	mov	[bx].takcnt,cx		; count of bytes
+	mov	[bx].takinfo.takcnt,cx		; count of bytes
 	cld
 	rep	movsb			; copy bytes to Take buffer
 	jmp	evalt99
@@ -2471,13 +2471,13 @@ evalt11a:mov	cx,arglen		; length of text
 	mov	cx,ax			; copy just n of text
 evalt11b:sub	ax,cx			; available minus used bytes
 	mov	bx,takadr
-	mov	[bx].takcnt,cx		; count of bytes
+	mov	[bx].takinfo.takcnt,cx		; count of bytes
 	mov	si,argptr		; text
 	cld
 	rep	movsb			; copy bytes to Take buffer
 	mov	cx,ax			; padding bytes
 	jcxz	evalt11d		; z = none
-	add	[bx].takcnt,cx		; increase count of bytes
+	add	[bx].takinfo.takcnt,cx		; increase count of bytes
 	mov	bx,argptr+4		; point to c
 	mov	al,[bx]			; padding character, if any
 	cmp	arglen+4,0		; any char given?
@@ -2511,7 +2511,7 @@ evalt12a:sub	ax,arglen		; n - length of 'text'
 	jns	evalt12b		; ns = no underflow
 	xor	ax,ax			; else omit padding
 evalt12b:mov	cx,ax			; padding count
-	mov	[bx].takcnt,cx		; count of bytes
+	mov	[bx].takinfo.takcnt,cx		; count of bytes
 	mov	bx,argptr+4		; point to c
 	mov	al,[bx]			; padding character, if any
 	cmp	arglen+4,0		; any char given?
@@ -2522,14 +2522,14 @@ evalt12c:cld
 	mov	cx,arglen		; length of text
 	mov	cx,tbufsiz-2		; buffer capacity
 	mov	bx,takadr
-	sub	cx,[bx].takcnt		; minus bytes written so far
+	sub	cx,[bx].takinfo.takcnt		; minus bytes written so far
 	mov	ax,arglen		; length of 'text'
 	cmp	ax,cx			; n larger than buffer?
 	jbe	evalt12d		; be = no
 	mov	ax,cx
 evalt12d:mov	cx,ax			; append count
 	mov	bx,takadr
-	add	[bx].takcnt,cx		; increase count of bytes
+	add	[bx].takinfo.takcnt,cx		; increase count of bytes
 	mov	si,argptr		; start of text
 	cld
 	rep	movsb			; append byte to Take buffer
@@ -2542,8 +2542,8 @@ evalt13:cmp	evaltype,F_code		; \fcode(char)?
 	xor	ah,ah
 	call	fdec2di			; convert to ASCII string, no '\'
 	mov	bx,takadr		;   prefix
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 	jmp	evalt99
 
 evalt14:cmp	evaltype,F_definition	; \fdefinition(macro)?
@@ -2616,8 +2616,8 @@ evalt14f:mov	ax,[si-2]		; length of macro name
 evalt14h:push	ds
 	mov	bx,takadr
 	mov	cx,arglen+2		; length of string
-	mov	[bx].takcnt,cx		; macro length
-	mov	[bx].takptr,2		; offset of text in destination
+	mov	[bx].takinfo.takcnt,cx		; macro length
+	mov	[bx].takinfo.takptr,2		; offset of text in destination
 	mov	ax,argptr+2		; seg of string
 	mov	ds,ax
 	mov	si,2			; offset of string
@@ -2670,8 +2670,8 @@ evalt15f:push	si
 	stosb				; and null terminate
 	pop	si
 	mov	bx,takadr
-	sub	di,[bx].takptr		; bytes consumed
-	mov	[bx].takcnt,di
+	sub	di,[bx].takinfo.takptr		; bytes consumed
+	mov	[bx].takinfo.takcnt,di
 evalt15x:jmp	evalt99
 
 evalt16:cmp	evaltype,F_index	; \findex(pat, string, [offset])
@@ -2740,8 +2740,8 @@ evalt16e:pop	di
 	mov	bx,takadr
 	call	fdec2di			; binary to ASCIIZ
 	mov	bx,takadr
-	sub	di,[bx].takptr
-	mov	[bx].takcnt,di		; length of ASCIIZ result
+	sub	di,[bx].takinfo.takptr
+	mov	[bx].takinfo.takcnt,di		; length of ASCIIZ result
 evalt16x:jmp	evalt99
 
 evalt17:cmp	evaltype,F_repeat	; \frepeat(text,n)?
@@ -2781,8 +2781,8 @@ evalt17e:sub	dx,cx			; deduct amount done
 	or	dx,dx			; any space left?
 	jg	evalt17d		; g = yes
 evalt17f:mov	bx,takadr
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 evalt17g:jmp	evalt99
 
 evalt18:cmp	evaltype,F_reverse	; \freverse(text)?
@@ -2792,7 +2792,7 @@ evalt18:cmp	evaltype,F_reverse	; \freverse(text)?
 	add	di,cx
 	dec	di			; last byte in output string
 	mov	bx,takadr
-	mov	[bx].takcnt,cx		; length of output to buffer
+	mov	[bx].takinfo.takcnt,cx		; length of output to buffer
 	jcxz	evalt18b		; z = empty string
 evalt18a:cld
 	lodsb				; read left
@@ -2815,7 +2815,7 @@ evalt19a:
 	call	strlen			; get length of results to CX
 	pop	di
 	mov	bx,takadr
-	mov	[bx].takcnt,cx		; length of results
+	mov	[bx].takinfo.takcnt,cx		; length of results
 	mov	si,offset tmpbuf
 	cld
 	rep	movsb			; copy to Take buffer
@@ -2855,8 +2855,8 @@ evalt20e:call	rgetfile		; get item from directory structure
 	mov	ax,filecnt		; report file count
 	call	fdec2di			; convert to ASCII string
 	mov	bx,takadr
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 	jmp	evalt99
 
 evalt21:cmp	evaltype,F_nextfile	; \fnextfile()?
@@ -2889,7 +2889,7 @@ evalt21:cmp	evaltype,F_nextfile	; \fnextfile()?
 	stosb				; write it
 	inc	dx
 	mov	bx,takadr
-	mov	[bx].takcnt,dx		; length of result
+	mov	[bx].takinfo.takcnt,dx		; length of result
 	jmp	evalt99
 evalt21a:				; c = failure, no next
 	mov	findkind,0		; failure means no next
@@ -3005,8 +3005,8 @@ evalt24f:or	cx,cx			; qty of source bytes remaining
 evalt24g:cld
 	rep	movsb			; copy decbuf to Take buffer
 	mov	bx,takadr
-	sub	di,[bx].takptr
-	mov	[bx].takcnt,di		; length of ASCIIZ result
+	sub	di,[bx].takinfo.takptr
+	mov	[bx].takinfo.takcnt,di		; length of ASCIIZ result
 	jmp	evalt99
 
 evalt25:cmp	evaltype,F_eval		; \feval(string)?
@@ -3038,8 +3038,8 @@ evalt25a:call	flnout			; convert DX:AX to ASCIIZ in DS:DI
 	cld
 	rep	movsb			; copy to final buffer
 	mov	bx,takadr
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 evalt25b:jmp	evalt99
 
 evalt26:cmp	evaltype,F_verify	; \fverify(pattern,string,offset)?
@@ -3078,8 +3078,8 @@ evalt26b:mov	ax,bx			; char position of first mismatch
 	pop	es
 	call	fdec2di			; convert to ASCII string
 	mov	bx,takadr
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 	jmp	evalt99
 
 evalt27:cmp	evaltype,F_ipaddr	; \fipaddr(string, offset)?
@@ -3132,8 +3132,8 @@ evalt27c:dec	si			; break char
 	mov	si,argptr		; start
 	rep	movsb			; copy string to destination
 	mov	bx,takadr
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 	jmp	evalt99
 
 evalt27x:inc	argptr			; step to next source byte
@@ -3176,8 +3176,8 @@ evalt29:cmp	evaltype,F_tod2secs	; \ftod2secs(hh:mm:ss)?
 	call	tod2secs		; convert to ASCII long in es:di
 	jc	evalt99			; c = failed to convert
 	mov	bx,takadr
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 	jmp	evalt99
 
 evalt30:cmp	evaltype,F_chksum	; \fchecksum(string)?
@@ -3207,8 +3207,8 @@ evalt30a:lodsb
 	cld
 	rep	movsb
 	mov	bx,takadr
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 	jmp	evalt99
 
 evalt31:cmp	evaltype,F_basename	; \fbasename(string)?
@@ -3227,8 +3227,8 @@ evalt31:cmp	evaltype,F_basename	; \fbasename(string)?
 	call	strlen
 	rep	movsb			; copy to result buffer
 	mov	bx,takadr
-	sub	di,[bx].takptr		; end minus start
-	mov	[bx].takcnt,di		; string length
+	sub	di,[bx].takinfo.takptr		; end minus start
+	mov	[bx].takinfo.takcnt,di		; string length
 	jmp	evalt99
 
 evalt99:pop	temp
@@ -3432,13 +3432,13 @@ evarg	endp
 ; Reallocates more memory than provided in the default takopen 128 byte buffer.
 ; Enter with desired byte quantity in CX and a Take structure already
 ; present at takadr. Returns with new buffer length in CX, ES:DI pointing
-; at buffer+2 ([bx].takbuf:[bx].takptr)
+; at buffer+2 ([bx].takinfo.takbuf:[bx].takinfo.takptr)
 evmem	proc	near
 	push	ax
 	push	bx
 	push	cx
 	mov	bx,takadr
-	mov	ax,[bx].takbuf		; segment of preallocated memory
+	mov	ax,[bx].takinfo.takbuf		; segment of preallocated memory
 	mov	bx,cx			; string length, in bytes
 	add	bx,2+1+15		; count + null term + round up
 	mov	cl,4
@@ -3451,7 +3451,7 @@ evmem	proc	near
 	jae	evmem2			; ae = enough
 	push	bx
 	mov	bx,takadr
-	mov	cx,[bx].takcnt		; old unread-bytes
+	mov	cx,[bx].takinfo.takcnt		; old unread-bytes
 	shr	cx,1
 	shr	cx,1
 	shr	cx,1
@@ -3472,7 +3472,7 @@ evmem2:	mov	cl,4
 	sub	cx,2			; minus two for len field
 	mov	es,ax			; set new segment
 	mov	bx,takadr
-	xchg	[bx].takbuf,ax		; new segment, swap with old seg
+	xchg	[bx].takinfo.takbuf,ax		; new segment, swap with old seg
 	or	ax,ax			; if any allocated
 	jz	evmem2a			; z = none
 	push	es
@@ -3482,9 +3482,9 @@ evmem2:	mov	cl,4
 	pop	es
 evmem2a:mov	di,2			; new offset
 	mov	bx,takadr
-	mov	[bx].takptr,di		; new offset
-	mov	[bx].takcnt,0		; total buffer, unread bytes
-	or	[bx].takattr,take_malloc ; malloc'd buffer to remove later
+	mov	[bx].takinfo.takptr,di		; new offset
+	mov	[bx].takinfo.takcnt,0		; total buffer, unread bytes
+	or	[bx].takinfo.takattr,take_malloc ; malloc'd buffer to remove later
 	pop	bx			; discard old cx, return new cx
 	pop	bx
 	pop	ax
@@ -4071,31 +4071,31 @@ cmget21:mov	flags.extflg,1		; EOF on disk file, set exit flag
 
 cmget1:	push	bx			; read from Take file
 	mov	bx,takadr		; offset of this Take structure
-	mov	al,[bx].taktyp
+	mov	al,[bx].takinfo.taktyp
 	mov	read_source,al
-	cmp	[bx].takcnt,0		; bytes remaining in Take buffer
+	cmp	[bx].takinfo.takcnt,0		; bytes remaining in Take buffer
 	jne	cmget4			; ne = not empty
 	cmp	al,take_file		; type of Take (file?)
 	jne	cmget3			; ne = no (macro)
 	call	takrd			; read another buffer
-	cmp	[bx].takcnt,0		; anything in the buffer?
+	cmp	[bx].takinfo.takcnt,0		; anything in the buffer?
 	jne	cmget4			; ne = yes
 cmget3:	pop	bx			; clear stack
 	jmp	short cmget5		; close the Take file
 
 cmget4:	push	si			; read from Take non-empty buffer
 	push	es
-	mov	es,[bx].takbuf		; segment of Take buffer
-	mov	si,[bx].takptr		; current offset in Take buffer
+	mov	es,[bx].takinfo.takbuf		; segment of Take buffer
+	mov	si,[bx].takinfo.takptr		; current offset in Take buffer
 	mov	al,es:[si]		; read a char from Take buffer
 	pop	es
 	inc	si
-	mov	[bx].takptr,si		; move buffer pointer
+	mov	[bx].takinfo.takptr,si		; move buffer pointer
 	pop	si
-	dec	WORD PTR [bx].takcnt  	; decrease number of bytes remaining
+	dec	WORD PTR [bx].takinfo.takcnt  	; decrease number of bytes remaining
 	cmp	read_source,take_sub	; substitution macro?
 	jne	cmget4b			; ne = no
-	cmp	[bx].takcnt,0		; read last byte?
+	cmp	[bx].takinfo.takcnt,0		; read last byte?
 	jne	cmget4b			; ne = no
 	cmp	al,'\'			; ended on a backsash?
 	jne	cmget4b			; ne = no
@@ -4111,7 +4111,7 @@ cmget4b:pop	bx
 
 cmget5:	push	bx			; end of file on Take buffer
 	mov	bx,takadr		; offset of this Take structure
-	mov	ah,[bx].takattr		; save kind of autoCR
+	mov	ah,[bx].takinfo.takattr		; save kind of autoCR
 	pop	bx
 	cmp	read_source,take_sub	; text subsititution?
 	je	cmget5a			; e = yes, cannot keep open
@@ -4121,12 +4121,12 @@ cmget5a:
 	push	ax
 	push	bx
 	mov	bx,takadr
-cmget5c:mov	al,[bx].takinvoke	; take level of last DO or command
+cmget5c:mov	al,[bx].takinfo.takinvoke	; take level of last DO or command
 	call	ftakclos		; close take file, saves reg ax
 	mov	bx,takadr		; next Take
-	test	[bx].takattr,take_autocr ; if macro needs special ending
+	test	[bx].takinfo.takattr,take_autocr ; if macro needs special ending
 	jnz	cmget5d			; nz = it does, do not autoclose here
-	cmp	[bx].takcnt,0		; empty?
+	cmp	[bx].takinfo.takcnt,0		; empty?
 	jne	cmget5d			; ne = no, done closing
 	cmp	taklev,0		; any Take levels left?
 	je	cmget5d			; e = no
@@ -4590,7 +4590,7 @@ remake	proc	near
 remake1:cmp	taklev,0		; in a take file?
 	je	remake2			; e = no
 	mov	bx,takadr
-	cmp	[bx].taktyp,take_sub	; sub macro?
+	cmp	[bx].takinfo.taktyp,take_sub	; sub macro?
 	jne	remake2			; ne = no
 	push	cx
 	call	ftakclos		; close sub macros
@@ -4598,12 +4598,12 @@ remake1:cmp	taklev,0		; in a take file?
 	jmp	short remake1		; next victim
 remake2:call	takopen_macro		; open take as macro (comand kind)
 	mov	bx,takadr		; pointer to new Take structure
-	mov	[bx].taktyp,take_comand ; that's us
-	and	[bx].takattr,not take_autocr ; no CR at end of macro please
-	mov	[bx].takcnt,cx		; number of unread bytes
-	mov	[bx].takbuf,seg rawbuf	; segment of Take buffer
+	mov	[bx].takinfo.taktyp,take_comand ; that's us
+	and	[bx].takinfo.takattr,not take_autocr ; no CR at end of macro please
+	mov	[bx].takinfo.takcnt,cx		; number of unread bytes
+	mov	[bx].takinfo.takbuf,seg rawbuf	; segment of Take buffer
 	mov	cx,offset rawbuf
-	mov	[bx].takptr,cx 		; offset to read from
+	mov	[bx].takinfo.takptr,cx 		; offset to read from
 	mov	cmrawptr,cx
 remake3:mov	in_reparse,0		; clear our flag
 	mov	bracecnt,0
@@ -4758,7 +4758,7 @@ wrtargc	proc	near
 	cmp	taklev,0		; in a Take/Macro?
 	je	wrtarg1			; e = no
 	mov	bx,takadr		; current Take structure
-	mov	ax,[bx].takargc		; get ARGC
+	mov	ax,[bx].takinfo.takargc		; get ARGC
 wrtarg1:call	fdec2di			; write as ascii
 	mov	word ptr es:[di],0020h	; space and null terminator
 	ret
@@ -4770,7 +4770,7 @@ wrtcnt	proc	near
 	cmp	taklev,0		; in a Take/Macro?
 	je	wrtcnt1			; e = no
 	mov	bx,takadr		; current Take structure
-	mov	ax,[bx].takctr		; get COUNT
+	mov	ax,[bx].takinfo.takctr		; get COUNT
 wrtcnt1:call	fdec2di			; write as ascii
 	ret
 wrtcnt	endp
@@ -5150,10 +5150,10 @@ showp2:	push	ax			; save take level
 	call	takopen_sub		; open take as text substitution
 	mov	bx,takadr		; address of take structure
 	mov	ax,ds
-	mov	[bx].takbuf,ax		; segment of Take buffer
-	mov	[bx].takptr,dx 		; offset of beginning of def text
-	mov	[bx].takcnt,cx		; # of chars in buffer (includes NUL)
-	or	[bx].takattr,take_autocr ; imply CR at end of prompt
+	mov	[bx].takinfo.takbuf,ax		; segment of Take buffer
+	mov	[bx].takinfo.takptr,dx 		; offset of beginning of def text
+	mov	[bx].takinfo.takcnt,cx		; # of chars in buffer (includes NUL)
+	or	[bx].takinfo.takattr,take_autocr ; imply CR at end of prompt
 	mov	in_showprompt,1		; say making new prompt
 	xor	ax,ax
 	mov	cmsflg,al		; get all spaces
