@@ -423,7 +423,7 @@ tcpdbtab db	4			; TCP Debug modes
 	mkeyw	'off',0
 	mkeyw	'status',1
 	mkeyw	'timing',2
-	mkeyw	'on' 3
+	mkeyw	'on', 3
 
 newlinetab db	3			; TCP/IP Newline mode
 	mkeyw	'off',0
