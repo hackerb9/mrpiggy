@@ -767,14 +767,15 @@ include:
 	return (&slot->iphdr); 		/* use this datagram pointer */
 }
 
-/* XXXXX
+/* XXXXX Breakage here!
 
    Note from hackerb9: It is going to be tricky to use bcc for the
    tcp.c routine as it does not support FAR pointers. As a test, let's
-   just remove the keyword FAR and see what happens.
+   just remove the keyword FAR and see what happens. 
 
-   In symboldefs.h: #define FAR _far, which is no better.
+   Need to undef since symboldefs.h does #define FAR _far, which is no better.
 */
+#undef FAR
 #define FAR
 
 static int
