@@ -232,6 +232,7 @@ static int
 request(void)
 {
 	int reply_len;
+	byte *bp_vend;
 
 /* if have sent datagram and receive waiting has time to go, then receive */	
 
@@ -314,10 +315,14 @@ inprogress:			/* here we read UDP responses */
 	reply_len = sock_fastread(&bsock, (byte *)bp, 
 						sizeof(struct bootp));
 
+	bp_vend = bp->bp_vend;
 	if ((reply_len < sizeof(struct bootp) - 248) || /* too short */
 	    (bp->bp_xid != xid) ||			/* not our ident */
 	    (bp->bp_yiaddr == 0) ||		/* no IP address for us */
-	    (*(long *)&bp->bp_vend != VM_RFC1048) ||	/* wrong vendor id */
+
+	    //(*(long *)&bp->bp_vend != VM_RFC1048) ||	/* wrong vendor id */
+	    /* The above fails to compile with BCC, so break it up. */
+	    (*(long *)&bp_vend != VM_RFC1048) ||	/* wrong vendor id */
 	    (bootmethod == BOOT_DHCP && DHCP_state != DHCPDISCOVER &&
 			(DHCP_server_IP != ntohl(bp->bp_siaddr) ||
 			notdhcp(bp, reply_len))) )
