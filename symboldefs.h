@@ -9,8 +9,10 @@
 ;	notice must not be removed, altered, or obscured.
 
 ;; MASM v6, use MASM 5.1 constructions (/Zm)	OPTION	M510
+OPTION	M510
 	.xlist			; suppress listing in program
 	.sall			; don't list macro expansions
+
 ; define MS-DOS Kermit conditionals
 ; comment out line to re-enable functionality
 ;nls_portuguese	equ 1		; for Portuguese (Brazil) legends
@@ -334,17 +336,17 @@ ifndef save_mem2
 trinfo	struc
 maxdat	dw 0		; Max packet size for send, word for long packets
 chklen	db 1		; Number of characters in checksum
-seol  	db cr		; Send EOL char
-reol  	db cr		; Receive EOL char
-ssoh  	db soh		; Send start-of-packet character
-rsoh  	db soh		; Receive start-of-packet character
-squote	db dsquot	; Send quote character
-rquote	db dsquot	; Receive quote character
+seol  	db CR		; Send EOL char
+reol  	db CR		; Receive EOL char
+ssoh  	db SOH		; Send start-of-packet character
+rsoh  	db SOH		; Receive start-of-packet character
+squote	db DSQUOT	; Send quote character
+rquote	db DSQUOT	; Receive quote character
 rptq	db 7eh		; Repeat quote character (tilde)
 rptqenable db 1		; Repeat quote character enable (1)/disable(0)
-spsiz 	db dspsiz	; Send (regular) packet size
-rpsiz 	db drpsiz	; Receive (regular) packet size
-stime 	db dstime	; Send timeout. (Don't timeout)
+spsiz 	db DSPSIZ	; Send (regular) packet size
+rpsiz 	db DRPSIZ	; Receive (regular) packet size
+stime 	db DSTIME	; Send timeout. (Don't timeout)
 rtime 	db 5		; Receive timeout
 sdelay	db 0		; Send delay time (sec) for just SEND command
 spad  	db 0		; Send number of padding char
@@ -352,10 +354,10 @@ rpad  	db 0		; Receive number of padding char
 spadch	db 0		; Send padding char
 rpadch	db 0		; Receive padding char
 ebquot	db 'Y'		; Send 8-bit quote character
-escchr	db defesc	; Escape character
+escchr	db DEFESC	; Escape character
 capas	db 2,0		; Capas bytes (just two for now)
 windo	db 1		; number of window slots
-rlong	dw drpsiz	; long pkt size we want to receive
+rlong	dw DRPSIZ	; long pkt size we want to receive
 slong	dw 9024		; long pkt size we could send (negotiated with host)
 xchset	db 0		; transfer char set (0=hardware) on comms wire
 xchri	db 0		; transfer char set readable (0) or invertible (1)
@@ -487,7 +489,7 @@ inecho	db	1		; echo Input cmd text (0 = no)
 infilter db	1		; filer control sequences from screen (0=no)
 xmitfill db	0		; non-zero to TRANSMIT filler for blank line
 xmitlf	db	0		; non-zero to TRANSMIT LF's
-xmitpmt	db	lf		; default prompt for line acknowledgments
+xmitpmt	db	LF		; default prompt for line acknowledgments
 xmitpause dw	0		; millisec pause between lines
 scptinfo ends
 
