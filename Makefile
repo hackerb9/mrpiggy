@@ -26,10 +26,12 @@
 #    /nologo stops displaying MSC copyright notice on every compile
 # The inference macros below call CL and MASM to create .o modules.
 
+#    -ansi to convert ansi prototype definitions to bcc's K&R style
 #    -Md for small memory model 64KB MSDOS executable COM file.
+#    -c  compile, don't link
 #    -L  don't add default library to search list
 %.o : %.c
-	bcc -ansi -Md -c $*.c
+	bcc -Md -ansi -c $*.c
 #	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
 
@@ -55,7 +57,7 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 
 
 kermit.exe:	$(objects)
-	bcc -L -o $@ $^
+	bcc -o $@ $^
 
 # These are the dependency relations (.o depends on .asm/.c and .h):
 
