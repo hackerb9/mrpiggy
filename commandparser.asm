@@ -1,4 +1,4 @@
-;   	NAME	msscmd
+   	NAME	msscmd
 ; File MSSCMD.ASM
 	include mssdef.h
 ;	Copyright (C) 1982, 1999, Trustees of Columbia University in the 
