@@ -4884,7 +4884,11 @@ dgbar5:	mov	cx,rectx2		; ending x coord
 	inc	cx			; number of horizontal pixels
 	call	psetup			; set up dsp and di to screen offset
 			; di points to whole byte, do bits in byte in gfplot
-	mov	fill,0ffffh
+	
+;;; Why did Kermit originally stuff a 16-bit number in an 8-bit variable?
+;;	mov	fill,0ffffh		; XXX Something I don't understand.
+	mov	fill,0ffh	
+	
 dgbar6:	call	gfplot			; line fill routine, uses CX
 	call	pincy			; next line
 	dec	numlines
