@@ -24,6 +24,7 @@
 
 /* Function prototypes */
 
+#ifndef __BCC__
 #ifndef byte
 typedef unsigned char byte;
 #endif  /* byte */
@@ -33,6 +34,7 @@ typedef unsigned int word;
 #ifndef longword
 typedef unsigned long longword;
 #endif /* longword */
+#endif /* __BCC__*/
 
 void outch( byte );		/* print character to stdio */
 void outs( byte * );		/* print an ASCIIZ string to stdio */
