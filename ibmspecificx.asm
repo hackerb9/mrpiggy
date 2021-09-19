@@ -5109,7 +5109,12 @@ out75b1:call    read_timer2	; save previous end count in CX, read timer
         mov	al,0b4h		; set up counter 2 to mode 2, load LSB+MSB
         out	timercmd,al	; set mode 2 = rate generator
         jmp	$+2
-        mov	ax,cnt75b*4+cnt75b*4+cnt75b*2-precomp  ; set start point
+	;; set start point
+	;; Note that in Kermit's original code, this constant
+	;; overflowed 16-bits, which was all MASM 5.01 could handle.
+	;; Result is 157,082, which is larger than 65535.
+	;; So, we'll take the low 16-bits and hope that that's right.
+        mov	ax,(cnt75b*4+cnt75b*4+cnt75b*2-precomp) AND 0FFFFh
         out	timer2data,al	; output LSB
         jmp	$+2
         xchg	cx,ax		; save value in CX for compare in READ_TIMER2
@@ -5125,7 +5130,8 @@ out75b1:call    read_timer2	; save previous end count in CX, read timer
         out	timer2data,al	; set counter wraparound to 0FFFFH
         jmp	$+2
         out	timer2data,al
-        mov	bp,cnt75b*4+cnt75b*4+cnt75b ; set timer value for next bit
+	;; set timer value for next bit
+        mov	bp,cnt75b*4+cnt75b*4+cnt75b AND 0FFFFh
         mov	dx,modem.mddat	; get com port address
         add	dx,3		; address of it's line control register
         in 	al,dx		; get port status
