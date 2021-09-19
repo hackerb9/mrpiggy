@@ -208,6 +208,7 @@ arp_handler(arp_header *in)
 	register arp_header *op;
 	longword his_ip, target_ip, temp;
 	register arp_tables *arp_ptr;
+	byte *sender_mac;
 
 	if (in == NULL) return (0);			/* failure */
 
@@ -235,7 +236,13 @@ arp_handler(arp_header *in)
 			arp_ptr->flags = ARP_FLAG_IMPOSTER;
 			outs("\r\n Another station is using our IP address");
 			outs(" from MAC address ");
-			outhexes(&in->sender_mac, in->hlen);
+
+			//	outhexes(&in->sender_mac, in->hlen);
+			/* BCC is failing to compile this. */
+			/* Try splitting it into two lines. */
+			sender_mac=in->sender_mac;
+			outhexes(&sender_mac, in->hlen);
+
 			outs("\r\n");
 			}
 		}			/* end of REPLY section */
