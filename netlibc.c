@@ -51,14 +51,17 @@ int _acrtused;			/* MS C compiler startup file quantity */
   Returns pointer to it if found, NULL if not found.
 */
 byte *
-strchr(byte *s, const byte c) {
+strchr(byte *s, byte c) {
     while ((*s != (byte)'\0') && (*s != (byte)(c & 0xff))) s++;
     if (*s == '\0') return(NULL);
     else return(s);
 }
 
+// XXX Kludge for bcc. This probably won't work, but let's see.
+// Bruce's cc cannot handle FAR pointers. 
+#define FAR
 byte FAR *
-strchrf(byte FAR *s, const byte c) {
+strchrf(byte FAR *s, byte c) {
     while ((*s != (byte)'\0') && (*s != (byte)(c & 0xff))) s++;
     if (*s == '\0') return(NULL);
     else return(s);
@@ -302,7 +305,7 @@ ltoa(long value, byte *string, int radix) { /* K & R */
   Returns 1 if argument is a decimal digit, 0 otherwise.
 */
 int
-isdigit(const byte c) {
+isdigit(byte c) {
     if ((c & 0xff) < '0' || (c & 0xff) > '9')
       return(0);			/* say is not a digit */
     return(1);
