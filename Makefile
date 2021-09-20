@@ -33,7 +33,8 @@ export INCLUDE="${WATCOM}/h"
 
 %.o : %.c
 	owcc -bdos -mcmodel=s -c $*.c
-#	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
+
+# Old args	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
 
 # -Zm MASM v5.1 SYNTAX (don't need to qualify fields with structure names) 
@@ -58,7 +59,7 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 
 
 kermit.exe:	$(objects)
-	bcc -L -o $@ $^
+	owcc -L -o $@ $^
 
 # These are the dependency relations (.o depends on .asm/.c and .h):
 
