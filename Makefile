@@ -26,10 +26,13 @@
 #    /nologo stops displaying MSC copyright notice on every compile
 # The inference macros below call CL and MASM to create .o modules.
 
-#    -Md for small memory model 64KB MSDOS executable COM file.
-#    -L  don't add default library to search list
+# Set up compilation environment for Open Watcom compiler
+export WATCOM="${HOME}/open-watcom-2"
+export PATH+="${WATCOM}/binl"
+export INCLUDE="${WATCOM}/h"
+
 %.o : %.c
-	bcc -ansi -Md -c $*.c
+	owcc -bdos -mcmodel=s -c $*.c
 #	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
 
