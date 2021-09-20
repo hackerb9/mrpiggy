@@ -5109,7 +5109,7 @@ out75b1:call    read_timer2	; save previous end count in CX, read timer
         mov	al,0b4h		; set up counter 2 to mode 2, load LSB+MSB
         out	timercmd,al	; set mode 2 = rate generator
         jmp	$+2
-        mov	ax,cnt75b*4+cnt75b*4+cnt75b*2-precomp  ; set start point
+        mov	ax,(cnt75b*4+cnt75b*4+cnt75b*2-precomp) AND 0ffffh  ; set start point
         out	timer2data,al	; output LSB
         jmp	$+2
         xchg	cx,ax		; save value in CX for compare in READ_TIMER2
@@ -5125,7 +5125,7 @@ out75b1:call    read_timer2	; save previous end count in CX, read timer
         out	timer2data,al	; set counter wraparound to 0FFFFH
         jmp	$+2
         out	timer2data,al
-        mov	bp,cnt75b*4+cnt75b*4+cnt75b ; set timer value for next bit
+        mov	bp,(cnt75b*4+cnt75b*4+cnt75b) AND 0ffffh ; set timer value for next bit
         mov	dx,modem.mddat	; get com port address
         add	dx,3		; address of it's line control register
         in 	al,dx		; get port status
