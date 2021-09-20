@@ -191,8 +191,8 @@ CAN	equ	18h			; ^X to return to ANSI mode
 ESCZ	equ	1Ah			; SUB, ESC-^Z triggers crosshairs
 VT	equ	0Bh			; ^K go up one line
 CR	equ	0Dh
-FS	equ	1Ch			; ^\ for point plot mode
-GS	equ	1Dh			; ^] draw line (1st move is invisible)
+FlSep	equ	1Ch			; ^\ for point plot mode
+GrpSp	equ	1Dh			; ^] draw line (1st move is invisible)
 RS	equ	1Eh	       		; ^^ for incremental line plot mode
 US	equ	1Fh			; ^_ (underscore) returns to text mode
 accent	equ	60h			; accent grave
@@ -1883,7 +1883,7 @@ TEKTXT	endp
 
 
 tekctl	proc	near			; Control characters:
-	cmp	al,GS			; Line plot command?
+	cmp	al,GrpSp			; Line plot command?
 	jne	tekctl1			; ne = no
 	mov	visible,0		; next move is invisible
 	and	status,not txtmode	; set status report byte
@@ -1896,7 +1896,7 @@ tekctl1:cmp	al,RS			; Incremental dot command?
 	mov	ttstate,offset tekrlin	; expect pen command next
 	call	remcursor		; remove text cursor
 	ret
-tekctl2:cmp	al,FS			; Point plot command?
+tekctl2:cmp	al,FlSep			; Point plot command?
 	jne	tekctl3			; ne = no
 	mov	visible,0		; next move is invisible
 	and	status,not txtmode	; set status report byte
@@ -3066,16 +3066,16 @@ tekgotst proc	near
 	ret
 tekgotst endp
 
-TEKLINE	proc	near			; GS line drawing
+TEKLINE	proc	near			; GrpSp line drawing
 	cmp	al,' '			; control char?
 	jae	teklin3			; ae = no
-	cmp	al,CR			; exit drawing on CR,LF,RS,US,FS,CAN
+	cmp	al,CR			; exit drawing on CR,LF,RS,US,FlSep,CAN
 	je	teklin2			; e = yes, a cr
 	cmp	al,LF			; these terminate line drawing cmds
 	je	teklin2
-	cmp	al,FS			; <FS>
+	cmp	al,FlSep			; <FlSep>
 	je	teklin2
-	cmp	al,GS			; <GS>
+	cmp	al,GrpSp			; <GrpSp>
 	je	teklin2
 	cmp	al,RS			; <RS>
 	je	teklin2
@@ -3100,16 +3100,16 @@ teklin4:mov	cl,visible		; get moveto or drawto variable
 	ret
 TEKLINE	endp
 	
-TEKPNT	proc	near			; FS plot single point
+TEKPNT	proc	near			; FlSep plot single point
 	cmp	al,' '			; control char?
 	jae	tekpnt3			; ae = no
-	cmp	al,CR			; exit drawing on CR,LF,RS,US,FS,CAN
+	cmp	al,CR			; exit drawing on CR,LF,RS,US,FlSep,CAN
 	je	tekpnt2			; e = yes, a cr
 	cmp	al,LF 			; these terminate line drawing cmds
 	je	tekpnt2
-	cmp	al,FS			; <FS>
+	cmp	al,FlSep			; <FlSep>
 	je	tekpnt2
-	cmp	al,GS			; <GS>
+	cmp	al,GrpSp			; <GrpSp>
 	je	tekpnt2
 	cmp	al,RS			; <RS>
 	je	tekpnt2
@@ -4883,7 +4883,7 @@ dgbar5:	mov	cx,rectx2		; ending x coord
 	inc	cx			; number of horizontal pixels
 	call	psetup			; set up dsp and di to screen offset
 			; di points to whole byte, do bits in byte in gfplot
-	mov	fill,0ffffh
+	mov	fill,0ffh
 dgbar6:	call	gfplot			; line fill routine, uses CX
 	call	pincy			; next line
 	dec	numlines
