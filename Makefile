@@ -27,12 +27,17 @@
 # The inference macros below call CL and MASM to create .o modules.
 
 # Set up compilation environment for Open Watcom compiler
-export WATCOM="${HOME}/open-watcom-2"
-export PATH+="${WATCOM}/binl"
-export INCLUDE="${WATCOM}/h"
+export WATCOM=${HOME}/open-watcom-2
+export PATH+=:${WATCOM}/binl
+export INCLUDE=${WATCOM}/h
+
+# 0: 16-bit
+# -ms: small memory model: small code, small data
+#
 
 %.o : %.c
-	owcc -bdos -mcmodel=s -c $*.c
+	echo ${PATH}
+	owcc -ms -bt=DOS -c $*.c
 
 # Old args	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
