@@ -192,6 +192,7 @@ tasksr(void)
 			status = bootptick();
 		if (status == -1)
 			return (-1);		/* fail */
+		return 0;
 }
 
 /* worker for tasksr(). Does its work minus the timed retries. */
