@@ -203,7 +203,7 @@ bootptick(void)
 	if (tcpflag != 2 && chkcon() != 0)	/* Control-C abort */
 		{
 		outs(" Canceled by user");
-		sock_close(&bsock);
+		sock_close((sock_type *)&bsock);
 		request_busy = REQ_IDLE;	/* done */
 		return (-1);			/* failing status */
 		}
@@ -211,10 +211,10 @@ bootptick(void)
 	/* if no data yet and not running from Int 8 background tick */
 	if (bsock.rdatalen == 0 && tcpflag != 2 &&
 		bsock.sisopen == SOCKET_OPEN) 
-		if (tcp_tick(&bsock) == 0)		/* read packets */
+		if (tcp_tick((sock_type *)&bsock) == 0)		/* read packets */
 			{		/* major network error if UDP fails */
 			outs(" Network troubles, quitting");
-			sock_close(&bsock);
+			sock_close((sock_type *)&bsock);
 			request_busy = REQ_IDLE;	/* unlock access */
 			return (-1);			/* fail */
 			}
@@ -243,7 +243,7 @@ request(void)
 
 	if (chk_timeout(sendtimeout) == TIMED_OUT) /* sent for too long */
 		{			/* failed attempt, no respondent */
-		sock_close(&bsock);
+		sock_close((sock_type *)&bsock);
 		request_busy = REQ_IDLE;
 		return (-1);				/* fail */
 		}
@@ -290,18 +290,18 @@ request(void)
 		}
 
 	if (bsock.sisopen == SOCKET_OPEN) 
-		sock_close(&bsock);			/* just in case */
-	if (udp_open(&bsock, IPPORT_BOOTPC, bootphost, IPPORT_BOOTPS) == 0)
+		sock_close((sock_type *)&bsock);			/* just in case */
+	if (udp_open((struct udp_socket *)&bsock, IPPORT_BOOTPC, bootphost, IPPORT_BOOTPS) == 0)
 		{
 		request_busy = REQ_IDLE;		/* clear lock */
-		sock_close(&bsock);
+		sock_close((sock_type *)&bsock);
        		return (-1);				/* fail */
 		}
 
 		/* send only bootp length requests, accept DHCP replies */
 						/* send datagram */
 	bsock.rdatalen = 0;			/* clear old received data */
-	sock_write(&bsock, (byte *)bp, sizeof(struct bootp) - 248);
+	sock_write((sock_type *)&bsock, (byte *)bp, sizeof(struct bootp) - 248);
 	readtimeout = set_timeout(magictimeout++); /* receiver timeout */
 	if (magictimeout > 8)
 		magictimeout = 8;		/* truncate waits */
@@ -312,7 +312,7 @@ request(void)
 
 inprogress:			/* here we read UDP responses */
 
-	reply_len = sock_fastread(&bsock, (byte *)bp, 
+	reply_len = sock_fastread((sock_type *)&bsock, (byte *)bp, 
 						sizeof(struct bootp));
 
 	if ((reply_len < sizeof(struct bootp) - 248) || /* too short */
@@ -338,7 +338,7 @@ inprogress:			/* here we read UDP responses */
 		else
 			ntoa(kbtpserver, DHCP_server_IP); /* decode() swaps */
 		}
-	sock_close(&bsock);
+	sock_close((sock_type *)&bsock);
 	request_busy = REQ_IDLE;		/* done processing */
 	return (my_ip_addr != 0? 0: -1); /* -1 for fail, 0 for success */
 }
@@ -517,12 +517,12 @@ end_bootp(void)
 	*(long *)&bp->bp_vend[9] = htonl(DHCP_server_IP);
 	bp->bp_vend[13] = OPTION_END;	/* end of options */
 
-	sock_write(&bsock, (byte *)bp, sizeof(struct bootp) - 248);
+	sock_write((sock_type *)&bsock, (byte *)bp, sizeof(struct bootp) - 248);
 	wait = set_ttimeout(1);		/* one Bios clock tick */
 	while (chk_timeout(wait) != TIMED_OUT) ;	/* pause */
 							/* repeat */
-	sock_write(&bsock, (byte *)bp, sizeof(struct bootp) - 248);
-	sock_close(&bsock);
+	sock_write((sock_type *)&bsock, (byte *)bp, sizeof(struct bootp) - 248);
+	sock_close((sock_type *)&bsock);
 
  	DHCP_server_IP = 0L;		/* DHCP server IP address, 0 = none */
 	DHCP_lease = 0L;		/* no lease expiration */
