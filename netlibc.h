@@ -61,7 +61,7 @@ int    atoi(byte *);
 byte * ltoa(long, byte *, int);
 byte * itoa(int, byte *, int);
 int    isdigit(const byte);
-byte * strchr(byte FAR *, const byte);
+byte * strchr(byte *, const byte);
 byte FAR * strchrf(byte FAR *, const byte);
 byte * strcat(void *, void *);
 byte * strncat(void *, void *, int);
