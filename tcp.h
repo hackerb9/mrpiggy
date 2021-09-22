@@ -315,7 +315,7 @@ int	eth_send(word);
 void	eth_free(void *);
 byte *	eth_arrived(word *);
 void	eth_release(void);
-void *	eth_hardware(byte *);
+eth_address *	eth_hardware(in_Header *);
 int	do_bootp(void);
 int	do_rarp(void);
 int	do_ping(byte *, longword);
