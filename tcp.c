@@ -40,18 +40,18 @@ extern	int DHCP_refresh(void);
 extern	int request_busy;	/* msnbtp.c, DHCP request() lock */
 extern	int odi_busy(void);
 
-static	int tcp_handler(void *);
+static	int tcp_handler(in_Header *);
 static	int tcp_rst(in_Header *, tcp_Header FAR *);
-static	int tcp_read(void *, byte FAR *, int);
-static	int tcp_write(void *, byte FAR *, int);
-static	int tcp_close(void *);
-static	int tcp_processdata(void *, void FAR *, int);
-static	int tcp_send(void *);
+static	int tcp_read(tcp_Socket *, byte FAR *, int);
+static	int tcp_write(tcp_Socket *, byte FAR *, int);
+static	int tcp_close(tcp_Socket *);
+static	int tcp_processdata(tcp_Socket *, tcp_Header FAR *, int);
+static	int tcp_send(tcp_Socket *);
 static	int tcp_retransmitter(void);
-static	int tcp_unthread(void *);
-static	int udp_handler(void *);
-static	int udp_read(void *, byte FAR *, int);
-static	int udp_write(void *, byte FAR *, int);
+static	int tcp_unthread(tcp_Socket *);
+static	int udp_handler(in_Header *);
+static	int udp_read(udp_Socket *, byte FAR *, int);
+static	int udp_write(udp_Socket *, byte FAR *, int);
 static	int udp_close(udp_Socket *);
 static	void lost_ack(tcp_Socket *);
 static	void new_rto(tcp_Socket *, int);
@@ -109,7 +109,7 @@ longword start_time;		/* debugging, time first session began */
 #define in_GetHdrlenBytes(ip)  (in_GetHdrlen(ip) << 2) /* 8 bit byte size */
 
 /* Start reassembly section */
-static in_Header * reasm(void *);
+static in_Header * reasm(in_Header *);
 static int use_reasmbuf;	/* 0 = not doing fragmented IP datagram */
 				/* else is 1 + slot number to clean later*/
 #define MAXSLOTS	4	/* number of datagrams in progress */
