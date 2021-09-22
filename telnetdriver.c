@@ -417,7 +417,7 @@ tnmain(void)					/* start TCP from Kermit */
 			tcp_status = HOST_UNREACHABLE;
 			goto anyerr;
 			}
-		sock_wait_established(s, 30, NULL, &status);
+		sock_wait_established((sock_type *)s, 30, NULL, &status);
 		}
 
 	doslevel = 0;			/* end of DOS level i/o */
@@ -513,7 +513,7 @@ session_close(int ident)	/* close a particular, ident, session */
 		{
 		s = &session[ident].socketdata;
 		s->rdatalen = 0;		/* flush read buffer */
-		sock_close(s);
+		sock_close((sock_type *)s);
 		}
 	session_cleanout();	/* clean out deceased sessions */
 				/* activate, rtn next available session */
@@ -565,7 +565,7 @@ serial_handler(word cmd)
 		if (tn_ini() == -1)	/* init Telnet negotiations */
 			return (BAPISTAT_NOS);	/* fatal error, quit */
 
-	tcp_tick(s);			/* catch up on packet reading */
+	tcp_tick((sock_type *)s);       /* catch up on packet reading */
 
 	cmdstatus = BAPISTAT_SUC;	/* success so far */
 
@@ -587,7 +587,7 @@ serial_handler(word cmd)
 				}
 			if (s->state == tcp_StateESTAB)
 				{
-				bapiret = sock_write(s, bapiadr, bapireq);
+				bapiret = sock_write((sock_type *)s, bapiadr, bapireq);
 
 				if (bapiret == -1)	 /* no session */
 					cmdstatus = BAPISTAT_NOS;
@@ -632,14 +632,14 @@ serial_handler(word cmd)
 				{
 				if (i > bapireq)	/* safety check */
 					i = bapireq;
- 				bapiret = sock_fastread(s, bapiadr, i);
+ 				bapiret = sock_fastread((sock_type *)s, bapiadr, i);
 
 		/* if terminal serving with local echoing then echo to host */
 				if (session[active].echo != 0 && 
 					session[active].server_mode != 0 &&
 						kserver == 0 &&
 						s->myport == 23)
-					sock_write(s, bapiadr, bapiret);
+					sock_write((sock_type *)s, bapiadr, bapiret);
 				break;
 				}
 
@@ -667,7 +667,7 @@ serial_handler(word cmd)
 			switch (ch &= 0xff)	/* dispatch on escaped byte */
 				{
 				case AYT:	/* Are You There */
-    					sock_write(s, "Yes\r\n", 5);
+    					sock_write((sock_type *)s, "Yes\r\n", 5);
 					break;
 				case IAC:	/* IAC IAC yields just IAC */
 					*bapiadr = (byte) ch;
@@ -688,7 +688,7 @@ serial_handler(word cmd)
 			byte cmd[2];
 
 			cmd[0] = IAC; cmd[1] = BREAK;
-			if (sock_write(s, cmd, 2) == -1)
+			if (sock_write((sock_type *)s, cmd, 2) == -1)
 				cmdstatus = BAPISTAT_NOS; /* no session */
 			break;
 			}
@@ -702,7 +702,7 @@ serial_handler(word cmd)
 			break;
 
 		case BAPISTAT:		/* check read status (chars avail) */
-			bapiret = sock_dataready(s); /* # chars available */
+			bapiret = sock_dataready((sock_type *)s); /* # chars available */
  			break;
 
 		case BAPIDISC:			/* close this connection */
@@ -720,7 +720,7 @@ serial_handler(word cmd)
 		}
 
 	if ((s->sisopen == SOCKET_CLOSED) && (msgcnt == 0) &&  
-		(sock_dataready(s) == 0))	/* no data and no session */
+		(sock_dataready((sock_type *)s) == 0))	/* no data and no session */
 			{
 			session_close(active);	/* close deceased */
 			return (BAPISTAT_NOS);	/* means exit session */
@@ -736,8 +736,8 @@ ttinc(void)
 {
 	byte ch;
 	
-	tcp_tick(s);				/* read another packet */
-	if (sock_fastread(s, &ch, 1) != 0)	/* qty chars returned */
+	tcp_tick((sock_type *)s);	   /* read another packet */
+	if (sock_fastread((sock_type *)s, &ch, 1) != 0)	/* qty chars returned */
 		return (0xff & ch);
 	return (-1);
 }
@@ -790,7 +790,7 @@ send_iac(byte cmd, int opt)
 	io_data[0] = IAC;
 	io_data[1] = cmd;
 	io_data[2] = (byte)(opt & 0xff);
-	if (sock_write(s, io_data, 3) != 3 )
+	if (sock_write((sock_type *)s, io_data, 3) != 3 )
 		return (1);			/* failed to write */
 	if (kdebug & DEBUG_STATUS)
 		{
@@ -1129,7 +1129,7 @@ tn_sttyp(void)
 	*ttn++ = (byte)IAC;
 	*ttn   = (byte)SE;
 
-	sock_write(s, sb, ttnl + 6);
+	sock_write((sock_type *)s, sb, ttnl + 6);
 	if (kdebug & DEBUG_STATUS)
 		{
 		int i;
@@ -1154,7 +1154,7 @@ tn_snaws(void)
 	get_kscreen();				/* get current screen */
 	sbuf[4] = kterm_cols;
 	sbuf[6] = kterm_lines;
-	sock_write(s, sbuf, sizeof(sbuf));
+	sock_write((sock_type *)s, sbuf, sizeof(sbuf));
     	if (kdebug & DEBUG_STATUS)
     		{
 		outs("Opt send ");
@@ -1233,7 +1233,7 @@ server_hello(tcp_Socket *s)
 		}
 
 		
-	sock_write(s, hellomsg, strlen(hellomsg));	/* tell remote */
+	sock_write((sock_type *)s, hellomsg, strlen(hellomsg));	/* tell remote */
 				/* tell main body the news */
 	strcpy(hellomsg, "\r\n Connection starting from [");
 	ntoa(&hellomsg[strlen(hellomsg)], s->hisaddr);	/* their IP */
