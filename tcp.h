@@ -322,7 +322,7 @@ int	do_ping(byte *, longword);
 longword resolve(byte *);
 int	add_server(int *, int, longword *, longword);
 void	arp_init(void);
-int	arp_resolve(longword, void *);
+int	arp_resolve(longword, eth_address *);
 void	arp_register(longword, longword);
 void	arp_add_gateway(byte *, longword);
 longword arp_rpt_gateway(int);
