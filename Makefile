@@ -76,8 +76,7 @@ OWCCARGS+=-fnostdlib		# no default library
 # -e1000 show up to 1000 errors
 # -W3
 %.o : %.asm
-	jwasm -Zm -ms -Zp1 -Cu -nologo -W3 -e1000 $< 
-
+	jwasm -Zm -ms -Zp1 -nologo -W3 -e1000 $< 
 
 
 objects = commandparser.o communication.o filehandling.o main.o		\
@@ -89,7 +88,8 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 
 # kermit.exe is the first and hence the implied target if none is specified
 kermit.exe:	$(objects)
-	wlink Format DOS Name $< File { $^ }
+	wlink Name $<  Format DOS  File { $^ }
+
 
 # These are the dependency relations (.o depends on .asm/.c and .h):
 
