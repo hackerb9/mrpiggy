@@ -39,19 +39,7 @@ export WATCOM=${HOME}/open-watcom-2
 export PATH+=:${WATCOM}/binl
 export INCLUDE=${WATCOM}/h
 
-# Build up command line for owcc compiler
-OWCCARGS=
-OWCCARGS+=-bt=DOS		# Compile a DOS .exe file
-OWCCARGS+=-march=i86		# 16-bit 8086
-OWCCARGS+=-mcmodel=s		# small memory model: 64K code, 64K data group
-OWCCARGS+=-fpack-struct=1	# pack structures on one byte boundaries
-OWCCARGS+=-fno-stack-check	# no stack checking; optional optimization 
-OWCCARGS+=-fnostdlib		# no default library
-
-%.o : %.c
-	owcc ${OWCCARGS} -c $*.c
-
-# Maybe we need to use the wcc compiler?
+# Testing: Maybe we need to use the wcc compiler? No, didn't help over owcc.
 WCCARGS=
 WCCARGS+=-bt=DOS		# Compile a DOS .exe file
 WCCARGS+=-bc			# Application type "console"
@@ -64,6 +52,18 @@ WCCARGS+=-zl			# remove default library information
 
 %.o : %.c
 	wcc ${WCCARGS} $*.c
+
+# Build up command line for owcc compiler
+OWCCARGS=
+OWCCARGS+=-bt=DOS		# Compile a DOS .exe file
+OWCCARGS+=-march=i86		# 16-bit 8086
+OWCCARGS+=-mcmodel=s		# small memory model: 64K code, 64K data group
+OWCCARGS+=-fpack-struct=1	# pack structures on one byte boundaries
+OWCCARGS+=-fno-stack-check	# no stack checking; optional optimization 
+OWCCARGS+=-fnostdlib		# no default library
+
+%.o : %.c
+	owcc ${OWCCARGS} -c $*.c
 
 # Old masm args	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
@@ -89,7 +89,7 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 
 # kermit.exe is the first and hence the implied target if none is specified
 kermit.exe:	$(objects)
-	wcl $^
+	wlink Format DOS Name $< File { $^ }
 
 # These are the dependency relations (.o depends on .asm/.c and .h):
 
