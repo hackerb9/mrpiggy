@@ -5,6 +5,9 @@
 # Make file for MS Kermit using Microsoft's Make v4 and later and NMK.
 # Written by Joe R. Doupnik
 #
+
+######################################################################
+# OBSOLETE
 # MASM v6 or above and Microsoft C v6 or v7 are required.
 # If using MASM v6 execute this command file as
 #	NMK /f <name of this file> kermit.exe
@@ -16,6 +19,10 @@
 # MASM v6 switch /mx means preserve case of externals, required.
 # MASM v6 switch /Zm means use MASM v5.1 & earlier syntax. This switch is
 # implied by running v6 of MASM.EXE rather than running ML directly.
+######################################################################
+
+######################################################################
+# OBSOLETE
 # MSC CL switches:
 #    /AS for small memory model (64KB code, everything else in 64KB DGROUP)
 #    /Zp1 for pack structures on one byte boundaries.
@@ -25,23 +32,42 @@
 #    /Of for p-code quoting (supposed to be the default, but is broken)
 #    /nologo stops displaying MSC copyright notice on every compile
 # The inference macros below call CL and MASM to create .o modules.
+######################################################################
 
 # Set up compilation environment for Open Watcom compiler
 export WATCOM=${HOME}/open-watcom-2
 export PATH+=:${WATCOM}/binl
 export INCLUDE=${WATCOM}/h
 
-# 0: 16-bit
-# -ms: small memory model: small code, small data
-#
+# Build up command line for owcc compiler
+OWCCARGS=
+OWCCARGS+=-bt=DOS		# Compile a DOS .exe file
+OWCCARGS+=-march=i86		# 16-bit 8086
+OWCCARGS+=-mcmodel=s		# small memory model: 64K code, 64K data group
+OWCCARGS+=-fpack-struct=1	# pack structures on one byte boundaries
+OWCCARGS+=-fno-stack-check	# no stack checking; optional optimization 
+OWCCARGS+=-fnostdlib		# no default library
 
 %.o : %.c
-	echo ${PATH}
-	owcc -ms -bt=DOS -c $*.c
+	owcc ${OWCCARGS} -c $*.c
 
-# Old args	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
+# Maybe we need to use the wcc compiler?
+WCCARGS=
+WCCARGS+=-bt=DOS		# Compile a DOS .exe file
+WCCARGS+=-bc			# Application type "console"
+WCCARGS+=-0			# 16-bit 8086
+WCCARGS+=-ms			# small memory model: 64K code, 64K data group
+WCCARGS+=-zp=1			# pack structure members with alignment=1 byte
+WCCARGS+=-s			# remove stack overflow checks; optional 
+WCCARGS+=-ze			# enable NEAR, FAR, EXPORT, etc
+WCCARGS+=-zl			# remove default library information
 
+%.o : %.c
+	wcc ${WCCARGS} $*.c
 
+# Old masm args	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
+
+# JWASM args
 # -Zm MASM v5.1 SYNTAX (don't need to qualify fields with structure names) 
 # -ms ? Small memory model?
 # -Zp1 for pack structures on one byte boundaries
@@ -53,7 +79,6 @@ export INCLUDE=${WATCOM}/h
 	jwasm -Zm -ms -Zp1 -Cu -nologo -W3 -e1000 $< 
 
 
-# kermit.exe is the first and hence the implied target if none is specified
 
 objects = commandparser.o communication.o filehandling.o main.o		\
 	receive.o script.o send.o server.o setcommand.o showcommand.o	\
@@ -62,9 +87,9 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 	telnetdriver.o tcp.o ethsupport.o dns.o arp.o bootp.o icmp.o	\
 	packetdriver.o netlibc.o netutil.o
 
-
+# kermit.exe is the first and hence the implied target if none is specified
 kermit.exe:	$(objects)
-	owcc -L -o $@ $^
+	wcl $^
 
 # These are the dependency relations (.o depends on .asm/.c and .h):
 
