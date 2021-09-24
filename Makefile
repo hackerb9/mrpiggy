@@ -92,7 +92,7 @@ OWCCARGS+=-DMSDOS
 
 # Obsolete assembly method:	 masm /mx /Zm $*.asm;
 
-# JWASM args
+### JWASM args
 # -Zm  MASM v5.1 SYNTAX (don't need to qualify fields with structure names)
 # -ms  Small memory model
 # -Zp1 pack structures on one byte boundaries
@@ -110,9 +110,11 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 	telnetdriver.o tcp.o ethsupport.o dns.o arp.o bootp.o icmp.o	\
 	packetdriver.o netlibc.o netutil.o
 
-# kermit.exe is the first and hence the implied target if none is specified
+### kermit.exe is the first and hence the implied target if none is specified
+# OWCC serves as a nicer frontend to WLINK's wacky directives file.
+# Use -fd=directives.lnk if you wish to see the .LNK file owcc creates.
 kermit.exe:	$(objects)
-	owcc -fd=generated.lnk -bdos -o kermit.exe $^
+	owcc -bdos -o kermit.exe $^
 
 
 # OBSOLETE
