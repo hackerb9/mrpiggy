@@ -112,7 +112,7 @@ telnetdriver.o tcp.o ethsupport.o dns.o arp.o bootp.o icmp.o packetdriver.o netl
 
 .PHONY : clean
 clean :
-	rm kermit.exe $(objects) 2>/dev/null || true
+	rm kermit.exe $(objects) *.err 2>/dev/null || true
 
 
 
