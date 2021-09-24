@@ -62,6 +62,7 @@ OWCCARGS+=-fpack-struct=1	# pack structures on one byte boundaries
 OWCCARGS+=-fno-stack-check	# no stack checking; optional optimization 
 OWCCARGS+=-fnostdlib		# no default library
 OWCCARGS+=-mabi=cdecl		# Set calling convention to C (_underscore)
+OWCCARGS+=-DMSDOS		# define MSDOS so netlibc.c will use _ourdiv()
 
 %.o : %.c
 	owcc ${OWCCARGS} -c $*.c
