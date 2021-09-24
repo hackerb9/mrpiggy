@@ -91,12 +91,11 @@ OWCCARGS+=-DMSDOS
 ### JWASM args
 # -Cx  Casemap=none. Preserve case of externals, required.
 # -Zm  Use MASM v5.1 syntax. Don't need to qualify fields with structure names.
-# -ms  Small memory model
-# -Zp1 pack structures on one byte boundaries
+# -Zp1 pack structures on one byte boundaries (needed?)
 # -q   Quiet: don't show statistics after assembling
 # -e1000  show up to 1000 errors
 %.o : %.asm
-	jwasm -Cx -Zm -ms -Zp1 -q -e1000 $<
+	jwasm -Cx -Zm -Zp1 -q -e1000 $<
 
 
 objects = commandparser.o communication.o filehandling.o main.o		\
