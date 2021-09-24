@@ -1,6 +1,6 @@
 	NAME	mssker
 ; File MSSKER.ASM
-	include mssdef.h
+	include symboldefs.h
 ; Edit history
 ; 20 Mar 1998 version 3.16
 ; Last edit
@@ -902,10 +902,19 @@ ifdef	no_terminal
 	mov	dx,offset noterm
 	int	dos
 endif
-ifdef no_graphics + no_tcp + no_network
+
+;; Here mskermit originally used:
+;;     ifdef no_graphics + no_tcp + no_network
+;; That doesn't work with jwasm, so unroll it presuming '+' means Boolean OR.
+ifdef no_graphics
+elseifdef no_tcp
+elseifdef no_network
 	mov	dx,offset crlf
 	int	dos
+endelse
+endelse
 endif
+
 	mov	dx,offset hlpmsg
 	int	dos
 start3:	mov	patchena,' '		; let patch level show

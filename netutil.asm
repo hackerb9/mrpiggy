@@ -48,7 +48,7 @@ _BSS	ENDS
 DGROUP	GROUP	CONST, _BSS, _DATA
 	ASSUME  CS: _TEXT, DS: DGROUP, SS: DGROUP
 
-	include	mssdef.h
+	include	symboldefs.h
 data	segment
 	extrn	flags:byte
 data	ends

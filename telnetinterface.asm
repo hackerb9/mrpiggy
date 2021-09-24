@@ -37,7 +37,7 @@
 ; Use ktcpswap to resume a session because ktcpstart always tries to start a
 ; new one.
 
-	include	mssdef.h
+	include	symboldefs.h
 
 bapicon	equ	0a0h		; 3Com BAPI, connect to port
 bapidisc equ	0a1h		; 3Com BAPI, disconnect
@@ -101,7 +101,7 @@ _kport		dw	23		; TCP port (Telnet = 23)
 _kpdint		dw	0		; Packet Driver Int, 0 = search
 _kdebug		db	0		; if SET DEBUG ON is effective
 _ktnmode	db	0		; Telnet mode (0=NVT-ASCII,1=BINARY)
-_kterm		dw	0		; terminal type index, see mssdef.h
+_kterm		dw	0		; terminal type index, see symboldefs.h
 _kterm_lines	db	0		; terminal screen height (24)
 _kterm_cols	db	0		; terminal screen width (80)
 _ktcpmss	dw	0		; MSS override

@@ -1,7 +1,7 @@
 	NAME	msxibm
 ; File MSXIBM.ASM
 ; Kermit system dependent module for IBM-PC
-	include mssdef.h
+	include symboldefs.h
 ;	Copyright (C) 1982, 1999, Trustees of Columbia University in the 
 ;	City of New York.  The MS-DOS Kermit software may not be, in whole 
 ;	or in part, licensed or sold for profit as a software product itself,
@@ -5130,8 +5130,10 @@ out75b1:call    read_timer2	; save previous end count in CX, read timer
         out	timer2data,al	; set counter wraparound to 0FFFFH
         jmp	$+2
         out	timer2data,al
-	;; set timer value for next bit
-        mov	bp,cnt75b*4+cnt75b*4+cnt75b AND 0FFFFh
+	;; set timer value for next bit -- ensure 16-bit result
+        mov	bp,(cnt75b*4+cnt75b*4+cnt75b) AND 0FFFFh
+        mov	bp,(cnt75b*4+cnt75b*4+cnt75b) AND 0ffffh ; set timer value for next bit
+>>>>>>> owcc
         mov	dx,modem.mddat	; get com port address
         add	dx,3		; address of it's line control register
         in 	al,dx		; get port status

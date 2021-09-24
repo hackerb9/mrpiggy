@@ -32,8 +32,8 @@
  *  eth_brdcast	- Ethernet broadcast address.
  */
 
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 #define ETH_MIN	60              /* Minimum Ethernet packet size */
 
@@ -147,9 +147,9 @@ eth_release(void)
 /*
  * eth_hardware - return pointer to source hardware address of a frame
  */
-void *
-eth_hardware(byte *p)
+eth_address *
+eth_hardware(in_Header *p)
 {
 	if (p == NULL || pktdevclass == PD_SLIP) return (NULL);
-	return (p - 8);
+	return (eth_address *)(p - 8);
 }

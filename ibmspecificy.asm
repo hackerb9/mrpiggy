@@ -1,6 +1,6 @@
 	NAME msyibm
 ; File MSYIBM.ASM
-	include mssdef.h
+	include symboldefs.h
 ;	Copyright (C) 1982, 1999, Trustees of Columbia University in the 
 ;	City of New York.  The MS-DOS Kermit software may not be, in whole 
 ;	or in part, licensed or sold for profit as a software product itself,

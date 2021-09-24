@@ -17,8 +17,8 @@
  * strchr, strcat, strncat, strcpy, strncpy, strlen, strcmp, stricmp, strncmp
  * atoi, itoa, ltoa, isdigit, ntoa.
 */
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 #ifndef MSDOS
 /*

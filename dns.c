@@ -23,8 +23,8 @@
  *
  */
 
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 byte *def_domain;
 
@@ -249,7 +249,7 @@ sendom(byte *s, longword towho, word num)
     	if (udp_open(dom_sock, 0, towho, DNS_PORT) == 0)	/* failure */
     		return (0); 					/* fail*/
 
-    if ((word)sock_write(dom_sock, (byte *)question, ulen) != ulen)
+    if ((word)sock_write((sock_type *)dom_sock, (byte *)question, ulen) != ulen)
     	return (0);						/* fail */
 
     return (ulen);
@@ -358,7 +358,7 @@ udpdom() {
 	register int i, uret;
 	longword desired;
 
-	uret = sock_fastread(dom_sock, (byte *)question, sizeof(struct useek));
+	uret = sock_fastread((sock_type *)dom_sock, (byte *)question, sizeof(struct useek));
 
 	if (uret == 0) return (0L);		/* fastread failed to read */
 
@@ -449,11 +449,11 @@ Sdomain(byte *mname, int adddom, longword nameserver, byte *timedout)
 			{
 			if (icmp_unreach != 0)		/* unreachable? */
 			 	goto sock_err;
-			if (tcp_tick(dom_sock) == 0) 	/* read packets */
+			if (tcp_tick((sock_type *)dom_sock) == 0) 	/* read packets */
 				goto sock_err;		/* socket is closed */
 			if (chk_timeout(timeout) == TIMED_OUT)
 				break;			/* timeout */
-			if (sock_dataready(dom_sock))	/* have response */
+			if (sock_dataready((sock_type *)dom_sock))	/* have response */
 				*timedout = 0;		/* say no timeout */
 			if (chkcon() != 0)		/* Control-Break */
 				goto sock_err;		/* bail out */
@@ -465,7 +465,7 @@ Sdomain(byte *mname, int adddom, longword nameserver, byte *timedout)
 	if (*timedout == 0)			/* if answer, else fall thru*/
 		{
 		response = udpdom();		/* process the received data*/
-		sock_close(dom_sock);
+		sock_close((sock_type *)dom_sock);
 		return (response);
 		}
 
@@ -474,7 +474,7 @@ sock_err:
 	ntoa(namebuff, nameserver);	/* nameserver IP to dotted decimal */
 	outs(namebuff);			/* display nameserver's IP */
 	*timedout = 1;			/* say timeout */
-	sock_close(dom_sock);
+	sock_close((sock_type *)dom_sock);
 	while (chkcon()) ;		/* consume extra ^Cs */
 	return (0);
 }

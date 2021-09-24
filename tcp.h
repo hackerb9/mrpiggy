@@ -275,28 +275,28 @@ typedef union {
     if (ip_delay2(s, seconds, fn, statusptr)) goto sock_err;
 
 /* s is a pointer to a udp or tcp socket */
-int	sock_read(void *, byte FAR *, int);
-int	sock_fastread(void *, byte FAR *, int);
-int	sock_write(void *, byte FAR *, int);
-word	sock_dataready(void *);
-int	sock_established(void *);
-int	sock_close(void *);
-void	sock_abort(void *);
-int	sock_setmode(void *, word, word);
+int	sock_read(sock_type *, byte FAR *, int);
+int	sock_fastread(sock_type *, byte FAR *, int);
+int	sock_write(sock_type *, byte FAR *, int);
+word	sock_dataready(sock_type *);
+int	sock_established(sock_type *);
+int	sock_close(sock_type *);
+void	sock_abort(sock_type *);
+int	sock_setmode(tcp_Socket *, word, word);
 
 /*
  * TCP or UDP specific material, must be used for open's and listens, but
  * sock calls are used for everything else.
  */
-int	udp_open(void *, word, longword, word);
-int	tcp_open(void *, word, longword, word);
-int	tcp_listen(void *, word, longword, word, word);
+int	udp_open(udp_Socket *, word, longword, word);
+int	tcp_open(tcp_Socket *, word, longword, word);
+int	tcp_listen(tcp_Socket *, word, longword, word, word);
 int	tcp_established(void *);
 
 /* timers */
-int	ip_delay0(void *, int, procref, int *);
-int	ip_delay1(void *, int, procref, int *);
-int	ip_delay2(void *, int, procref, int *);
+int	ip_delay0(sock_type *, int, procref, int *);
+int	ip_delay1(sock_type *, int, procref, int *);
+int	ip_delay2(sock_type *, int, procref, int *);
 
 /* tcp_init/tcp_shutdown, init/kill all tcp and lower services.
    Call if sock_init is not used, else not recommended.
@@ -307,10 +307,10 @@ int	tcp_abort(tcp_Socket *);
 /* tcp_tick - called periodically by user application in sock_wait.
   returns 0 when our socket closes
 */
-int	tcp_tick(void *);
+int	tcp_tick(sock_type *);
 
-int	tcp_cancel(void *);
-int	udp_cancel(void *);
+int	tcp_cancel(in_Header *);
+int	udp_cancel(in_Header *);
 
 int	eth_init();
 byte *	eth_formatpacket(void *, word);
@@ -318,14 +318,14 @@ int	eth_send(word);
 void	eth_free(void *);
 byte *	eth_arrived(word *);
 void	eth_release(void);
-void *	eth_hardware(void *);
+eth_address *	eth_hardware(in_Header *);
 int	do_bootp(void);
 int	do_rarp(void);
 int	do_ping(byte *, longword);
 longword resolve(byte *);
 int	add_server(int *, int, longword *, longword);
 void	arp_init(void);
-int	arp_resolve(longword, void *);
+int	arp_resolve(longword, eth_address *);
 void	arp_register(longword, longword);
 void	arp_add_gateway(byte *, longword);
 longword arp_rpt_gateway(int);

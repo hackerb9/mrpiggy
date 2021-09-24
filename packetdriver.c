@@ -16,8 +16,8 @@
  * Last edit
  * 12 Jan 1995 v3.14
  */
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 #define BUFSIZE	(8*1024)		/* size of pkt receive buffer */
 

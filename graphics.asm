@@ -1,6 +1,6 @@
  	Name msgibm
 ; File MSGIBM.ASM
-	include mssdef.h
+	include symboldefs.h
 ;	Copyright (C) 1982, 1999, Trustees of Columbia University in the 
 ;	City of New York.  The MS-DOS Kermit software may not be, in whole 
 ;	or in part, licensed or sold for profit as a software product itself,
@@ -191,7 +191,7 @@ CAN	equ	18h			; ^X to return to ANSI mode
 ESCZ	equ	1Ah			; SUB, ESC-^Z triggers crosshairs
 VT	equ	0Bh			; ^K go up one line
 CR	equ	0Dh
-;; FS and GrpSp are 386/486 segment registers so we need to rename them.
+;; FS and GS are 386/486 segment registers so we need to rename them.
 FlSep	equ	1Ch			; ^\ for point plot mode
 GrpSp	equ	1Dh			; ^] draw line (1st move is invisible)
 RS	equ	1Eh	       		; ^^ for incremental line plot mode
@@ -4885,10 +4885,15 @@ dgbar5:	mov	cx,rectx2		; ending x coord
 	call	psetup			; set up dsp and di to screen offset
 			; di points to whole byte, do bits in byte in gfplot
 	
-;;; Why did Kermit originally stuff a 16-bit number in an 8-bit variable?
+;;; Why did MS-Kermit originally stuff a 16-bit number in an 8-bit variable?
 ;;	mov	fill,0ffffh		; XXX Something I don't understand.
 	mov	fill,0ffh	
 	
+||||||| merged common ancestors
+	mov	fill,0ffffh
+=======
+	mov	fill,0ffh
+>>>>>>> owcc
 dgbar6:	call	gfplot			; line fill routine, uses CX
 	call	pincy			; next line
 	dec	numlines
@@ -5286,7 +5291,7 @@ dginter2:cmp	di,ax	 		; yscan vs y[index]
 	mov	bx,word ptr rdbuf	; count of x,y pairs
 	shl	bx,1
 	shl	bx,1			; count pairs
-	sub	ax,word ptr rdbuf+2[bx-2] ; y[0] - y[maxindex-1]
+	sub	ax,word ptr (rdbuf+2)[bx-2] ; y[0] - y[maxindex-1]
 	pop	bx
 	jmp	short dginter4
 dginter3:sub	ax,[bx-2] 		; y[index] - y[index-1]

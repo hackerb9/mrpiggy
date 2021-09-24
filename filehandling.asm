@@ -1,6 +1,6 @@
 	NAME	mssfil
 ; File MSSFIL.ASM
-	include mssdef.h
+	include symboldefs.h
 ;	Copyright (C) 1982, 1999, Trustees of Columbia University in the 
 ;	City of New York.  The MS-DOS Kermit software may not be, in whole 
 ;	or in part, licensed or sold for profit as a software product itself,
@@ -24,7 +24,7 @@
 	public	L1cp437, L1cp850, L1cp860, L1cp863, L1cp865, unique
 	public	cplatin, goopen, latininv, protlist, jpnxtof, templf
 	public	jpnftox, echrcnt, rcvpathflg, sndpathflg, atfile, atflag
-	public	l5cp866, lccp866r, k8cp866r, k7cp866r, cp866koi7, cp866koi8
+	public	L5cp866, lccp866r, k8cp866r, k7cp866r, cp866koi7, cp866koi8
 	public	cp866lci, crcword, lastfsize
 
 SIchar	equ	0fh
