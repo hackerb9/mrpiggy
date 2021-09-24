@@ -4886,14 +4886,8 @@ dgbar5:	mov	cx,rectx2		; ending x coord
 			; di points to whole byte, do bits in byte in gfplot
 	
 ;;; Why did MS-Kermit originally stuff a 16-bit number in an 8-bit variable?
-;;	mov	fill,0ffffh		; XXX Something I don't understand.
+;;	mov	fill,0ffffh		; XXX How did this even work?
 	mov	fill,0ffh	
-	
-||||||| merged common ancestors
-	mov	fill,0ffffh
-=======
-	mov	fill,0ffh
->>>>>>> owcc
 dgbar6:	call	gfplot			; line fill routine, uses CX
 	call	pincy			; next line
 	dec	numlines

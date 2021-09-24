@@ -5132,8 +5132,6 @@ out75b1:call    read_timer2	; save previous end count in CX, read timer
         out	timer2data,al
 	;; set timer value for next bit -- ensure 16-bit result
         mov	bp,(cnt75b*4+cnt75b*4+cnt75b) AND 0FFFFh
-        mov	bp,(cnt75b*4+cnt75b*4+cnt75b) AND 0ffffh ; set timer value for next bit
->>>>>>> owcc
         mov	dx,modem.mddat	; get com port address
         add	dx,3		; address of it's line control register
         in 	al,dx		; get port status
