@@ -23,8 +23,8 @@
  *
  */
 
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 byte *def_domain;
 

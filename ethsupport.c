@@ -32,8 +32,8 @@
  *  eth_brdcast	- Ethernet broadcast address.
  */
 
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 #define ETH_MIN	60              /* Minimum Ethernet packet size */
 

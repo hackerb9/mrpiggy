@@ -58,7 +58,7 @@
 ; 12 Jan 1995 version 3.14
 ; Last edit
 ; 23 Dec 1995
-INCLUDE mssdef.h
+INCLUDE symboldefs.h
 getintv		equ	35h		; DOS get interrupt vector to es:bx
 dos		equ	21h
 lf		equ	0ah

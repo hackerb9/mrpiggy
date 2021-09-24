@@ -23,8 +23,8 @@
  *   and successors 2131 and 2132.
  */
 
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 /*
  * structure for send and receives

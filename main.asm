@@ -1,6 +1,6 @@
 	NAME	mssker
 ; File MSSKER.ASM
-	include mssdef.h
+	include symboldefs.h
 ; Edit history
 ; 20 Mar 1998 version 3.16
 ; Last edit

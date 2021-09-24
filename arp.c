@@ -27,8 +27,8 @@
  *               - does not return hardware address if passed NULL for buffer
  *
  */
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 #define MAX_ARP_DATA 10			/* cache entries */
 #define MAX_ARP_ALIVE  300		/* cache lifetime, five minutes */

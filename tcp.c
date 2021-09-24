@@ -22,8 +22,8 @@
  *
  */
 
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 extern	int arp_handler(in_Header *);
 extern	int rarp_handler(void *);

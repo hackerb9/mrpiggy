@@ -19,8 +19,8 @@
  * Last edit
  * 12 Jan 1995 v3.14
  */
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 #define	MAXSESSIONS 6
 #define MSGBUFLEN 1024
@@ -97,7 +97,7 @@ byte bootmethod = BOOT_FIXED;	/* Boot method (fixed, bootp, rarp) */
 struct	{
 	word ident;
 	char *name;
-	} termarray[]=		/* terminal type names, from mssdef.h */
+	} termarray[]=		/* terminal type names, from symboldefs.h */
 		{
 		{0,"UNKNOWN"}, {1,"H-19"}, {2,"VT52"}, {4,"VT100"},
 		{8,"VT102"}, {0x10,"VT220"}, {0x20,"VT320"}, {0x40,"TEK4014"},
@@ -154,7 +154,7 @@ extern byte khost[];			/* remote host name/IP # */
 extern word kport;			/* remote host TCP port */
 extern word kserver;			/* if Kermit is in server mode */
 extern byte ktttype[];			/* user term type override string */
-extern byte kterm;			/* terminal type index, from mssdef.h*/
+extern byte kterm;			/* terminal type index, from symboldefs.h*/
 extern byte kterm_lines;		/* terminal screen height */
 extern word kterm_cols;			/* terminal screen width */
 extern byte kbtpserver[];		/* IP of Bootp host answering query */

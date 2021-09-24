@@ -1,6 +1,6 @@
 	NAME	mszibm
 ; File MSZIBM.ASM
-	include mssdef.h
+	include symboldefs.h
 ;	Copyright (C) 1982, 1999, Trustees of Columbia University in the 
 ;	City of New York.  The MS-DOS Kermit software may not be, in whole 
 ;	or in part, licensed or sold for profit as a software product itself,
@@ -7366,7 +7366,7 @@ modtab1:mov	[si+bx],cl		; store tab byte
 ; This routine initializes the VT  setups at startup. It is called from
 ; procedure lclyini in module msyibm.
 vsinit	proc	near
-	mov	vtemu.vtflgst,vsdefaults ; Init to defaults in mssdef.h
+	mov	vtemu.vtflgst,vsdefaults ; Init to defaults in symboldefs.h
 	mov	vtemu.vtflgop,vsdefaults ; Init runtime state to setup items
 	mov	savflgs,vsdefaults
 	mov	iniflgs,vsdefaults

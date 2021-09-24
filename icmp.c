@@ -19,8 +19,8 @@
  * Last edit
  * 31 Oct 2000 v3.16
  */
-#include "msntcp.h"
-#include "msnlib.h"
+#include "tcp.h"
+#include "netlibc.h"
 
 /*
  * ICMP - RFC 792
