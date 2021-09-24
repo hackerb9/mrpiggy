@@ -106,17 +106,7 @@ struct	{
 		{0x2000, "ANSI"}, {0xff,"UNKNOWN"}
 		};
 
-// Note from hackerb9: bcc doesn't support far pointers to different
-// segments. According to https://github.com/skeeto/bcc-demos, the
-// workaround is to use inline assembly (surrounded by #asm, #endasm
-// tags). In this case, since it is an extern, I think simply removing
-// the word FAR may suffice. On the otherhand, I have no idea.
-
-//extern  byte FAR * bapiadr;	/* Far address of local Telnet client's buf */
-extern  byte * bapiadr;	/* Far address of local Telnet client's buf */
-
-
-
+extern  byte FAR * bapiadr;	/* Far address of local Telnet client's buf */
 extern	int bapireq, bapiret;	/* count of chars in/out */
 extern	longword my_ip_addr, sin_mask; /* binary of our IP, netmask */
 extern	longword ipbcast;	/* binary IP of broadcast */

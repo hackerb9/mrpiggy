@@ -332,15 +332,8 @@ ddextract(struct useek *qp, longword *mip)
 	    rrp = (struct rrpart *)p;		/* resource record here */
 	    if (*p == 0 && *(p+1) == DTYPEA && 	/* correct type and class */
 	    *(p+2) == 0 && *(p+3) == DIN) {
-
-
-   //		bcopy(&rrp->rdata, mip, 4);	/* save binary IP # */
-	      /* This is failing to compiile under BCC. */
-	      /* Try splitting it up into two separate lines */
-	      byte *rdata=rrp->rdata;
-	      bcopy(&rdata, mip, 4);	/* save binary IP # */
-
-	      return (0);			/* successful return */
+		bcopy(&rrp->rdata, mip, 4);	/* save binary IP # */
+		return (0);			/* successful return */
 	    }
 	    p += 10 + ntohs(rrp->rdlength);	/* length of rest of RR */
 	}
