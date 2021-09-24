@@ -24,7 +24,7 @@
 	public	L1cp437, L1cp850, L1cp860, L1cp863, L1cp865, unique
 	public	cplatin, goopen, latininv, protlist, jpnxtof, templf
 	public	jpnftox, echrcnt, rcvpathflg, sndpathflg, atfile, atflag
-	public	l5cp866, lccp866r, k8cp866r, k7cp866r, cp866koi7, cp866koi8
+	public	L5cp866, lccp866r, k8cp866r, k7cp866r, cp866koi7, cp866koi8
 	public	cp866lci, crcword, lastfsize
 
 SIchar	equ	0fh
