@@ -53,6 +53,9 @@ WCCARGS+=-zl			# remove default library information
 %.o : %.c
 	wcc ${WCCARGS} $*.c
 
+
+# Obsolete C compiler flags:	 cl /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
+
 # Build up command line for owcc compiler
 OWCCARGS=
 OWCCARGS+=-bt=DOS		# Compile a DOS .exe file
@@ -67,7 +70,8 @@ OWCCARGS+=-DMSDOS		# define MSDOS so netlibc.c will use _ourdiv()
 %.o : %.c
 	owcc ${OWCCARGS} -c $*.c
 
-# Old masm args	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
+
+# Obsolete assembly method: 	 masm /mx $*.asm;
 
 # JWASM args
 # -Zm  MASM v5.1 SYNTAX (don't need to qualify fields with structure names) 
