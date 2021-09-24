@@ -11,7 +11,7 @@
 # MASM v6 or above and Microsoft C v6 or v7 are required.
 # If using MASM v6 execute this command file as
 #	NMK /f <name of this file> kermit.exe
-# or rename this file to be "makefile" and say  
+# or rename this file to be "makefile" and say
 #	NMK kermit.exe.
 # The final argument, kermit.exe, tells NMK which item to make.
 # NMK is smaller than NMAKE; MASM.EXE (v6) provides v5 compatibility.
@@ -34,54 +34,73 @@
 # The inference macros below call CL and MASM to create .o modules.
 ######################################################################
 
-# Set up compilation environment for Open Watcom compiler
+### Set up compilation environment for Open Watcom compiler
 export WATCOM=${HOME}/open-watcom-2
 export PATH+=:${WATCOM}/binl
 export INCLUDE=${WATCOM}/h
 
-# Testing: Maybe we need to use the wcc compiler? Nope, no better than owcc.
-WCCARGS=
-WCCARGS+=-bt=DOS		# Compile a DOS .exe file
-WCCARGS+=-bc			# Application type "console"
-WCCARGS+=-0			# 16-bit 8086
-WCCARGS+=-ms			# small memory model: 64K code, 64K data group
-WCCARGS+=-zp=1			# pack structure members with alignment=1 byte
-WCCARGS+=-s			# remove stack overflow checks; optional 
-WCCARGS+=-ze			# enable NEAR, FAR, EXPORT, etc
-WCCARGS+=-zl			# remove default library information
+### Testing: Maybe we need to use the wcc compiler? Nope, no better than owcc.
+# Quiet: Don't show logo at startup
+WCCARGS+=-q
+# Compile a DOS .exe file
+WCCARGS+=-bt=DOS
+# Application type "console"
+WCCARGS+=-bc
+# 16-bit 8086
+WCCARGS+=-0
+# small memory model: 64K code, 64K data group
+WCCARGS+=-ms
+# pack structure members with alignment=1 byte
+WCCARGS+=-zp=1
+# remove stack overflow checks; optional
+WCCARGS+=-s
+# enable NEAR, FAR, EXPORT, etc
+WCCARGS+=-ze
+# remove default library information
+WCCARGS+=-zl
+# Set calling convention to C (_underscore)
+WCCARGS+=-ecc
+# define MSDOS so netlibc.c will use _ourdiv()
+WCCARGS+=-DMSDOS
 
-%.o : %.c
-	wcc ${WCCARGS} $*.c
+#%.o : %.c
+#	wcc ${WCCARGS} $*.c
 
+### Obsolete C compiler flags:	 cl /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
-# Obsolete C compiler flags:	 cl /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
-
-# Build up command line for owcc compiler
-OWCCARGS=
-OWCCARGS+=-bt=DOS		# Compile a DOS .exe file
-OWCCARGS+=-march=i86		# 16-bit 8086
-OWCCARGS+=-mcmodel=s		# small memory model: 64K code, 64K data group
-OWCCARGS+=-fpack-struct=1	# pack structures on one byte boundaries
-OWCCARGS+=-fno-stack-check	# no stack checking; optional optimization 
-OWCCARGS+=-fnostdlib		# no default library
-OWCCARGS+=-mabi=cdecl		# Set calling convention to C (_underscore)
-OWCCARGS+=-DMSDOS		# define MSDOS so netlibc.c will use _ourdiv()
+### Build up command line for owcc compiler
+# Compile and link for a DOS .exe file
+OWCCARGS+=-bdos
+# 16-bit 8086
+OWCCARGS+=-march=i86
+# small memory model: 64K code, 64K data group
+OWCCARGS+=-mcmodel=s
+# pack structures on one byte boundaries
+OWCCARGS+=-fpack-struct=1
+# no stack checking; optional optimization
+OWCCARGS+=-fno-stack-check
+# no default library
+OWCCARGS+=-fnostdlib
+# Set calling convention to C (_underscore)
+OWCCARGS+=-mabi=cdecl
+# define MSDOS so netlibc.c will use _ourdiv()
+OWCCARGS+=-DMSDOS
 
 %.o : %.c
 	owcc ${OWCCARGS} -c $*.c
 
 
-# Obsolete assembly method: 	 masm /mx $*.asm;
+# Obsolete assembly method:	 masm /mx /Zm $*.asm;
 
 # JWASM args
-# -Zm  MASM v5.1 SYNTAX (don't need to qualify fields with structure names) 
-# -ms  ? Small memory model?
-# -Zp1 for pack structures on one byte boundaries
+# -Zm  MASM v5.1 SYNTAX (don't need to qualify fields with structure names)
+# -ms  Small memory model
+# -Zp1 pack structures on one byte boundaries
 # -Cx  Casemap=none (-Cu all to upper, -Cp =notpublic does not work )
-# -nologo stops displaying JWASM copyright notice on every compile
+# -q   Quiet: don't show statistics after assembling
 # -e1000  show up to 1000 errors
 %.o : %.asm
-	jwasm -Zm -ms -Zp1 -Cx -nologo -e1000 $< 
+	jwasm -Zm -ms -Zp1 -Cx -q -e1000 $<
 
 
 objects = commandparser.o communication.o filehandling.o main.o		\
@@ -93,10 +112,13 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 
 # kermit.exe is the first and hence the implied target if none is specified
 kermit.exe:	$(objects)
-	wcl $^
+	owcc -fd=generated.lnk -bdos -o kermit.exe $^
 
+
+# OBSOLETE
 # Here's how to link with wlink if we decide to go back to that.
-#	wlink Name kermit.exe  Format DOS  File { $^ }
+#kermit.exe:	$(objects)
+#	wlink  Option quiet  Name kermit.exe  System DOS  File { $^ }
 
 
 # These are the dependency relations (.o depends on .asm/.c and .h):
