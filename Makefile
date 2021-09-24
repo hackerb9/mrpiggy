@@ -70,15 +70,14 @@ OWCCARGS+=-DMSDOS		# define MSDOS so netlibc.c will use _ourdiv()
 # Old masm args	 /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
 
 # JWASM args
-# -Zm MASM v5.1 SYNTAX (don't need to qualify fields with structure names) 
-# -ms ? Small memory model?
+# -Zm  MASM v5.1 SYNTAX (don't need to qualify fields with structure names) 
+# -ms  ? Small memory model?
 # -Zp1 for pack structures on one byte boundaries
-# -Cu means Casemap=all to upper, (-Cx =none, -Cp =notpublic does not work )
+# -Cx  Casemap=none (-Cu all to upper, -Cp =notpublic does not work )
 # -nologo stops displaying JWASM copyright notice on every compile
-# -e1000 show up to 1000 errors
-# -W3
+# -e1000  show up to 1000 errors
 %.o : %.asm
-	jwasm -Zm -ms -Zp1 -Cx -nologo -W3 -e1000 $< 
+	jwasm -Zm -ms -Zp1 -Cx -nologo -e1000 $< 
 
 
 objects = commandparser.o communication.o filehandling.o main.o		\
