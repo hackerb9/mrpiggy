@@ -5281,7 +5281,7 @@ dginter2:cmp	di,ax	 		; yscan vs y[index]
 	mov	bx,word ptr rdbuf	; count of x,y pairs
 	shl	bx,1
 	shl	bx,1			; count pairs
-	sub	ax,word ptr rdbuf+2[bx-2] ; y[0] - y[maxindex-1]
+	sub	ax,word ptr (rdbuf+2)[bx-2] ; y[0] - y[maxindex-1]
 	pop	bx
 	jmp	short dginter4
 dginter3:sub	ax,[bx-2] 		; y[index] - y[index-1]

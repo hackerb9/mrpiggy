@@ -10104,8 +10104,8 @@ dggpol3:jc	dggpol4
 	shl	bx,1			; count pairs
 	mov	cx,word ptr emubuf	; x coord
 	mov	ax,dgnum		; y coord
-	mov	word ptr rdbuf+2[bx],cx	; stuff x
-	mov	word ptr rdbuf+2[bx+2],ax ; stuff y
+	mov	word ptr (rdbuf+2)[bx],cx	; stuff x
+	mov	word ptr (rdbuf+2)[bx+2],ax 	; stuff y
 	inc	word ptr rdbuf		; another vertex in list
 	jmp	short dggpol1		; get another vertex
 dggpol4:cmp	word ptr rdbuf,3	; minimum viable point count
@@ -10115,9 +10115,9 @@ dggpol4:cmp	word ptr rdbuf,3	; minimum viable point count
 	shl	bx,1			; count pairs
 	mov	al,mar_top
 	xor	ah,ah
-	mov	word ptr rdbuf+2[bx],ax	; top margin, PC text lines
+	mov	word ptr (rdbuf+2)[bx],ax	; top margin, PC text lines
 	mov	al,mar_bot
-	mov	word ptr rdbuf+2[bx+2],ax ; bottom margin, PC text lines
+	mov	word ptr (rdbuf+2)[bx+2],ax	; bottom margin, PC text lines
 	call	dgsettek		; setup special graphics mode
 	mov	al,curattr		; save current coloring
 	push	ax
