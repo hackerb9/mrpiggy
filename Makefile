@@ -39,7 +39,7 @@ export WATCOM=${HOME}/open-watcom-2
 export PATH+=:${WATCOM}/binl
 export INCLUDE=${WATCOM}/h
 
-# Testing: Maybe we need to use the wcc compiler? No, didn't help over owcc.
+# Testing: Maybe we need to use the wcc compiler? Nope, no better than owcc.
 WCCARGS=
 WCCARGS+=-bt=DOS		# Compile a DOS .exe file
 WCCARGS+=-bc			# Application type "console"
@@ -61,6 +61,7 @@ OWCCARGS+=-mcmodel=s		# small memory model: 64K code, 64K data group
 OWCCARGS+=-fpack-struct=1	# pack structures on one byte boundaries
 OWCCARGS+=-fno-stack-check	# no stack checking; optional optimization 
 OWCCARGS+=-fnostdlib		# no default library
+OWCCARGS+=-mabi=cdecl		# Set calling convention to C (_underscore)
 
 %.o : %.c
 	owcc ${OWCCARGS} -c $*.c
@@ -71,12 +72,12 @@ OWCCARGS+=-fnostdlib		# no default library
 # -Zm MASM v5.1 SYNTAX (don't need to qualify fields with structure names) 
 # -ms ? Small memory model?
 # -Zp1 for pack structures on one byte boundaries
-# -Cu means Casemap=all, (-Cp means Casemap=none )
+# -Cu means Casemap=all to upper, (-Cx =none, -Cp =notpublic does not work )
 # -nologo stops displaying JWASM copyright notice on every compile
 # -e1000 show up to 1000 errors
 # -W3
 %.o : %.asm
-	jwasm -Zm -ms -Zp1 -nologo -W3 -e1000 $< 
+	jwasm -Zm -ms -Zp1 -Cx -nologo -W3 -e1000 $< 
 
 
 objects = commandparser.o communication.o filehandling.o main.o		\
@@ -88,7 +89,10 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 
 # kermit.exe is the first and hence the implied target if none is specified
 kermit.exe:	$(objects)
-	wlink Name $<  Format DOS  File { $^ }
+	wcl $^
+
+# Here's how to link with wlink if we decide to go back to that.
+#	wlink Name kermit.exe  Format DOS  File { $^ }
 
 
 # These are the dependency relations (.o depends on .asm/.c and .h):
