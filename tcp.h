@@ -58,9 +58,6 @@ typedef byte eth_address[6];
 /* MSC v6.0 & v7.0 &v8.0 definition of Far as _far */
 #define FAR _far
 
-// XXX hackerb9 kludge to test removing FAR to appease bcc.
-#define FAR
-
 /*
 #define DEBUG
 */
