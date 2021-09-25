@@ -42,8 +42,8 @@
 
 
 ### Set up compilation environment for Open Watcom compiler
-export WATCOM=${HOME}/open-watcom-2
-export PATH+=:${WATCOM}/binl
+export WATCOM=${HOME}/ow2
+export PATH+=:${WATCOM}/bin
 export INCLUDE=${WATCOM}/h
 
 
