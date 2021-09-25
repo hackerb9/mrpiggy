@@ -5,7 +5,7 @@
 An experimental fork of 
 [MS Kermit](https://github.com/hackerb9/mskermit). Cross compiles for
 MS-DOS on modern GNU/Linux systems using no proprietary software.
-The [executable](https://github.com/hackerb9/mrpiggy/releases/download/v0.0.1/kermit.exe) 
+The [executable](https://github.com/hackerb9/mrpiggy/releases/download/v0.0.2/kermit.exe) 
 is 16-bit (8086) and can run on original IBM PC hardware or in an
 emulator such as [dosbox](https://dosbox.com).
 
@@ -13,7 +13,7 @@ emulator such as [dosbox](https://dosbox.com).
 
 If you have jwasm and owcc installed (see below), then you can compile
 a DOS executable of 
-[KERMIT.EXE](https://github.com/hackerb9/mrpiggy/releases/download/v0.0.1/kermit.exe)
+[KERMIT.EXE](https://github.com/hackerb9/mrpiggy/releases/download/v0.0.2/kermit.exe)
 by simply running 'make' on your GNU/Linux box. 
 
 ## Prerequisites
