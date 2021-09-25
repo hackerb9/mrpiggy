@@ -41,11 +41,11 @@
 ######################################################################
 
 
-### Set up compilation environment for Open Watcom compiler
-export WATCOM=${HOME}/ow2
-export PATH+=:${WATCOM}/bin
-export INCLUDE=${WATCOM}/h
-
+### Set up compilation environment for Open Watcom compiler.
+# Set the WATCOM environment variable if you wish to override these defaults.
+export WATCOM ?= ${HOME}/ow2
+export PATH += :${WATCOM}/bin
+export INCLUDE ?= ${WATCOM}/h
 
 ### Testing: Maybe wcc compiler works better? Nope, no better than owcc.
 # -q		Quiet: Don't show logo at startup
