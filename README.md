@@ -1,7 +1,9 @@
-# mrpiggy
+<img src="README.md.d/mrpiggy.jpg" width="33%" align="right">
+# MR Piggy
 
 An experimental fork of
-[mskermit](https://github.com/hackerb9/mskermit). 
+[MS Kermit](https://github.com/hackerb9/mskermit). Cross compiles for
+16-bit DOS on modern GNU/Linux systems using no proprietary software.
 
 # Compilation
 
