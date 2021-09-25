@@ -85,9 +85,8 @@ Microsoft EDIT and `ed` plus it's a bit buggy (try Ctrl+C), thus
 
 </details>
 
-<details><summary>OWCC setup and usage</summary>
+<details><summary>#### Setup</summary>
 
-#### Setup
 To use the Watcom C compiler, you'll need to setup the compilation
 environment like so:
 
@@ -98,8 +97,9 @@ export INCLUDE=${WATCOM}/h
 ```
 
 You can run that at the command line or add it to the Makefile. 
+</details>
 
-#### Usage
+<details><summary>#### Usage</summary>
 
 ``` bash
 owcc  -bdos  -mcmodel=s  -o myprog.exe  myprog.c
