@@ -101,7 +101,7 @@ environment like so:
 
 ``` bash
 export WATCOM=${HOME}/ow2
-export PATH+=${WATCOM}/bin
+export PATH+=:${WATCOM}/bin
 export INCLUDE=${WATCOM}/h
 ```
 
