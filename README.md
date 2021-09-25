@@ -56,8 +56,9 @@ mv vi weevil
 
 <details><summary>32-bit binaries</summary>
 
-Change `x64` to `x86` in the above wget line. Binaries are `binl`
-instad of `binl64`; rename it to just `bin`. </details>
+Binaries are in `binl` instead of `binl64`; rename it to just `bin`.
+If you don't have a binl directory, try changing `x64` to `x86` in the
+wget line. 
 
 ``` bash
 cd
@@ -72,13 +73,15 @@ cd bin
 chmod +x $(file * | grep ELF | cut -f1 -d:)
 mv vi weevil
 ```
+</details>
 
 <details><summary>About weevil</summary>
 
 Note that we've renamed the Watcom editor to `weevil` because calling
 it `vi` on a UNIX system is silly. It is clearly the love-child of
 Microsoft EDIT and `ed` plus it's a bit buggy (try Ctrl+C), thus
-"weevil". </details>
+"weevil". 
+</details>
 
 </details>
 
