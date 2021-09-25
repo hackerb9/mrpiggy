@@ -42,18 +42,33 @@ times out, so I had to install a prebuilt copy.
 
 ``` bash
 cd
-mkdir -p ow2/tmp
-cd ow2/tmp
+mkdir ow2
+cd ow2
 R=https://github.com/open-watcom/open-watcom-v2/releases
 wget -O ow2.zip "$R"/download/Current-build/open-watcom-2_0-c-linux-x64
 unzip ow2.zip
-mv h lib286 lib386 eddat ..
-mv binl* ../bin
-mv binw/dos32a.exe binw/dos4gw.exe ../bin/
-cd ..
-rm -r tmp
+rm -r ow2.zip binnt binp binw rdos rh 
+mv binl64 bin
 cd bin
-chmod +x owcc wcc wcc386 wlink
+chmod +x $(file * | grep ELF | cut -f1 -d:)
+mv vi weevil
+```
+
+<details><summary>32-bit binaries</summary>
+
+Change `x64` to `x86` in the above wget line. Binaries are `binl`
+instad of `binl64`; rename it to just `bin`. </details>
+
+``` bash
+cd
+mkdir ow2
+cd ow2
+R=https://github.com/open-watcom/open-watcom-v2/releases
+wget -O ow2.zip "$R"/download/Current-build/open-watcom-2_0-c-linux-x86
+unzip ow2.zip
+rm -r ow2.zip binnt binp binw rdos rh 
+mv binl bin
+cd bin
 chmod +x $(file * | grep ELF | cut -f1 -d:)
 mv vi weevil
 ```
