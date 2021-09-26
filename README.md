@@ -123,4 +123,31 @@ You can then execute the .exe file in dosbox to test it out.
 
 - [x] Get it to compile under GNU/Linux
 
-- [ ] Trim it down to run on retro PCs
+- [x] Test the .EXE on an IBM PC
+
+- Reduce file size so it can run on retro-PCs.
+  - Simple Methods
+	- [ ] Compiler, linker flags.
+	- [ ] Investigate why Open Watcom executable 50 KB larger than the
+          one created by Microsoft tools in 1999. Secretly adding
+          Watcom's standard library?
+	- [ ] Check how Open Watcom's PACKDATA works. Kermit 3.14 notes
+		  state that 40KB was saved by using PACKDATA option of
+		  LINK.EXE. That option exists in Open Watcom but produces no
+		  savings in file size.
+	- [ ] Look into runtime DOS executable compressors. Do any exist
+          that are Free Software?
+  - Complex Methods
+	- [ ] Conditional compilation
+		- [ ] Add "Lite" versions (no NET, no GRAPHICS, neither) to Makefile.
+		- [ ] Identify other large subsystems
+			- [ ] serial port? script interpreter?
+			- [ ] what does CHECK command identify?
+		- [ ] Wrap them in #ifdef, same as Lite.
+	- [ ] Analyze algorithms and datastructures to trim for size.
+	- [ ] Analyze .o and .exe to see where specific bytes are coming from.
+- [ ] Maybe include the numerous miscellaneous supplementary files
+      that came with the MS Kermit 3.14 distribution.
+
+- [ ] Bundle with FreeDOS as a bootable 360KB disk image.
+
