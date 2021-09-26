@@ -79,8 +79,14 @@ OWCCARGS+=-fno-stack-check
 OWCCARGS+=-fnostdlib
 # Set calling convention to C (_underscore)
 OWCCARGS+=-mabi=cdecl
-# define MSDOS so netlibc.c will use _ourdiv()
+# Define MSDOS so netlibc.c will use _ourdiv()
 OWCCARGS+=-DMSDOS
+# Remove debugging code to save about 20KB in .exe.
+OWCCARGS+=-g0 -s
+# Optimize (-O3 adds 2KB, -Os has no effect on size)
+OWCCARGS+=-O3
+# Allow optimizer to take multiple passes. (Has no effect on size)
+OWCCARGS+=-frerun-optimizer
 
 %.o : %.c
 	owcc ${OWCCARGS} -c $*.c
@@ -109,7 +115,7 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 # OWCC serves as a nicer frontend to WLINK's wacky directives file.
 # Use -fd=directives.lnk if you wish to see the .LNK file owcc creates.
 kermit.exe:	$(objects)
-	owcc -bdos -o kermit.exe $^
+	owcc ${OWCCARGS} -o kermit.exe $^
 
 
 ### OBSOLETE
