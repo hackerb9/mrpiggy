@@ -87,6 +87,10 @@ OWCCARGS+=-g0 -s
 OWCCARGS+=-O3
 # Allow optimizer to take multiple passes. (Has no effect on size)
 OWCCARGS+=-frerun-optimizer
+# MS Kermit 3.14 saved about 40K by using Microsoft's "PACKDATA".
+# It doesn't seem to help with OWCC. 
+OWCCARGS+=-Wl,'OPTION PACKCODE=16K'
+OWCCARGS+=-Wl,'OPTION PACKDATA=16K'
 
 %.o : %.c
 	owcc ${OWCCARGS} -c $*.c
