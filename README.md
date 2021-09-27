@@ -126,6 +126,8 @@ You can then execute the .exe file in dosbox to test it out.
 - [x] Test the .EXE on an IBM PC
 
 - Reduce file size so it can run on retro-PCs.
+<details>
+
   - Simple Methods
 	- [ ] Compiler, linker flags.
 	- [ ] Investigate why Open Watcom executable 50 KB larger than the
@@ -142,10 +144,17 @@ You can then execute the .exe file in dosbox to test it out.
 		- [ ] Add "Lite" versions (no NET, no GRAPHICS, neither) to Makefile.
 		- [ ] Identify other large subsystems
 			- [ ] serial port? script interpreter?
-			- [ ] what does CHECK command identify?
+			- [X] what does CHECK command identify?
+				- IF:
+				- Graphics:
+				- Network:
+				- TCP/IP:
+				- Terminal: Terminal emulation. no_terminal implies no_graphics.
+			- Missing from check command but defined in ifdef nls_portuguese.
 		- [ ] Wrap them in #ifdef, same as Lite.
 	- [ ] Analyze algorithms and datastructures to trim for size.
 	- [ ] Analyze .o and .exe to see where specific bytes are coming from.
+</details>
 - [ ] Maybe include the numerous miscellaneous supplementary files
       that came with the MS Kermit 3.14 distribution.
 
