@@ -136,14 +136,20 @@ You can then execute the .exe file in dosbox to test it out.
 	- [ ] Check how Open Watcom's PACKDATA works. Kermit 3.14 notes
 		  state that 40KB was saved by using PACKDATA option of
 		  LINK.EXE. That option exists in Open Watcom but produces no
-		  savings in file size.
-	- [ ] Look into runtime DOS executable compressors. Do any exist
-          that are Free Software?
+		  savings in file size.<br/> ** WARNING! ** I had thought this
+		  was a safe thing to experiment with, but I realized that
+		  since stack checking is disabled, a smaller segment size
+		  might cause pointers to wrap around!
+	- [X] Look into runtime DOS executable compressors. Do any exist
+          that are Free Software? Surprisingly, Yes!
+          [UPX](https://github.com/upx/upx) can be installed with `apt
+          install upx-ucl`. Running `upx` on KERMIT.EXE cuts the size
+          in half to 152 KB. 
   - Complex Methods
 	- [ ] Conditional compilation
 		- [ ] Add "Lite" versions (no NET, no GRAPHICS, neither) to Makefile.
 		- [ ] Identify other large subsystems
-			- [ ] serial port? script interpreter?
+			- [ ] serial port? script interpreter? H19 and other terms?
 			- [X] what does CHECK command identify?
 				- IF:
 				- Graphics:
@@ -154,6 +160,7 @@ You can then execute the .exe file in dosbox to test it out.
 		- [ ] Wrap them in #ifdef, same as Lite.
 	- [ ] Analyze algorithms and datastructures to trim for size.
 	- [ ] Analyze .o and .exe to see where specific bytes are coming from.
+	- [ ] How large is Kermit's TCP/IP and DHCP implementation? Is mTCP smaller?
 </details>
 - [ ] Maybe include the numerous miscellaneous supplementary files
       that came with the MS Kermit 3.14 distribution.
