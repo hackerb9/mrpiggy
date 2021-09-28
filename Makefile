@@ -89,8 +89,10 @@ OWCCARGS+=-O3
 OWCCARGS+=-frerun-optimizer
 # MS Kermit 3.14 saved about 40K by using Microsoft's "PACKDATA".
 # It doesn't seem to help with OWCC. 
-OWCCARGS+=-Wl,'OPTION PACKCODE=16K'
-OWCCARGS+=-Wl,'OPTION PACKDATA=16K'
+# Note that changing these values makes the segment size smaller which
+# is not necessarily safe! Pointers on large data structures can wrap around.
+#OWCCARGS+=-Wl,'OPTION PACKCODE=16K'
+#OWCCARGS+=-Wl,'OPTION PACKDATA=16K'
 
 %.o : %.c
 	owcc ${OWCCARGS} -c $*.c
@@ -120,6 +122,12 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 # Use -fd=directives.lnk if you wish to see the .LNK file owcc creates.
 kermit.exe:	$(objects)
 	owcc ${OWCCARGS} -o kermit.exe $^
+
+
+### UPX compression utility
+# UPX compress the Kermit.exe file from 300 KB to 152 KB. 
+upx:	kermit.exe
+	upx kermit.exe
 
 
 ### OBSOLETE
