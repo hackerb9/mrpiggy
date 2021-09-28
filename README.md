@@ -130,13 +130,11 @@ You can then execute the .exe file in dosbox to test it out.
 
   - Simple Methods
 	- [X] Look into runtime DOS executable compressors. Do any exist
-          that are Free Software? 
-		  - Surprisingly, Yes!
-          - [UPX](https://github.com/upx/upx) can be installed with
-	   		`apt install upx-ucl`. 
-		  - Running `upx` on KERMIT.EXE cuts the size in half to 152
-	   		KB.
-		  - Noticeably slower start up time in emulation with DOSBOX.
+          that are Free Software?
+	  - Surprisingly, Yes!
+	  - [UPX](https://github.com/upx/upx) can be installed with `apt install upx-ucl`.
+	  - Running `upx` on KERMIT.EXE cuts the size in half to 152 KB.
+	  - Noticeably slower start up time in emulation with DOSBOX.
 	- [ ] Compiler, linker flags.
 	- [ ] Investigate: why is Open Watcom executable 50 KB larger than
           the one created by Microsoft tools in 1999. Is it Watcom's
