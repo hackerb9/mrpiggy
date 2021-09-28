@@ -160,7 +160,7 @@ You can then execute the .exe file in dosbox to test it out.
 			- (nls_portuguese: Missing from check but exists as ifdef.)
 		- [ ] Identify other large subsystems
 			- [ ] serial port? script interpreter? H19 and other terms?
-			- [ ] weird networks like IPX and 
+			- [ ] weird networks like IPX
 		- [ ] Wrap them in #ifdef, same as Lite.
 	- [ ] Analyze algorithms and datastructures to trim for size.
 	- [ ] How large is Kermit's TCP/IP, DHCP, and DNS implementation? 
