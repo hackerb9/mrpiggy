@@ -2,6 +2,13 @@
 # Written by Joe R. Doupnik, 1991
 # Rejigged for GNU Make, jwasm, and Open Watcom by hackerb9, Sept 2021
 
+# Define subsystems to remove
+#LITESUBSYSTEMS+=-Dno_graphics
+#LITESUBSYSTEMS+=-Dno_terminal
+#LITESUBSYSTEMS+=-Dno_tcp
+#LITESUBSYSTEMS+=-Dno_network
+
+
 ######################################################################
 # OBSOLETE
 # File	MSVIBM.MAK						2 Feb 1991
@@ -95,7 +102,7 @@ OWCCARGS+=-frerun-optimizer
 #OWCCARGS+=-Wl,'OPTION PACKDATA=16K'
 
 %.o : %.c
-	owcc ${OWCCARGS} -c $*.c
+	owcc ${OWCCARGS} ${LITESUBSYSTEMS} -c $*.c
 
 
 # Obsolete assembly method:	 masm /mx /Zm $*.asm;
@@ -107,7 +114,7 @@ OWCCARGS+=-frerun-optimizer
 # -q   Quiet: don't show statistics after assembling
 # -e1000  show up to 1000 errors
 %.o : %.asm
-	jwasm -Cx -Zm -Zp1 -q -e1000 $<
+	jwasm -Cx -Zm -Zp1 -q -e1000 ${LITESUBSYSTEMS} $<
 
 
 objects = commandparser.o communication.o filehandling.o main.o		\
@@ -127,7 +134,7 @@ kermit.exe:	$(objects)
 ### UPX compression utility
 # UPX compress the Kermit.exe file from 300 KB to 152 KB. 
 upx:	kermit.exe
-	upx kermit.exe
+	upx --8086 kermit.exe
 
 
 ### OBSOLETE
