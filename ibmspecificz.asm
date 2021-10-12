@@ -321,12 +321,12 @@ p20ejt	dw	atdgf0, atdgf1, atdgf0, atsdhl, atsdhl	 	; '01234'
 	dw	atdcsnul, atxreset,atls2, atls3, atpriv		; '_cno{'
 	dw	atls3r, atls2r, atls1r				; '|}~'
 
-; VT320/VT102/VT100/Honewell ANSI mode escape follower table
+; VT320 ANSI mode escape follower table
 ansesc	db	52			; number of entries
 	dw	ansejt			; address of action routines
 	db	'01234','56789','<=>?@'
 	db	'ABCDE','FGHIJ','KLMN','OPQRV'
-	db	'WYZ[\',']',5eh,5fh	; 5eh = caret, 5fh=underscore
+	db	'WYZ[\',']',5eh,5fh	;';5eh = caret, 5fh=underscore
 	db	60h,'c','fgno',7bh	; 7bh=left curly brace,  7ch=vert bar
 	db	7ch,7dh,7eh		; 7dh=right curly brace, 7eh=tilde
 
@@ -344,7 +344,7 @@ ansejt	dw	atdgf0, atdgf1, atdgf0, atsdhl, atsdhl	 	; '01234'
 	dw	atdgnrc,atdgnrc,atls2,atls3, atpriv		; 'fgno{'
 	dw	atls3r, atls2r, atls1r				; '|}~'
 
-; Final char table for VT320/VT102/VT100/Honeywell ANSI control sequences
+; Final char table for VT320 ANSI control sequences
 anstab	db	40			; number of entries
 	dw	ansjmp			; address of action routines
 	db	'@ABCD','EFGHI','JKLMP', 'Xacde','fghil','mnpqr','uwxyz'
@@ -373,126 +373,126 @@ dcstab	db	5			; number of entries
 dcsjmp	dw	atcrqq, atcrq, atupss, atdcsnul, atudk		; 'pqu{|'
 ;;; DCS Ps $ p string ST   page 209 restore color palette
 
-; Data General D463/D470 terminal section
-dgescape equ	1eh				; DG escape char (RS)
+;; ; Data General D463/D470 terminal section
+;; dgescape equ	1eh				; DG escape char (RS)
 
-	even				; DG C0 7-bit control code table
-dgc0	dw	atign,dgprtfm,dgrevidoff,dgblkena,dgblkdis;NUL,SOH,STX,ETX,EOT
-	dw	dgrwa,atign,vtbell,dgwinhome,atign  ; ENQ, ACK, BEL, BS,  HT
-	dw	dglf, dgeol, dgewin, dgcr,dgblkon   ; LF,  VT,  FF,  CR,  SO
-	dw	dgblkoff,dgwwa,dgprtwn,dgrollena,dgrolldis ;SI,DLE,DC1,DC2,DC3
-	dw	dguson,dgusoff,dgrevidon,dgcuu,dgcuf ; DC4, NAK, SYN, ETB, CAN
-	dw	dgcub, dgcud,atign,dgdimon,dgdimoff ; EM, SUB, ESC, FS, GS
-	dw	dgesc, atign			    ; RS, US
+;; 	even				; DG C0 7-bit control code table
+;; dgc0	dw	atign,dgprtfm,dgrevidoff,dgblkena,dgblkdis;NUL,SOH,STX,ETX,EOT
+;; 	dw	dgrwa,atign,vtbell,dgwinhome,atign  ; ENQ, ACK, BEL, BS,  HT
+;; 	dw	dglf, dgeol, dgewin, dgcr,dgblkon   ; LF,  VT,  FF,  CR,  SO
+;; 	dw	dgblkoff,dgwwa,dgprtwn,dgrollena,dgrolldis ;SI,DLE,DC1,DC2,DC3
+;; 	dw	dguson,dgusoff,dgrevidon,dgcuu,dgcuf ; DC4, NAK, SYN, ETB, CAN
+;; 	dw	dgcub, dgcud,atign,dgdimon,dgdimoff ; EM, SUB, ESC, FS, GS
+;; 	dw	dgesc, atign			    ; RS, US
 
-; DG D463/D470 DG-escape (RS) follower table
+;; ; DG D463/D470 DG-escape (RS) follower table
 
-dgesctab db	17			; number of entries
-	dw	dgejt			; address of action routines
-	db	'ABCDE','FGHIJ','KLMNO','PR'
+;; dgesctab db	17			; number of entries
+;; 	dw	dgejt			; address of action routines
+;; 	db	'ABCDE','FGHIJ','KLMNO','PR'
 
-; Dispatch for dgesctab table
-	even
-dgejt	dw	dgsfc, dgsbc, dgrmid, dgrevidon, dgrevidoff 	; 'ABCDE'
-	dw	dgFSERIES, dgGSERIES, dgscrup, dgscrdn, dginsc	; 'FGHIJ'
-	dw	dgdelc, dggline, atign, atls1, atls0		; 'KLMNO'
-	dw	dgunix, dgRSERIES				; 'PR'
+;; ; Dispatch for dgesctab table
+;; 	even
+;; dgejt	dw	dgsfc, dgsbc, dgrmid, dgrevidon, dgrevidoff 	; 'ABCDE'
+;; 	dw	dgFSERIES, dgGSERIES, dgscrup, dgscrdn, dginsc	; 'FGHIJ'
+;; 	dw	dgdelc, dggline, atign, atls1, atls0		; 'KLMNO'
+;; 	dw	dgunix, dgRSERIES				; 'PR'
 
-fltable	db	61				; RS F letter dispatch table
-	dw	faction				; table of action routines
-	db	'789;<', '>?ABC', 'DEFGH', 'IJKLM', 'NOPQR'
-	db	'STUVW', 'XYZ[\', ']^_`a', 'bcdef', 'hikmq'
-	db	'rstvw', 'xz{}~', '@'
+;; fltable	db	61				; RS F letter dispatch table
+;; 	dw	faction				; table of action routines
+;; 	db	'789;<', '>?ABC', 'DEFGH', 'IJKLM', 'NOPQR'
+;; 	db	'STUVW', 'XYZ[\', ']^_`a', 'bcdef', 'hikmq'
+;; 	db	'rstvw', 'xz{}~', '@'
 
-; Dispatch for fltable table
-	even
-faction	dw	dgign2n, atign, dggrid, atign, atign		; '789;<'
-	dw	dgalign, dgprt, atreset, dgsetw, dgsleft	; '>?ABC'
-	dw	dgsright, dgescn, dgeeos, dgshome, dginsl	; 'DEFGH'
-	dw	dgdell, dgnarrow, dgwide, dgpton, dgptoff	; 'IJKLM'
-	dw	dgchatr, dgrhso, dgwsa, dgsct, dgdefch		; 'NOPQR'
-	dw	dgscs, dgign1n, dg78bit, protena, protdis	; 'STUVW'
-	dw	dgsetmar, dgsetamar, dgrnmar, dgilbm, dgdlbm	; 'XYZ[\'
-	dw	dghsdis, dghsena, dgshcol, dgprt3a, atign	; ']^_`a'
-	dw	dgrsa, dgscmap, dgrchr, dgresch, dgskl		; 'bcdef'
-	dw	atign, atign, atnorm, atnorm, dgdchs 		; 'hikmq'
-	dw	dgsclk, dgign1n, dgrss, dgrwc, dgrnmod		; 'rstvw'
-	dw	dgppb, dgs25l, dgsmid, dgnscur, dgign2n		; 'xz{}~'
-	dw	dgtoansi					; '@'
+;; ; Dispatch for fltable table
+;; 	even
+;; faction	dw	dgign2n, atign, dggrid, atign, atign		; '789;<'
+;; 	dw	dgalign, dgprt, atreset, dgsetw, dgsleft	; '>?ABC'
+;; 	dw	dgsright, dgescn, dgeeos, dgshome, dginsl	; 'DEFGH'
+;; 	dw	dgdell, dgnarrow, dgwide, dgpton, dgptoff	; 'IJKLM'
+;; 	dw	dgchatr, dgrhso, dgwsa, dgsct, dgdefch		; 'NOPQR'
+;; 	dw	dgscs, dgign1n, dg78bit, protena, protdis	; 'STUVW'
+;; 	dw	dgsetmar, dgsetamar, dgrnmar, dgilbm, dgdlbm	; 'XYZ[\'
+;; 	dw	dghsdis, dghsena, dgshcol, dgprt3a, atign	; ']^_`a'
+;; 	dw	dgrsa, dgscmap, dgrchr, dgresch, dgskl		; 'bcdef'
+;; 	dw	atign, atign, atnorm, atnorm, dgdchs 		; 'hikmq'
+;; 	dw	dgsclk, dgign1n, dgrss, dgrwc, dgrnmod		; 'rstvw'
+;; 	dw	dgppb, dgs25l, dgsmid, dgnscur, dgign2n		; 'xz{}~'
+;; 	dw	dgtoansi					; '@'
 
-gltable	db	14				; RS G letter dispatch table
-	dw	gaction				; table of action routines
-	db	'018:>','?@ABC','HInp'
+;; gltable	db	14				; RS G letter dispatch table
+;; 	dw	gaction				; table of action routines
+;; 	db	'018:>','?@ABC','HInp'
 
-; Dispatch for gltable table
-	even
-gaction	dw	dggarc, dggbar, dggline, dggpoly, dggcloc	; '018:>'
-	dw	dggrcl, dggcatt, dggcrst, dggcon, dggcoff	; '?@ABC'
-	dw	dggctrk, atnorm, atnorm, dggsetp		; 'HInp'
+;; ; Dispatch for gltable table
+;; 	even
+;; gaction	dw	dggarc, dggbar, dggline, dggpoly, dggcloc	; '018:>'
+;; 	dw	dggrcl, dggcatt, dggcrst, dggcon, dggcoff	; '?@ABC'
+;; 	dw	dggctrk, atnorm, atnorm, dggsetp		; 'HInp'
 
-rltable	db	6			; Data General D463/D470 RS R series
-	dw	raction
-	db	'@ABCD','E'
+;; rltable	db	6			; Data General D463/D470 RS R series
+;; 	dw	raction
+;; 	db	'@ABCD','E'
 
-; Dispatch for rltable table
-raction	dw	dgign2n, dgsps, dgsfield, dgspage, dgsdo	; '@ABCD'
-	dw	dgdhdw						; 'E'
+;; ; Dispatch for rltable table
+;; raction	dw	dgign2n, dgsps, dgsfield, dgspage, dgsdo	; '@ABCD'
+;; 	dw	dgdhdw						; 'E'
 
-dgescftab db	34			; DG ESC.. Final escape follower tab
-	dw	dgescfjmp		; address of action routines
-	db	'01234','56789',':;<=>','?ABHI','JKL'
-	db	'cDEMN','OPVW[','\'
+;; dgescftab db	34			; DG ESC.. Final escape follower tab
+;; 	dw	dgescfjmp		; address of action routines
+;; 	db	'01234','56789',':;<=>','?ABHI','JKL'
+;; 	db	'cDEMN','OPVW[','\'
 
-dgescfjmp dw	23 dup (dgesc_ch)      ; '01234','56789',':;<=>','?ABHI','JKL'
-	dw	dgesc_c,dgesc_D,dgesc_E,dgesc_M,atss2	; 'cDEMN'
-	dw	atss3,atdcs0,dgesc_V,dgesc_W,atcsi0	; 'OPVW['
-	dw	atgotst0				; '\'
+;; dgescfjmp dw	23 dup (dgesc_ch)      ; '01234','56789',':;<=>','?ABHI','JKL'
+;; 	dw	dgesc_c,dgesc_D,dgesc_E,dgesc_M,atss2	; 'cDEMN'
+;; 	dw	atss3,atdcs0,dgesc_V,dgesc_W,atcsi0	; 'OPVW['
+;; 	dw	atgotst0				; '\'
 
-dganstab db	28			; DG CSI .. Final  char dsptch
-	dw	dgcjmp			; address of action routines
-	db	'@ABCD','HJKLM','PSTfh','ilmnp','qrstu','vwx'
+;; dganstab db	28			; DG CSI .. Final  char dsptch
+;; 	dw	dgcjmp			; address of action routines
+;; 	db	'@ABCD','HJKLM','PSTfh','ilmnp','qrstu','vwx'
 
-					; DG ANSI dispatch table
-dgcjmp	dw	dgcsi_@,dgcsi_A,dgcsi_B,dgcsi_C,dgcsi_D	; '@ABCD'
-	dw	dgcsi_f,ated,  atel,   dgcsi_L,dgcsi_M	; 'HJKLM'
-	dw	atdelc,dgcsi_S,dgcsi_T,dgcsi_f,dgcsi_h	; 'PSTfh'
-	dw	dgcsi_i,dgcsi_sl,atsgr,dgcsi_n,dgcsi_sp	; 'ilmnp'
-	dw	dgcsi_q,dgcsi_r,dgcsi_ss,dgcsi_st,dgcsi_u ; 'qrstu'
-	dw	dgcsi_v,dgcsi_w,dgcsi_x			; 'uwx'
+;; 					; DG ANSI dispatch table
+;; dgcjmp	dw	dgcsi_@,dgcsi_A,dgcsi_B,dgcsi_C,dgcsi_D	; '@ABCD'
+;; 	dw	dgcsi_f,ated,  atel,   dgcsi_L,dgcsi_M	; 'HJKLM'
+;; 	dw	atdelc,dgcsi_S,dgcsi_T,dgcsi_f,dgcsi_h	; 'PSTfh'
+;; 	dw	dgcsi_i,dgcsi_sl,atsgr,dgcsi_n,dgcsi_sp	; 'ilmnp'
+;; 	dw	dgcsi_q,dgcsi_r,dgcsi_ss,dgcsi_st,dgcsi_u ; 'qrstu'
+;; 	dw	dgcsi_v,dgcsi_w,dgcsi_x			; 'uwx'
 
-dgdcstab db	6			; DG DCS dispatch table
-	dw	dgdcsjmp
-	db	'ABCDE','F'
+;; dgdcstab db	6			; DG DCS dispatch table
+;; 	dw	dgdcsjmp
+;; 	db	'ABCDE','F'
 
-dgdcsjmp dw	dgdefch,dggline,dggset2,dgsetw,dggpoly		; 'ABCDE'
-	dw	dgdcs_F						; 'F'
+;; dgdcsjmp dw	dgdefch,dggline,dggset2,dgsetw,dggpoly		; 'ABCDE'
+;; 	dw	dgdcs_F						; 'F'
 
-				; Wyse-50 control codes
-	even					; C0 7-bit control code table
-wyc0	dw	5 dup (atign)			; NUL, SOH, STX, ETX, EOT
-	dw	atenq,atign,vtbell,wycub,atht 	; ENQ, ACK, BEL, BS,  HT
-	dw	atlf, wycup, dgcuf, atcr,atign	; LF,  VT,  FF,  CR,  SO
-	dw	atign, atign, atign, wyprton, atign ; SI,  DLE, DC1, DC2, DC3
-	dw	wyprtoff,3 dup (atign), wy_d2	; DC4, NAK, SYN, ETB, CAN
-	dw	atign, wysub, wyesc,atign,atign	; EM,  SUB, ESC, FS,  GS
-	dw	wyhome, atlf1			; RS,  US
+;; 				; Wyse-50 control codes
+;; 	even					; C0 7-bit control code table
+;; wyc0	dw	5 dup (atign)			; NUL, SOH, STX, ETX, EOT
+;; 	dw	atenq,atign,vtbell,wycub,atht 	; ENQ, ACK, BEL, BS,  HT
+;; 	dw	atlf, wycup, dgcuf, atcr,atign	; LF,  VT,  FF,  CR,  SO
+;; 	dw	atign, atign, atign, wyprton, atign ; SI,  DLE, DC1, DC2, DC3
+;; 	dw	wyprtoff,3 dup (atign), wy_d2	; DC4, NAK, SYN, ETB, CAN
+;; 	dw	atign, wysub, wyesc,atign,atign	; EM,  SUB, ESC, FS,  GS
+;; 	dw	wyhome, atlf1			; RS,  US
 
-				; Wyse-50 escape dispatch table
-wyescf	db	50
-	dw	wyejt				; table of action routines
-	db	' !&',27h,'(',')*+,-','./012','89:;=','?ADEF'
-	db	'GHIMN','OQRTV','WY`ab','dijqr','txyz{'
+;; 				; Wyse-50 escape dispatch table
+;; wyescf	db	50
+;; 	dw	wyejt				; table of action routines
+;; 	db	' !&',27h,'(',')*+,-','./012','89:;=','?ADEF'
+;; 	db	'GHIMN','OQRTV','WY`ab','dijqr','txyz{'
 
-wyejt	dw	wyenq,wy_bang,protena,protdis,clrprot	; ' !&'('
-	dw	setprot,wy_star,wy_star,wy_comma,wy_minus ; ')*+,-'
-	dw	wy_dot,wy_slash,wytab0,athts,wytab2	; './012'
-	dw	wy_8,wy_9,wysub,wysub,wy_equ		; '89:;='
-	dw	wy_query,wy_A,atnorm,inslin,wy_F	; '?ADEF'
-	dw	wy_G,wy_H,wy_I,wy_M,wy_N		; 'GHIMN'
-	dw	wy_O,ansich,wy_R,atel0,wy_V		; 'OQRTV'
-	dw	atdelc,ereos,wy_acc,wy_sa,wy_b		; 'WY`ab'
-	dw	wy_d,atht,atri,wy_q,wy_sr		; 'dijqr'
-	dw	atel0,wy_x,ereos,wy_z,wyhome		; 'txyz{'
+;; wyejt	dw	wyenq,wy_bang,protena,protdis,clrprot	; ' !&'('
+;; 	dw	setprot,wy_star,wy_star,wy_comma,wy_minus ; ')*+,-'
+;; 	dw	wy_dot,wy_slash,wytab0,athts,wytab2	; './012'
+;; 	dw	wy_8,wy_9,wysub,wysub,wy_equ		; '89:;='
+;; 	dw	wy_query,wy_A,atnorm,inslin,wy_F	; '?ADEF'
+;; 	dw	wy_G,wy_H,wy_I,wy_M,wy_N		; 'GHIMN'
+;; 	dw	wy_O,ansich,wy_R,atel0,wy_V		; 'OQRTV'
+;; 	dw	atdelc,ereos,wy_acc,wy_sa,wy_b		; 'WY`ab'
+;; 	dw	wy_d,atht,atri,wy_q,wy_sr		; 'dijqr'
+;; 	dw	atel0,wy_x,ereos,wy_z,wyhome		; 'txyz{'
 
 ;; Notes on char set idents
 ; Kermit ident	 	size	ident	comment			designator
@@ -1035,10 +1035,11 @@ anstt4:	test	yflags,capt		; capturing output?
 	call	fcptchr			; give it captured character
 anstt4a:or	al,al			; NUL char?
 	jnz	anstt5			; nz = no
-	test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
-	jnz	anstt5			; nz = yes, must pass nulls
-	test	flags.vtflg,ttwyse	; Wyse?
-	jz	atign			; z = no, ignore it
+	;; test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
+	;; jnz	anstt5			; nz = yes, must pass nulls
+	;; test	flags.vtflg,ttwyse	; Wyse?
+	;; jz	atign			; z = no, ignore it
+	jmp	atign
 
 anstt5:	cmp	vtemu.vtdnld,0		; autodownload disabled?
 	je	anstt8			; e = yes
@@ -1126,10 +1127,11 @@ anstt5z:mov	dnldcnt,0
 	ret
 
 					; Direct char to processor module
-anstt8:	test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
-	jnz	anstt10			; nz = yes
-	test	flags.vtflg,ttwyse	; Wyse?
-	jnz	anstt20			; nz = yes
+anstt8:
+	;; test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
+	;; jnz	anstt10			; nz = yes
+	;; test	flags.vtflg,ttwyse	; Wyse?
+	;; jnz	anstt20			; nz = yes
 	cmp	vtemu.vtchset,13	; ASCII (0) or NRC's (1-13) active?
 	ja	anstt8b			; a = no
 	cmp	vtemu.vtchset,0		; ASCII?
@@ -1145,36 +1147,36 @@ anstt8c:jmp	atctrl			; dispatch on control code
 anstt9:	jmp	ttstate			; dispatch according to state
 
 					; DG D463/D470 terminal
-anstt10:test	flags.remflg,d8bit	; use high bit?
-	jnz	anstt11			; nz = yes
-	and	al,7fh			; 7 bit terminal only
-anstt11:test	anspflg,vtcntp		; controller (transparent) printing?
-	jnz	anstt12			; nz = yes, go through filter routine
-	cmp	dgd470mode,0		; ansi mode?
-	jne	anstt13			; ne = yes
-	test	al,not 9fh		; control chars (0-1fh, 80h-9fh)?
-	jnz	anstt12			; nz = no, do according to state
-	cmp	ttstate,offset atnrm	; normal text processing?
-	jne	anstt12			; ne = no, pass controls to state
-	jmp	dgctrl			; do DG controls
-anstt12:jmp	ttstate			; process regularly
-					; D470 ANSI mode operations
-anstt13:test	al,not 9fh		; control chars (0-1fh, 80h-9fh)?
-	jz	anstt14			; z = yes
-	jmp	ttstate			; process regularly
-anstt14:jmp	dgansctl		; do controls
+;; anstt10:test	flags.remflg,d8bit	; use high bit?
+;; 	jnz	anstt11			; nz = yes
+;; 	and	al,7fh			; 7 bit terminal only
+;; anstt11:test	anspflg,vtcntp		; controller (transparent) printing?
+;; 	jnz	anstt12			; nz = yes, go through filter routine
+;; 	cmp	dgd470mode,0		; ansi mode?
+;; 	jne	anstt13			; ne = yes
+;; 	test	al,not 9fh		; control chars (0-1fh, 80h-9fh)?
+;; 	jnz	anstt12			; nz = no, do according to state
+;; 	cmp	ttstate,offset atnrm	; normal text processing?
+;; 	jne	anstt12			; ne = no, pass controls to state
+;; 	jmp	dgctrl			; do DG controls
+;; anstt12:jmp	ttstate			; process regularly
+;; 					; D470 ANSI mode operations
+;; anstt13:test	al,not 9fh		; control chars (0-1fh, 80h-9fh)?
+;; 	jz	anstt14			; z = yes
+;; 	jmp	ttstate			; process regularly
+;; anstt14:jmp	dgansctl		; do controls
 
-anstt20:and	al,7fh			; Wyse, chop 8th bit
-	cmp	ttstate,offset atnrm	; normal state?
-	je	anstt21			; e = yes
-	jmp	ttstate			; do state
+;; anstt20:and	al,7fh			; Wyse, chop 8th bit
+;; 	cmp	ttstate,offset atnrm	; normal state?
+;; 	je	anstt21			; e = yes
+;; 	jmp	ttstate			; do state
 
-anstt21:cmp	al,20h			; control code?
-	jae	atnrm			; ae = no, process as text
-	xor	ah,ah			; clear for word use below
-	mov	di,ax			; use AL as a word index
-	shl	di,1
-	jmp	wyc0[di]		; dispatch on C0 control codes
+;; anstt21:cmp	al,20h			; control code?
+;; 	jae	atnrm			; ae = no, process as text
+;; 	xor	ah,ah			; clear for word use below
+;; 	mov	di,ax			; use AL as a word index
+;; 	shl	di,1
+;; 	jmp	wyc0[di]		; dispatch on C0 control codes
 anstty	endp
 
 ; [HF]940130 translation procedure for Japanese
@@ -1326,10 +1328,10 @@ atnrm2a:push	ax			; save character
 	call	getatch			; check for protected field
 	test	cl,att_protect		; protected?
 	jz	atnrm2d			; z = no
-	test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
-	jz	atnrm2d			; z = no
-	call	dgcuf			; do DG cursor right
-	mov	dx,cursor
+	;; test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
+	;; jz	atnrm2d			; z = no
+	;; call	dgcuf			; do DG cursor right
+	;; mov	dx,cursor
 atnrm2d:cmp	decrlm,0		; host right-left mode active?
 	je	atnrm2e			; e = no
 	cmp	atwrap,0		; wrap pending?
@@ -1436,9 +1438,10 @@ atnrm3e:call	setatch			; write char (al) and attribute (ah)
 	pop	dx
 	shr	dl,1			; keep "cursor" in single units
 
-atnrm4:	test flags.vtflg,ttd463+ttd470+ttd217+ttheath+ttwyse; no wrap & scroll?
-	jz	atnrm4d			; z = no
-	jmp	dgcuf			; do DG cursor forward
+atnrm4:
+	;; test flags.vtflg,ttd463+ttd470+ttd217+ttheath+ttwyse; no wrap & scroll?
+	;; jz	atnrm4d			; z = no
+	;; jmp	dgcuf			; do DG cursor forward
 
 atnrm4d:test	vtemu.vtflgop,decawm	; Autowrap active?
 	jz	atnrm5			; z = no
@@ -1716,11 +1719,12 @@ endif	; no_graphics
 atcan:	mov	parstate,0		; CAN, clear esc seq parser
 	jmp	atnorm
 
-atenq:	mov	cx,ENQhstrl-1		; length of Honeywell string-1
+atenq:	
+	mov	cx,ENQhstrl-1		; length of Honeywell string-1
 	mov	si,offset ENQhstr	; ptr to string
 	mov	ttyact,0		; start grouping for networks
-	cmp	flags.vtflg,tthoney	; ENQ, Honeywell terminal?
-	je	atenq1			; e = yes
+;	cmp	flags.vtflg,tthoney	; ENQ, Honeywell terminal?
+;	je	atenq1			; e = yes
 	cmp	vtenqenable,0		; VTxxx response enabled?
 	je	atenq4			; e = no
 	cmp	enqbuf,0		; safe?
@@ -1735,9 +1739,9 @@ atenq1:	cld
 	pop 	si
 	pop	cx
 	loop	atenq1			; loop for all characters
-atenq1f:cmp	flags.vtflg,tthoney	; ENQ, Honeywell terminal?
-	je	atenq3			; e = yes
-	mov	rdbuf,' '
+;atenq1f:cmp	flags.vtflg,tthoney	; ENQ, Honeywell terminal?
+;	je	atenq3			; e = yes
+atenq1f:mov	rdbuf,' '
 	mov	di,offset rdbuf		; place to work
 	cmp	enqbuf,0		; safe message?
 	jne	atenq1b			; ne = no, unsafe, no prefix
@@ -1798,7 +1802,7 @@ atesc:	cmp	ttstate,offset atdcsnul	; consuming a DCS?
 	jne	atesc3			; ne = no
 	mov	ttstate,offset atesc1	; stay here
 	ret
-atesc1:	cmp	al,'\'			; end of ST?
+atesc1:	cmp	al,'\'			; end of ST?'
 	je	atesc2			; e = yes
 	jmp	atdcsnul		; continue to consume DCS
 atesc2:	jmp	atgotst			; reset DCS processing
@@ -1812,22 +1816,22 @@ atescf:	call	atpclr			; clear parser argument list
 	mov	atescftab,offset ansesc	; ANSI escape table, for atdispat
 	mov	ansifinptr,offset anstab
 	mov	cx,flags.vtflg
-	test	cx,ttvt320+ttvt220+ttvt102+ttvt100+tthoney+ttansi ; VT320 etc?
+	test	cx,ttvt320 ; VT320 etc?
 	jnz	atescf2			; nz = yes
-	mov	atescftab,offset v52esc ; VT52 escape table
-	cmp	cx,ttvt52		; VT52?
-	je	atescf1			; e = yes
-	mov	atescftab,offset h19esc ; use Heath-19 table
-	cmp	cx,ttheath		; Heath-19?
-	je	atescf1			; e = yes
-	mov	atescftab,offset pt200esc
-	cmp	cx,ttpt200		; Prime PT200?
-	je	atescf2			; e = yes
-	mov	atescftab,offset dgescftab ; use D470 escape follower table
-	mov	dcstabptr,offset dgdcstab ; DG DCS dispatch table
-	mov	ansifinptr,offset dganstab 
-	cmp	cx,ttd470		; D470?
-	je	atescf2			; e = yes
+	;; mov	atescftab,offset v52esc ; VT52 escape table
+	;; cmp	cx,ttvt52		; VT52?
+	;; je	atescf1			; e = yes
+	;; mov	atescftab,offset h19esc ; use Heath-19 table
+	;; cmp	cx,ttheath		; Heath-19?
+	;; je	atescf1			; e = yes
+	;; mov	atescftab,offset pt200esc
+	;; cmp	cx,ttpt200		; Prime PT200?
+	;; je	atescf2			; e = yes
+	;; mov	atescftab,offset dgescftab ; use D470 escape follower table
+	;; mov	dcstabptr,offset dgdcstab ; DG DCS dispatch table
+	;; mov	ansifinptr,offset dganstab 
+	;; cmp	cx,ttd470		; D470?
+	;; je	atescf2			; e = yes
 	ret				; return on error
 atescf1:mov	ttstate,offset atnrm	; reset state to "normal"
 	mov	bx,atescftab		; get offset of escape follower table
@@ -2266,7 +2270,7 @@ atdgfA:	call	atdgset			; 'A' ISO Latin-1, UK-ASCII
 	cmp	inter,'+'		; in the 94 byte set?
 	ja	atdgfA2			; a = no, 96 'A' is Latin1
 	mov	ax,flags.vtflg		; terminal type
-	test	ax,ttvt320+ttvt220+ttvt102+ttvt100+tthoney+ttansi ; VTxxx?
+	test	ax,ttvt320 ; VTxxx?
 	jz	atdgfA1			; z = no
 	jmp	mkukascii		; make UK ASCII table
 atdgfA1:ret
@@ -2305,7 +2309,7 @@ atdgfI:	call	atdgset			; [HF] JIS-Katakana
 	cmp	inter,'+'		; [HF] in the 94 byte set?
 	ja	atdgfI1			; [HF] a = no, just ignore
 	mov	ax,flags.vtflg		; [HF] terminal type
-	test	ax,ttvt320+ttvt220+ttvt102+ttvt100+tthoney ; [HF] VTxxx?
+	test	ax,ttvt320 ; [HF] VTxxx?
 	jz	atdgfI1			; [HF] z = no
 	jmp	mkjiskana		; [HF] make JIS Katakana table
 atdgfI1:ret				; [HF]
@@ -2314,7 +2318,7 @@ atdgfJ:	call	atdgset			; [HF] JIS-Roman
 	jc	atdgfJ1			; [HF] c = no matching pointer
 	cmp	inter,'+'		; [HF] in the 94 byte set?
 	ja	atdgfJ1			; [HF] a = no, just ignore
-	test	ax,ttvt320+ttvt220+ttvt102+ttvt100+tthoney ; [HF] VTxxx?
+	test	ax,ttvt320 ; [HF] VTxxx?
 	jz	atdgfJ1			; [HF] z = no
 	jmp	mkascii			; [HF] treat as US ASCII
 atdgfJ1:ret				; [HF]
@@ -4312,8 +4316,8 @@ decid1:	mov	ax,flags.vtflg		; get terminal ident type
 	je	decid2			; e = yes
 	cmp	ax,ttansi		; ANSI-BBS?
 	je	decid2			; e = yes
-	cmp	ax,tthoney		; Honeywell?
-	je	decid2			; e = yes
+;	cmp	ax,tthoney		; Honeywell?
+;	je	decid2			; e = yes
 	mov	si,offset v52str
 	cmp	ax,ttvt52		; VT52?
 	je	decid2			; e = yes
@@ -4807,8 +4811,9 @@ atcts5: ret
 
 atcts6:	cmp	nparam,0		; absence of parameters?
  	jne	atcts5			; ne = no, ignore sequence
-	jmp	athoney			; try Honeywell ESC [ y  ident response
-
+;;	jmp	athoney			; try Honeywell ESC [ y  ident response
+	jmp	atnorm
+	
 atalign	proc	near			; Align screen, fill screen with 'E's
 	mov	al,'E'			; char to use as filler
 	test	dspstate,dsptype	; is cursor on status line?
@@ -5274,14 +5279,15 @@ atcrqt2:call	prtbout
 	mov	al,7eh			; tilde
 	jmp	atcrqend		; do epilogue
 					; '"p' set conformance level
-atcrqp:	cmp	oldterm,ttvt100		; main-mode terminal is VT100?
-	je	atcrqp2			; e = yes
-	cmp	oldterm,tthoney		; Honeywell?
-	je	atcrqp2			; e = yes
-	cmp	oldterm,ttansi		; ANSI-BBS?
-	je	atcrqp2			; e = yes
-	cmp	oldterm,ttvt102		; VT102?
-	je	atcrqp2			; e = yes
+atcrqp:	
+	;; cmp	oldterm,ttvt100		; main-mode terminal is VT100?
+	;; je	atcrqp2			; e = yes
+	;; cmp	oldterm,tthoney		; Honeywell?
+	;; je	atcrqp2			; e = yes
+	;; cmp	oldterm,ttansi		; ANSI-BBS?
+	;; je	atcrqp2			; e = yes
+	;; cmp	oldterm,ttvt102		; VT102?
+	;; je	atcrqp2			; e = yes
 	cmp	oldterm,ttvt320		; how about VT320?
 	je	atcrqp2			; e = yes
 	jmp	atcrqxx			; say invalid request
@@ -5295,14 +5301,15 @@ atcrqp2:mov	ttyact,0		; group output for networks
 	mov	al,'$'
 	call	prtbout
 	mov	al,61			; assume VT102
-	cmp	oldterm,ttvt100		; VT100?
-	je	atcrqp2a		; e = yes
-	cmp	oldterm,tthoney		; Honeywell
-	je	atcrqp2a		; e = yes
-	cmp	oldterm,ttansi		; ANSI-BBS?
-	je	atcrqp2a		; e = yes
-	cmp	oldterm,ttvt102		; are we a VT102?
-	jne	atcrqp3			; ne = no
+	;; cmp	oldterm,ttvt100		; VT100?
+	;; je	atcrqp2a		; e = yes
+	;; cmp	oldterm,tthoney		; Honeywell
+	;; je	atcrqp2a		; e = yes
+	;; cmp	oldterm,ttansi		; ANSI-BBS?
+	;; je	atcrqp2a		; e = yes
+	;; cmp	oldterm,ttvt102		; are we a VT102?
+	;; jne	atcrqp3			; ne = no
+	jmp	atcrqp3		; testing
 atcrqp2a:call	prtnout
 	jmp	short atcrqp5		; finish the report
 
@@ -6301,9 +6308,9 @@ insli1:	mov	scroll,al		; lines to scroll
 	call	atscrd			; scroll down
 	pop	word ptr mar_top	; restore margins
 	xor	dl,dl			; go to left margin
-	test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
-	jz	insli2			; z = no
-	jmp	dgsetcur		; DG set cursor with protection
+	;; test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
+	;; jz	insli2			; z = no
+	;; jmp	dgsetcur		; DG set cursor with protection
 insli2:	jmp	atsetcur		; reposition cursor and return
 insli3: ret
 inslin	endp
@@ -6321,9 +6328,9 @@ delli1:	mov	scroll,al		; line count
 	mov	mar_top,dh		; temp top margin is here
 	call	atscru			; scroll up
 	pop	word ptr mar_top	; restore scrolling margins
-	test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
-	jz	delli2			; z = no
-	jmp	dgsetcur		; DG set cursor with protection
+	;; test	flags.vtflg,ttd463+ttd470+ttd217 ; DG D463/D470/D217 mode?
+	;; jz	delli2			; z = no
+	;; jmp	dgsetcur		; DG set cursor with protection
 delli2:	jmp	atsetcur		; restore cursor
 delli3: ret
 dellin	endp
@@ -6737,135 +6744,135 @@ ansmc7:	mov	ttstate,offset ansmc	; reset state to the beginning
 	ret
 ansmc	endp
 
-dgprt	proc	near			; RS F ? <char>	 DG Print routines
-	mov	ttstate,offset dgprt1	; get the <char>
-	ret
-dgprt1:	mov	ttstate,offset atnrm	; reset state
-	and	al,0fh
-	cmp	al,0			; Simulprint off?
-	jne	dgprt2			; ne = no
-	mov	al,7			; reform to be VT autoprint off
+;; dgprt	proc	near			; RS F ? <char>	 DG Print routines
+;; 	mov	ttstate,offset dgprt1	; get the <char>
+;; 	ret
+;; dgprt1:	mov	ttstate,offset atnrm	; reset state
+;; 	and	al,0fh
+;; 	cmp	al,0			; Simulprint off?
+;; 	jne	dgprt2			; ne = no
+;; 	mov	al,7			; reform to be VT autoprint off
 
-dgprt2:	cmp	al,1			; Simulprint on?
-	jne	dgprt3			; ne = no
-	mov	al,8			; reform to be VT autoprint on
+;; dgprt2:	cmp	al,1			; Simulprint on?
+;; 	jne	dgprt3			; ne = no
+;; 	mov	al,8			; reform to be VT autoprint on
 
-dgprt3:	cmp	al,3			; Print Pass Through on?
-	jne	dgprt4			; ne = no
-dgprt3a:				; RS F `   alternative to RS F ? 3
-	test	anspflg,vtcntp		; controller print already enabled?
-	jnz	dgprt7			; nz = yes
-	and	anspflg,not vtautop	; clear single-char flag for toggling
-	or	anspflg,vtcntp		; controller print enabled
-	mov	emubufc,0		; clear string buffer
-	mov	ttstate,offset dgmc	; do transparent print
-	call	ftrnprs			; toggle on mode line PRN indicator
-	ret
+;; dgprt3:	cmp	al,3			; Print Pass Through on?
+;; 	jne	dgprt4			; ne = no
+;; dgprt3a:				; RS F `   alternative to RS F ? 3
+;; 	test	anspflg,vtcntp		; controller print already enabled?
+;; 	jnz	dgprt7			; nz = yes
+;; 	and	anspflg,not vtautop	; clear single-char flag for toggling
+;; 	or	anspflg,vtcntp		; controller print enabled
+;; 	mov	emubufc,0		; clear string buffer
+;; 	mov	ttstate,offset dgmc	; do transparent print
+;; 	call	ftrnprs			; toggle on mode line PRN indicator
+;; 	ret
 
-dgprt4:	cmp	al,8			; VT-style autoprint on?
-	jne	dgprt5			; ne = no
-	call	fpntchk			; check printer, ignore carry ret
-	test	anspflg,vtautop		; is print already enabled?
-	jnz	dgprt7			; nz = yes, leave trnprs intact
-	and	anspflg,not vtautop	; say auto-print disabled to toggle on
-	call	ftrnprs			; toggle on mode line PRN indicator
-	ret
+;; dgprt4:	cmp	al,8			; VT-style autoprint on?
+;; 	jne	dgprt5			; ne = no
+;; 	call	fpntchk			; check printer, ignore carry ret
+;; 	test	anspflg,vtautop		; is print already enabled?
+;; 	jnz	dgprt7			; nz = yes, leave trnprs intact
+;; 	and	anspflg,not vtautop	; say auto-print disabled to toggle on
+;; 	call	ftrnprs			; toggle on mode line PRN indicator
+;; 	ret
 
-dgprt5:	cmp	al,7			; VT-style autoprint off?
-	jne	dgprt6			; ne = no
-	test	anspflg,vtautop		; check state of print flag
-	jz	dgprt7			; z = off already
-	or	anspflg,vtautop		; say auto-print enabled to toggle off
-	call	ftrnprs			; toggle mode line PRN indicator
-	ret
+;; dgprt5:	cmp	al,7			; VT-style autoprint off?
+;; 	jne	dgprt6			; ne = no
+;; 	test	anspflg,vtautop		; check state of print flag
+;; 	jz	dgprt7			; z = off already
+;; 	or	anspflg,vtautop		; say auto-print enabled to toggle off
+;; 	call	ftrnprs			; toggle mode line PRN indicator
+;; 	ret
 
-dgprt6:	cmp	al,':'			; Print Screen?
-	jne	dgprt7			; ne = no
-	mov	ah,mar_bot		; save margins
-	mov	al,mar_top
-	push	ax
-	mov	mar_top,0		; set to full screen height
-	mov	al,byte ptr low_rgt+1	; bottom text row
-	mov	mar_bot,al
-	push	cursor
-	xor	dx,dx			; cursor to home
-	call	dgprtwn			; print this window
-	pop	cursor
-	pop	ax
-	mov	mar_top,al		; restore margins
-	mov	mar_bot,ah
-dgprt7:	ret
-dgprt	endp
+;; dgprt6:	cmp	al,':'			; Print Screen?
+;; 	jne	dgprt7			; ne = no
+;; 	mov	ah,mar_bot		; save margins
+;; 	mov	al,mar_top
+;; 	push	ax
+;; 	mov	mar_top,0		; set to full screen height
+;; 	mov	al,byte ptr low_rgt+1	; bottom text row
+;; 	mov	mar_bot,al
+;; 	push	cursor
+;; 	xor	dx,dx			; cursor to home
+;; 	call	dgprtwn			; print this window
+;; 	pop	cursor
+;; 	pop	ax
+;; 	mov	mar_top,al		; restore margins
+;; 	mov	mar_bot,ah
+;; dgprt7:	ret
+;; dgprt	endp
 
-dgppb	proc	near			; RS F x <n> Printer Pass back to host
-	mov	bx,offset dgppb1	; call back routine
-	jmp	get1n			; setup consume one <n>
-dgppb1:	mov	al,dgescape		; send RS R x 0  cannot set
-	call	prtbout			; out, no echo
-	mov	al,'R'
-	call	prtbout
-	mov	al,'x'
-	call	prtbout
-	mov	al,'0'			; say cannot set NRC printer mode
-	call	prtbout
-	ret
-dgppb	endp
+;; dgppb	proc	near			; RS F x <n> Printer Pass back to host
+;; 	mov	bx,offset dgppb1	; call back routine
+;; 	jmp	get1n			; setup consume one <n>
+;; dgppb1:	mov	al,dgescape		; send RS R x 0  cannot set
+;; 	call	prtbout			; out, no echo
+;; 	mov	al,'R'
+;; 	call	prtbout
+;; 	mov	al,'x'
+;; 	call	prtbout
+;; 	mov	al,'0'			; say cannot set NRC printer mode
+;; 	call	prtbout
+;; 	ret
+;; dgppb	endp
 
-; State machine active while DG Simulprint is  On. Copies all chars to the 
-; printer until and excluding Simulprint Off (RS F ? 0) has been received 
-; or the emulator reset.
-; New char is in al.
-dgmc	proc	near
-	mov	ttstate,offset dgmc	; stay in this state
-	cmp	al,dgescape		; start a new sequence?
-	je	dgmc1			; e = yes
-	mov	emubufc,0		; say no matched chars
-	call	fpntchr			; print char in al, ignore errors
-	ret
-					; RS seen
-dgmc1:	call	ansmc5			; playback previous matches
-	mov	ttstate,offset dgmc2	; get next char
-	mov	emubufc,1		; one char matched
-	mov	emubuf,al		; store it
-	ret
+;; ; State machine active while DG Simulprint is  On. Copies all chars to the 
+;; ; printer until and excluding Simulprint Off (RS F ? 0) has been received 
+;; ; or the emulator reset.
+;; ; New char is in al.
+;; dgmc	proc	near
+;; 	mov	ttstate,offset dgmc	; stay in this state
+;; 	cmp	al,dgescape		; start a new sequence?
+;; 	je	dgmc1			; e = yes
+;; 	mov	emubufc,0		; say no matched chars
+;; 	call	fpntchr			; print char in al, ignore errors
+;; 	ret
+;; 					; RS seen
+;; dgmc1:	call	ansmc5			; playback previous matches
+;; 	mov	ttstate,offset dgmc2	; get next char
+;; 	mov	emubufc,1		; one char matched
+;; 	mov	emubuf,al		; store it
+;; 	ret
 
-dgmc2:	cmp	al,'F'			; 'F' part of RS F ? 2
-	jne	dgmc7			; ne = no
-	inc	emubufc			; say matched "RS F"
-	mov	emubuf+1,al		; store it
-	mov	ttstate,offset dgmc3	; get query char
-	ret
-					; RS F seen
-dgmc3:	cmp	al,'?'			; 'F' part of RS F ? 2
-	jne	dgmc4			; ne = no
-	inc	emubufc			; say matched "RS F ?"
-	mov	emubuf+1,al		; store it
-	mov	ttstate,offset dgmc5	; get final char
-	ret
+;; dgmc2:	cmp	al,'F'			; 'F' part of RS F ? 2
+;; 	jne	dgmc7			; ne = no
+;; 	inc	emubufc			; say matched "RS F"
+;; 	mov	emubuf+1,al		; store it
+;; 	mov	ttstate,offset dgmc3	; get query char
+;; 	ret
+;; 					; RS F seen
+;; dgmc3:	cmp	al,'?'			; 'F' part of RS F ? 2
+;; 	jne	dgmc4			; ne = no
+;; 	inc	emubufc			; say matched "RS F ?"
+;; 	mov	emubuf+1,al		; store it
+;; 	mov	ttstate,offset dgmc5	; get final char
+;; 	ret
 
-dgmc4:	cmp	al,'a'			; RS F a  alternative?
-	jne	dgmc7			; ne = no
-	jmp	short dgmc8		; finish up
+;; dgmc4:	cmp	al,'a'			; RS F a  alternative?
+;; 	jne	dgmc7			; ne = no
+;; 	jmp	short dgmc8		; finish up
 
-dgmc5:	and	al,0fh
-	cmp	al,2			; RS F ? seen, correct final char?
-	je	dgmc8			; e = yes
+;; dgmc5:	and	al,0fh
+;; 	cmp	al,2			; RS F ? seen, correct final char?
+;; 	je	dgmc8			; e = yes
 	
-dgmc7:	call	ansmc5			; playback previous matches
-	call	fpntchr			; print char in al, ignore errors
-	mov	ttstate,offset dgmc	; start over
-	ret
+;; dgmc7:	call	ansmc5			; playback previous matches
+;; 	call	fpntchr			; print char in al, ignore errors
+;; 	mov	ttstate,offset dgmc	; start over
+;; 	ret
 
-dgmc8:	mov	ttstate,offset atnrm	; return to normal state
-	call	fpntflsh		; flush printer buffer
-	test	anspflg,vtcntp		; was printing active?
-	jz	dgmc9			; z = no
-	and	anspflg,not vtcntp	; yes, disable print controller
-	mov	al,6			; send Control-F to host
-	call	prtbout			; output, no echo
-	call	ftrnprs			; toggle mode line PRN indicator
-dgmc9:	ret
-dgmc	endp
+;; dgmc8:	mov	ttstate,offset atnrm	; return to normal state
+;; 	call	fpntflsh		; flush printer buffer
+;; 	test	anspflg,vtcntp		; was printing active?
+;; 	jz	dgmc9			; z = no
+;; 	and	anspflg,not vtcntp	; yes, disable print controller
+;; 	mov	al,6			; send Control-F to host
+;; 	call	prtbout			; output, no echo
+;; 	call	ftrnprs			; toggle mode line PRN indicator
+;; dgmc9:	ret
+;; dgmc	endp
 
 pntlin	proc	near			; print whole line given by dx
 	push	ax
@@ -7486,9 +7493,8 @@ atres0:	mov	atctype,al		; VTxxx cursor type
 	mov	ax,ttvt320		; pretend initing VT320
 	jmp	short atres0b
 atres0a:mov	flags.vtflg,ax		; use it again
-atres0b:test	ax,ttvt102+ttvt100+tthoney+ttpt200+ttansi ; VT100 class?
-	jnz	atres1			; nz = yes, turn on ansi mode
-	test	ax,ttvt320+ttvt220	; VT320/VT220?
+atres0b:
+	test	ax,ttvt320	     ; VT320?
 	jz	atres1a			; z = no, no ansi, no 8-bit controls
 	test	vtemu.vtflgst,vscntl	; want 8-bit controls?
 	jz	atres1			; z = no
@@ -7548,7 +7554,7 @@ endif	; no_graphics
 	xor	si,si
 	call	atleds			; clear the LED indicators
 	call	cpytabs			; initialize tab stops
- test flags.vtflg,ttvt320+ttvt220+ttvt102+ttvt100+tthoney+ttd463+ttd217+ttd470+ttansi
+ test flags.vtflg,ttvt320
 	jz	atres1c			; z = no
 	mov	al,vtemu.vtchset	; setup char set
 	cmp	al,1			; in range for NRCs?
@@ -7675,7 +7681,7 @@ stblmds proc	near
 	rep	stosb
 	pop	es
 	and	vtemu.vtflgop,not decanm
- test	flags.vtflg,ttvt320+ttvt220+ttvt102+ttvt100+tthoney+ttpt200+ttansi
+ test	flags.vtflg,ttvt320
 	jz	stblm10			; z = no, not ansi class
 	or	vtemu.vtflgop,decanm	; set ansi flag bit
 	or	vtemu.vtflgst,decanm	; and in permanent setup too
@@ -7869,26 +7875,26 @@ endif	; no_graphics
 	jmp	short ans52d
 ans52t	endp
 
-;  Honeywell VIP 3.1 i.d. string [FD]
-athoney proc	near
-	cmp	flags.vtflg,tthoney	; Honeywell mode?
-	jne	athone3			; ne = no, ignore
-	mov	ttyact,0		; group for networks
-	mov	cx,VIPstrl		; length of string
-	mov	si,offset VIPstr	; ptr to string
-	cld
-athone1:lodsb				; get a byte
-	push	cx			; save regs
-	push	si
-	call	prtbout			; print WITHOUT echo
-	pop	si
-	pop	cx
-	cmp	cx,1			; last char?
-	ja	athone2			; a = not yet
-	mov	ttyact,1		; end of network grouping
-athone2:loop	athone1			; loop for all characters
-athone3:jmp	atnorm
-athoney endp
+;; ;  Honeywell VIP 3.1 i.d. string [FD]
+;; ;athoney proc	near
+;; ;	cmp	flags.vtflg,tthoney	; Honeywell mode?
+;; ;	jne	athone3			; ne = no, ignore
+;; ;	mov	ttyact,0		; group for networks
+;; ;	mov	cx,VIPstrl		; length of string
+;; ;	mov	si,offset VIPstr	; ptr to string
+;; ;	cld
+;; athone1:lodsb				; get a byte
+;; 	push	cx			; save regs
+;; 	push	si
+;; 	call	prtbout			; print WITHOUT echo
+;; 	pop	si
+;; 	pop	cx
+;; 	cmp	cx,1			; last char?
+;; 	ja	athone2			; a = not yet
+;; 	mov	ttyact,1		; end of network grouping
+;; athone2:loop	athone1			; loop for all characters
+;; athone3:jmp	atnorm
+;; athoney endp
 
 athoncls proc	near			; Honeywell ESC accent  screen clear
 	cmp	nparam,0		; absence of parameters?
@@ -7905,913 +7911,913 @@ athoncl1:ret
 athoncl2:jmp	atdgnrc			; try Norwegian/Danish NRC designation
 athoncls endp
 
-	; Data General D463/D470 support routines
+;; 	; Data General D463/D470 support routines
 
-					; Data General mode C0 control codes
-dgctrl	proc	near
-	test	anspflg,vtcntp		; printing desired?
-	jz	dgctrl1			; z = no
-	call	fpntchr			; print char in al
-dgctrl1:and	ax,001fh		; clear for word use below
-	mov	di,ax			; use AL as a word index
-	shl	di,1
-	jmp	dgc0[di]		; dispatch on DG C0 control codes
-dgctrl	endp
+;; 					; Data General mode C0 control codes
+;; dgctrl	proc	near
+;; 	test	anspflg,vtcntp		; printing desired?
+;; 	jz	dgctrl1			; z = no
+;; 	call	fpntchr			; print char in al
+;; dgctrl1:and	ax,001fh		; clear for word use below
+;; 	mov	di,ax			; use AL as a word index
+;; 	shl	di,1
+;; 	jmp	dgc0[di]		; dispatch on DG C0 control codes
+;; dgctrl	endp
 
-; Control-character dispatcher for DG ANSI mode
-dgansctl proc	near
-	cmp	al,escape		; an escape sequence starting?
-	jne	dgansctl1		; ne = no
-	jmp	atesc
-dgansctl1:cmp	al,CSI			; this kind of escape?
-	jne	dgansctl2		; ne = no
-	jmp	atcsi0
-dgansctl2:cmp	al,9ch			; end of DCS?
-	jne	dgansctl3		; ne = no
-	jmp	atgotst			; terminate DCS
-dgansctl3:cmp	ttstate,offset atdcsnul	; consuming a DCS?
-	jne	dgansctl4		; ne = no
-	ret				; consume
-dgansctl4:cmp	ttstate,offset atesc1	; state is second char of ST?
-	jne	dgansctl5		; ne = no
-	jmp	ttstate			; go process second char
-dgansctl5:test	anspflg,vtcntp		; printing desired?
-	jz	dgansctl6		; z = no
-	call	fpntchr			; print char in al
-dgansctl6:cmp	al,BELL
-	jne	dgansctl7
-	jmp	vtbell			; beep
-dgansctl7:cmp	al,BS
-	jne	dgansctl8
-	jmp	dgcub			; do DG Backspace
-dgansctl8:cmp	al,LF
-	je	dgansctl9		; e = yes
-	cmp	al,FF
-	jne	dgansctl10
-dgansctl9:jmp	dglf			; do DG Line Feed
-dgansctl10:ret
-dgansctl endp
+;; ; Control-character dispatcher for DG ANSI mode
+;; dgansctl proc	near
+;; 	cmp	al,escape		; an escape sequence starting?
+;; 	jne	dgansctl1		; ne = no
+;; 	jmp	atesc
+;; dgansctl1:cmp	al,CSI			; this kind of escape?
+;; 	jne	dgansctl2		; ne = no
+;; 	jmp	atcsi0
+;; dgansctl2:cmp	al,9ch			; end of DCS?
+;; 	jne	dgansctl3		; ne = no
+;; 	jmp	atgotst			; terminate DCS
+;; dgansctl3:cmp	ttstate,offset atdcsnul	; consuming a DCS?
+;; 	jne	dgansctl4		; ne = no
+;; 	ret				; consume
+;; dgansctl4:cmp	ttstate,offset atesc1	; state is second char of ST?
+;; 	jne	dgansctl5		; ne = no
+;; 	jmp	ttstate			; go process second char
+;; dgansctl5:test	anspflg,vtcntp		; printing desired?
+;; 	jz	dgansctl6		; z = no
+;; 	call	fpntchr			; print char in al
+;; dgansctl6:cmp	al,BELL
+;; 	jne	dgansctl7
+;; 	jmp	vtbell			; beep
+;; dgansctl7:cmp	al,BS
+;; 	jne	dgansctl8
+;; 	jmp	dgcub			; do DG Backspace
+;; dgansctl8:cmp	al,LF
+;; 	je	dgansctl9		; e = yes
+;; 	cmp	al,FF
+;; 	jne	dgansctl10
+;; dgansctl9:jmp	dglf			; do DG Line Feed
+;; dgansctl10:ret
+;; dgansctl endp
 
-dgesc	proc	near			; Parse Data General RS commands
-	mov	dgnum,0			; clear numerical result
-	mov	ttstate,offset dgesc1	; set up to get next char
-	ret
-dgesc1:	mov	bx,offset dgesctab	; dispatch table
-	mov	ttstate,offset atnrm	; reset state
-	jmp	atdispat		; dispatch on char in AL
-dgesc	endp
+;; dgesc	proc	near			; Parse Data General RS commands
+;; 	mov	dgnum,0			; clear numerical result
+;; 	mov	ttstate,offset dgesc1	; set up to get next char
+;; 	ret
+;; dgesc1:	mov	bx,offset dgesctab	; dispatch table
+;; 	mov	ttstate,offset atnrm	; reset state
+;; 	jmp	atdispat		; dispatch on char in AL
+;; dgesc	endp
 
-; Parse RS F/G <letter><DGnumber>(repeated)
-; F/G has been read, letter is next
-dgFSERIES:mov	ttstate,offset Fdisp	; dispatcher for incoming RS F
-	ret
-Fdisp:	mov	ttstate,offset atnrm	; normal state
-	mov	bx,offset fltable	; table of letters
-	jmp	atdispat		; dispatch to action routine
+;; ; Parse RS F/G <letter><DGnumber>(repeated)
+;; ; F/G has been read, letter is next
+;; dgFSERIES:mov	ttstate,offset Fdisp	; dispatcher for incoming RS F
+;; 	ret
+;; Fdisp:	mov	ttstate,offset atnrm	; normal state
+;; 	mov	bx,offset fltable	; table of letters
+;; 	jmp	atdispat		; dispatch to action routine
 
-dgGSERIES:mov	ttstate,offset Gdisp	; dispatcher for incoming RS G
-	ret
-Gdisp:	mov	ttstate,offset atnrm	; normal state
-	mov	bx,offset gltable	; table of letters
-	jmp	atdispat		; dispatch to action routine
+;; dgGSERIES:mov	ttstate,offset Gdisp	; dispatcher for incoming RS G
+;; 	ret
+;; Gdisp:	mov	ttstate,offset atnrm	; normal state
+;; 	mov	bx,offset gltable	; table of letters
+;; 	jmp	atdispat		; dispatch to action routine
 
-dgRSERIES:test	flags.vtflg,ttd463+ttd217 ; D463/D217?
-	jz	dgnoR			; z = no
-	mov	ttstate,offset Rdisp	; dispatcher for incoming RS R
-	ret
-dgnoR:	jmp	atnorm			; no RS R series in D470
+;; dgRSERIES:test	flags.vtflg,ttd463+ttd217 ; D463/D217?
+;; 	jz	dgnoR			; z = no
+;; 	mov	ttstate,offset Rdisp	; dispatcher for incoming RS R
+;; 	ret
+;; dgnoR:	jmp	atnorm			; no RS R series in D470
 
-Rdisp:	mov	ttstate,offset atnrm	; normal state
-	mov	bx,offset rltable	; table of letters
-	jmp	atdispat		; dispatch to action routine
+;; Rdisp:	mov	ttstate,offset atnrm	; normal state
+;; 	mov	bx,offset rltable	; table of letters
+;; 	jmp	atdispat		; dispatch to action routine
 
-; DG <n>,<nn>,<nnn> processors. Enter with BX holding callback address.
-; Returns number in dgnum and resets state to atnrm.
-					; get one DG numeric
-get1n:	mov	ttstate,offset getnum	; worker routine
-	mov	dgnum,0			; clear numerical result
-	mov	numdigits,1		; wanted qty of digits
-	mov	dgcaller,bx		; call back address
-	ret
-					; get two DG hex digits
-get2n:	mov	ttstate,offset getnum	; worker routine
-	mov	dgnum,0			; clear numerical result
-	mov	numdigits,2		; wanted qty of digits
-	mov	dgcaller,bx		; call back address
-	ret
-					; get three DG hex digits
-get3n:	mov	ttstate,offset getnum	; worker routine
-	mov	dgnum,0			; clear numerical result
-	mov	numdigits,3		; wanted qty of digits
-	mov	dgcaller,bx		; call back address
-	ret
+;; ; DG <n>,<nn>,<nnn> processors. Enter with BX holding callback address.
+;; ; Returns number in dgnum and resets state to atnrm.
+;; 					; get one DG numeric
+;; get1n:	mov	ttstate,offset getnum	; worker routine
+;; 	mov	dgnum,0			; clear numerical result
+;; 	mov	numdigits,1		; wanted qty of digits
+;; 	mov	dgcaller,bx		; call back address
+;; 	ret
+;; 					; get two DG hex digits
+;; get2n:	mov	ttstate,offset getnum	; worker routine
+;; 	mov	dgnum,0			; clear numerical result
+;; 	mov	numdigits,2		; wanted qty of digits
+;; 	mov	dgcaller,bx		; call back address
+;; 	ret
+;; 					; get three DG hex digits
+;; get3n:	mov	ttstate,offset getnum	; worker routine
+;; 	mov	dgnum,0			; clear numerical result
+;; 	mov	numdigits,3		; wanted qty of digits
+;; 	mov	dgcaller,bx		; call back address
+;; 	ret
 
-get3loc:mov	ttstate,offset getloc	; get three DG Location digits
-	mov	dgnum,0
-	mov	numdigits,3
-	mov	dgcaller,bx
-	ret
+;; get3loc:mov	ttstate,offset getloc	; get three DG Location digits
+;; 	mov	dgnum,0
+;; 	mov	numdigits,3
+;; 	mov	dgcaller,bx
+;; 	ret
 
-; get number from lower 5 bits of each byte
-getdd:	mov	ttstate,offset get5num	; worker routine
-	mov	dgnum,0			; clear numerical result
-	mov	numdigits,2		; wanted qty of digits
-	mov	dgcaller,bx		; call back address
-	ret
+;; ; get number from lower 5 bits of each byte
+;; getdd:	mov	ttstate,offset get5num	; worker routine
+;; 	mov	dgnum,0			; clear numerical result
+;; 	mov	numdigits,2		; wanted qty of digits
+;; 	mov	dgcaller,bx		; call back address
+;; 	ret
 
-getloc	proc	near
-	or	al,al			; is it truely null (RS L cmd stuff)?
-	jz	getloc3			; z = yes, exit now
-	and	al,00011111b		; keep only five lower bits
-	mov	cl,5
-	mov	bx,dgnum
-	shl	bx,cl
-	or	bl,al
-	mov	dgnum,bx
-	dec	numdigits		; say one more digit done
-	jz	getloc1			; z = have done all
-	ret				; else stay in state getloc
+;; getloc	proc	near
+;; 	or	al,al			; is it truely null (RS L cmd stuff)?
+;; 	jz	getloc3			; z = yes, exit now
+;; 	and	al,00011111b		; keep only five lower bits
+;; 	mov	cl,5
+;; 	mov	bx,dgnum
+;; 	shl	bx,cl
+;; 	or	bl,al
+;; 	mov	dgnum,bx
+;; 	dec	numdigits		; say one more digit done
+;; 	jz	getloc1			; z = have done all
+;; 	ret				; else stay in state getloc
 
-getloc3:stc				; set carry to say ended on NULL
-getloc1:call	atnorm			; set normal state
-	mov	bx,dgcaller		; get callback address
-	mov	dgcaller,offset atign	; reset default DG callback processor
-	jmp	bx			; go to callback address
-getloc	endp
+;; getloc3:stc				; set carry to say ended on NULL
+;; getloc1:call	atnorm			; set normal state
+;; 	mov	bx,dgcaller		; get callback address
+;; 	mov	dgcaller,offset atign	; reset default DG callback processor
+;; 	jmp	bx			; go to callback address
+;; getloc	endp
 
-; Return binary number in dgnum. When done it resets state to atnrm, 
-; clears callback address. Note that this proc accepts ALL bytes and uses
-; only the four lower bits, regardless of what the DG manuals suggest.
-getnum	proc	near
-	and	al,0fh			; keep lower four bits
-	mov	cl,4
-	mov	bx,dgnum		; get current value
-	shl	bx,cl			; times 16
-	or	bl,al			; add current digit
-	mov	dgnum,bx		; keep result
-	dec	numdigits		; say one more digit done
-	jz	getnum2			; z = have done all digits
-	ret				; else stay in this state
-getnum2:call	atnorm			; set normal state
-	mov	bx,dgcaller		; get callback address
-	mov	dgcaller,offset atign	; reset default DG callback processor
-	jmp	bx			; go to callback address
-getnum	endp
+;; ; Return binary number in dgnum. When done it resets state to atnrm, 
+;; ; clears callback address. Note that this proc accepts ALL bytes and uses
+;; ; only the four lower bits, regardless of what the DG manuals suggest.
+;; getnum	proc	near
+;; 	and	al,0fh			; keep lower four bits
+;; 	mov	cl,4
+;; 	mov	bx,dgnum		; get current value
+;; 	shl	bx,cl			; times 16
+;; 	or	bl,al			; add current digit
+;; 	mov	dgnum,bx		; keep result
+;; 	dec	numdigits		; say one more digit done
+;; 	jz	getnum2			; z = have done all digits
+;; 	ret				; else stay in this state
+;; getnum2:call	atnorm			; set normal state
+;; 	mov	bx,dgcaller		; get callback address
+;; 	mov	dgcaller,offset atign	; reset default DG callback processor
+;; 	jmp	bx			; go to callback address
+;; getnum	endp
 
-; Return binary number in dgnum. When done it resets state to atnrm, 
-; clears callback address. Note that this proc accepts ALL bytes and uses
-; only the five lower bits, regardless of what the DG manuals suggest.
-get5num	proc	near
-	and	al,1fh			; keep lower five bits
-	mov	cl,5
-	mov	bx,dgnum		; get current value
-	shl	bx,cl			; times 32
-	add	bl,al			; add current digit
-	adc	bh,0
-	mov	dgnum,bx		; keep result
-	dec	numdigits		; say one more digit done
-	cmp	numdigits,0		; done all?
-	jz	get5num2		; z = yes
-	ret				; else stay in this state
-get5num2:call	atnorm			; set normal state
-	mov	bx,dgcaller		; get callback address
-	mov	dgcaller,offset atign	; reset default DG callback processor
-	jmp	bx			; go to callback address
-get5num	endp
+;; ; Return binary number in dgnum. When done it resets state to atnrm, 
+;; ; clears callback address. Note that this proc accepts ALL bytes and uses
+;; ; only the five lower bits, regardless of what the DG manuals suggest.
+;; get5num	proc	near
+;; 	and	al,1fh			; keep lower five bits
+;; 	mov	cl,5
+;; 	mov	bx,dgnum		; get current value
+;; 	shl	bx,cl			; times 32
+;; 	add	bl,al			; add current digit
+;; 	adc	bh,0
+;; 	mov	dgnum,bx		; keep result
+;; 	dec	numdigits		; say one more digit done
+;; 	cmp	numdigits,0		; done all?
+;; 	jz	get5num2		; z = yes
+;; 	ret				; else stay in this state
+;; get5num2:call	atnorm			; set normal state
+;; 	mov	bx,dgcaller		; get callback address
+;; 	mov	dgcaller,offset atign	; reset default DG callback processor
+;; 	jmp	bx			; go to callback address
+;; get5num	endp
 
-; Provide binary number in dgnum from ANSI params, simulating get<kinds>
-; Enter with bx holding offset of main routine to call first.
-; Return carry set when no more parameters
-dec2getn proc	near
-	mov	dgparmread,0		; parameter read
-	call	bx			; call main routine
+;; ; Provide binary number in dgnum from ANSI params, simulating get<kinds>
+;; ; Enter with bx holding offset of main routine to call first.
+;; ; Return carry set when no more parameters
+;; dec2getn proc	near
+;; 	mov	dgparmread,0		; parameter read
+;; 	call	bx			; call main routine
 
-dec2getn1:cmp	ttstate,offset atnrm	; want to return to normal state?
-	je	dec2getnx		; e = yes
-	mov	bx,dgparmread		; number of parameters read
-	cmp	bx,nparam		; read all parameters?
-	jae	dec2getnx		; ae = yes
-	shl	bx,1			; convert to word index
-	mov	bx,param[bx]		; get parameter
-	inc	dgparmread		; say have read it
-	mov	dgnum,bx		; return value
-	clc
-	mov	bx,dgcaller
-	call	bx
-	jmp	short dec2getn1
-dec2getnx:
-	call	atnorm			; reset state
-	mov	dgnum,0
-	stc				; return carry set
-	ret
-dec2getn endp
+;; dec2getn1:cmp	ttstate,offset atnrm	; want to return to normal state?
+;; 	je	dec2getnx		; e = yes
+;; 	mov	bx,dgparmread		; number of parameters read
+;; 	cmp	bx,nparam		; read all parameters?
+;; 	jae	dec2getnx		; ae = yes
+;; 	shl	bx,1			; convert to word index
+;; 	mov	bx,param[bx]		; get parameter
+;; 	inc	dgparmread		; say have read it
+;; 	mov	dgnum,bx		; return value
+;; 	clc
+;; 	mov	bx,dgcaller
+;; 	call	bx
+;; 	jmp	short dec2getn1
+;; dec2getnx:
+;; 	call	atnorm			; reset state
+;; 	mov	dgnum,0
+;; 	stc				; return carry set
+;; 	ret
+;; dec2getn endp
 
-out2n	proc	near			; send <nn> report from value in AL
-	push	cx
-	mov	ch,al			; preserve a copy
-	mov	cl,4
-	shr	al,cl			; get high nibble
-	and	al,0fh
-	add	al,'0'			; ascii bias
-	call	prtbout
-	mov	al,ch			; recover copy
-	and	al,0fh			; get low nibble
-	add	al,'0'
-	call	prtbout
-	pop	cx
-	ret
-out2n	endp
+;; out2n	proc	near			; send <nn> report from value in AL
+;; 	push	cx
+;; 	mov	ch,al			; preserve a copy
+;; 	mov	cl,4
+;; 	shr	al,cl			; get high nibble
+;; 	and	al,0fh
+;; 	add	al,'0'			; ascii bias
+;; 	call	prtbout
+;; 	mov	al,ch			; recover copy
+;; 	and	al,0fh			; get low nibble
+;; 	add	al,'0'
+;; 	call	prtbout
+;; 	pop	cx
+;; 	ret
+;; out2n	endp
 
-out2na	proc	near			; send <nn> report from value in AL
-	push	cx
-	mov	ch,al			; preserve a copy
-	mov	cl,4
-	shr	al,cl			; get high nibble
-	and	al,0fh
-	add	al,'@'			; ascii bias
-	call	prtbout
-	mov	al,ch			; recover copy
-	and	al,0fh			; get low nibble
-	add	al,'@'
-	call	prtbout
-	pop	cx
-	ret
-out2na	endp
+;; out2na	proc	near			; send <nn> report from value in AL
+;; 	push	cx
+;; 	mov	ch,al			; preserve a copy
+;; 	mov	cl,4
+;; 	shr	al,cl			; get high nibble
+;; 	and	al,0fh
+;; 	add	al,'@'			; ascii bias
+;; 	call	prtbout
+;; 	mov	al,ch			; recover copy
+;; 	and	al,0fh			; get low nibble
+;; 	add	al,'@'
+;; 	call	prtbout
+;; 	pop	cx
+;; 	ret
+;; out2na	endp
 
-dgign1n	proc	near			; ignore a <n> command
-	mov	bx,offset atnorm	; ignore the <n>
-	jmp	get1n
-dgign1n	endp
+;; dgign1n	proc	near			; ignore a <n> command
+;; 	mov	bx,offset atnorm	; ignore the <n>
+;; 	jmp	get1n
+;; dgign1n	endp
 
-dgign2n	proc	near			; ignore a <nn> command
-	mov	bx,offset atnorm	; ignore the <nn>
-	jmp	get2n
-dgign2n	endp
+;; dgign2n	proc	near			; ignore a <nn> command
+;; 	mov	bx,offset atnorm	; ignore the <nn>
+;; 	jmp	get2n
+;; dgign2n	endp
 
-dgprtfm	proc	near			; Control-A  DG print form
-	mov	cursor,dx		; save cursor location
-dgprtf1:mov	dl,mar_right		; start at right margin
-	mov	cl,dl
-	sub	cl,mar_left		; minus left
-	inc	cl
-	xor	ch,ch			; number of columns to do
-dgprtf3:push	cx
-	call	dgprta			; get char which would be printed
-	pop	cx
-	cmp	al,' '			; space?
-	jne	dgprtf4			; ne = no, end scan here
-	dec	dl			; scan backward another column
-	loop	dgprtf3
-dgprtf4:jcxz	dgprtf6			; z = empty line
-	mov	dl,mar_left		; start at left margin
-dgprtf5:push	cx
-	push	dx
-	call	dgprta			; get printable
-	call	fpntchr			; print char in al
-	pop	dx
-	pop	cx
-	jc	dgprtf7			; c = printer error
-	inc	dl
-	loop	dgprtf5			; do count
+;; dgprtfm	proc	near			; Control-A  DG print form
+;; 	mov	cursor,dx		; save cursor location
+;; dgprtf1:mov	dl,mar_right		; start at right margin
+;; 	mov	cl,dl
+;; 	sub	cl,mar_left		; minus left
+;; 	inc	cl
+;; 	xor	ch,ch			; number of columns to do
+;; dgprtf3:push	cx
+;; 	call	dgprta			; get char which would be printed
+;; 	pop	cx
+;; 	cmp	al,' '			; space?
+;; 	jne	dgprtf4			; ne = no, end scan here
+;; 	dec	dl			; scan backward another column
+;; 	loop	dgprtf3
+;; dgprtf4:jcxz	dgprtf6			; z = empty line
+;; 	mov	dl,mar_left		; start at left margin
+;; dgprtf5:push	cx
+;; 	push	dx
+;; 	call	dgprta			; get printable
+;; 	call	fpntchr			; print char in al
+;; 	pop	dx
+;; 	pop	cx
+;; 	jc	dgprtf7			; c = printer error
+;; 	inc	dl
+;; 	loop	dgprtf5			; do count
 
-dgprtf6:mov	al,CR			; line terminator for printer
-	push	dx
-	call	fpntchr
-	pop	dx
-	jc	dgprtf7			; c = printer error
-	mov	al,LF
-	push	dx
-	call	fpntchr
-	pop	dx
-	jc	dgprtf7			; c = printer error
-	inc	dh			; next row down
-	cmp	dh,mar_bot		; below window now?
-	jbe	dgprtf1			; be = no
-dgprtf7:mov	al,6			; Control-F to host when done
-	call	prtbout			; output, no echo
-	mov	dx,cursor
-	ret
-dgprtfm	endp
+;; dgprtf6:mov	al,CR			; line terminator for printer
+;; 	push	dx
+;; 	call	fpntchr
+;; 	pop	dx
+;; 	jc	dgprtf7			; c = printer error
+;; 	mov	al,LF
+;; 	push	dx
+;; 	call	fpntchr
+;; 	pop	dx
+;; 	jc	dgprtf7			; c = printer error
+;; 	inc	dh			; next row down
+;; 	cmp	dh,mar_bot		; below window now?
+;; 	jbe	dgprtf1			; be = no
+;; dgprtf7:mov	al,6			; Control-F to host when done
+;; 	call	prtbout			; output, no echo
+;; 	mov	dx,cursor
+;; 	ret
+;; dgprtfm	endp
 
-dgprta	proc	near			; worker, report printable char at dx
-	call	getatch			; read char (al) and attribute (ah)
-	cmp	protectena,0		; protected mode enabled?
-	je	dgprta1			; e = no
-	test	cl,att_protect		; protected mode?
-	jnz	dgprta2			; nz = yes, use a space
-	ret				; else use as-is
-dgprta1:test	ah,att_bold		; bold?
-	jnz	dgprta3			; nz = yes, use as-is
-dgprta2:mov	al,' '			; replace with space
-dgprta3:ret
-dgprta	endp
+;; dgprta	proc	near			; worker, report printable char at dx
+;; 	call	getatch			; read char (al) and attribute (ah)
+;; 	cmp	protectena,0		; protected mode enabled?
+;; 	je	dgprta1			; e = no
+;; 	test	cl,att_protect		; protected mode?
+;; 	jnz	dgprta2			; nz = yes, use a space
+;; 	ret				; else use as-is
+;; dgprta1:test	ah,att_bold		; bold?
+;; 	jnz	dgprta3			; nz = yes, use as-is
+;; dgprta2:mov	al,' '			; replace with space
+;; dgprta3:ret
+;; dgprta	endp
 
-dgprtwn	proc	near			; Control-Q  DG print window
-	mov	cursor,dx		; save cursor location
-dgprtw1:mov	dl,mar_right		; start at right margin
-	mov	cl,dl
-	sub	cl,mar_left
-	inc	cl
-	xor	ch,ch			; number of columns to do
-dgprtw3:push	cx
-	call	dgprtb			; get char which would be printed
-	pop	cx
-	cmp	al,' '			; space?
-	jne	dgprtw4			; ne = no, end scan here
-	dec	dl			; scan backward another column
-	loop	dgprtw3
-dgprtw4:jcxz	dgprtw6			; z = empty line
-	mov	dl,mar_left		; start at left margin
-dgprtw5:push	cx
-	push	dx
-	call	dgprtb			; get printable
-	call	fpntchr			; print char in al
-	pop	dx
-	pop	cx
-	jc	dgprtw7			; c = printer error
-	inc	dl
-	loop	dgprtw5			; do count
-dgprtw6:mov	al,CR			; line terminator for printer
-	push	dx
-	call	fpntchr
-	pop	dx
-	jc	dgprtw7			; c = printer error
-	mov	al,LF
-	push	dx
-	call	fpntchr
-	pop	dx
-	jc	dgprtw7			; c = printer error
-	inc	dh			; next row down
-	cmp	dh,mar_bot		; below window now?
-	jbe	dgprtw1			; be = no
-dgprtw7:mov	al,6			; Control-F to host when done
-	call	prtbout			; output, no echo
-	mov	dx,cursor
-	ret
-dgprtwn	endp
+;; dgprtwn	proc	near			; Control-Q  DG print window
+;; 	mov	cursor,dx		; save cursor location
+;; dgprtw1:mov	dl,mar_right		; start at right margin
+;; 	mov	cl,dl
+;; 	sub	cl,mar_left
+;; 	inc	cl
+;; 	xor	ch,ch			; number of columns to do
+;; dgprtw3:push	cx
+;; 	call	dgprtb			; get char which would be printed
+;; 	pop	cx
+;; 	cmp	al,' '			; space?
+;; 	jne	dgprtw4			; ne = no, end scan here
+;; 	dec	dl			; scan backward another column
+;; 	loop	dgprtw3
+;; dgprtw4:jcxz	dgprtw6			; z = empty line
+;; 	mov	dl,mar_left		; start at left margin
+;; dgprtw5:push	cx
+;; 	push	dx
+;; 	call	dgprtb			; get printable
+;; 	call	fpntchr			; print char in al
+;; 	pop	dx
+;; 	pop	cx
+;; 	jc	dgprtw7			; c = printer error
+;; 	inc	dl
+;; 	loop	dgprtw5			; do count
+;; dgprtw6:mov	al,CR			; line terminator for printer
+;; 	push	dx
+;; 	call	fpntchr
+;; 	pop	dx
+;; 	jc	dgprtw7			; c = printer error
+;; 	mov	al,LF
+;; 	push	dx
+;; 	call	fpntchr
+;; 	pop	dx
+;; 	jc	dgprtw7			; c = printer error
+;; 	inc	dh			; next row down
+;; 	cmp	dh,mar_bot		; below window now?
+;; 	jbe	dgprtw1			; be = no
+;; dgprtw7:mov	al,6			; Control-F to host when done
+;; 	call	prtbout			; output, no echo
+;; 	mov	dx,cursor
+;; 	ret
+;; dgprtwn	endp
 
-dgprtb	proc	near			; worker to yield printable char
-	call	getatch			; read char (al) and attribute (ah)
-	test	al,80h			; high bit set?
-	jnz	dgprtb1			; nz = yes, use a space
-	cmp	al,20h			; in printables?
-	ja	dgprtb2			; a = yes
-dgprtb1:mov	al,' '			; replace with space
-dgprtb2:ret
-dgprtb	endp
+;; dgprtb	proc	near			; worker to yield printable char
+;; 	call	getatch			; read char (al) and attribute (ah)
+;; 	test	al,80h			; high bit set?
+;; 	jnz	dgprtb1			; nz = yes, use a space
+;; 	cmp	al,20h			; in printables?
+;; 	ja	dgprtb2			; a = yes
+;; dgprtb1:mov	al,' '			; replace with space
+;; dgprtb2:ret
+;; dgprtb	endp
 
-dgrevidon:mov	ah,curattr		; RS D  Control-V  reverse video on
-	call	setrev			; reverse video on
-	mov	curattr,ah		; store new attribute byte
-	ret
+;; dgrevidon:mov	ah,curattr		; RS D  Control-V  reverse video on
+;; 	call	setrev			; reverse video on
+;; 	mov	curattr,ah		; store new attribute byte
+;; 	ret
 
-dgrevidoff:mov	ah,curattr		; RS E  Control-B  reverse video off
-	call	clrrev			; 2, reverse video off
-	mov	curattr,ah		; store new attribute byte
-	ret
+;; dgrevidoff:mov	ah,curattr		; RS E  Control-B  reverse video off
+;; 	call	clrrev			; 2, reverse video off
+;; 	mov	curattr,ah		; store new attribute byte
+;; 	ret
 
-dgblkena:mov	blinkdis,0		; Control-C  DG blink enable
-	ret
-dgblkdis:mov	blinkdis,1		; Control-D  DG blink disable
-	ret
+;; dgblkena:mov	blinkdis,0		; Control-C  DG blink enable
+;; 	ret
+;; dgblkdis:mov	blinkdis,1		; Control-D  DG blink disable
+;; 	ret
 
-dgblkon	proc	near			; Control-N  DG Blink on
-	cmp	blinkdis,0		; disabled?
-	jne	dgblkon1		; ne = blink is disabled
-	mov	ah,curattr		; get current cursor attribute
-	call	setblink		; blink enable
-	mov	curattr,ah		; store new attribute byte
-dgblkon1:ret
-dgblkon	endp
+;; dgblkon	proc	near			; Control-N  DG Blink on
+;; 	cmp	blinkdis,0		; disabled?
+;; 	jne	dgblkon1		; ne = blink is disabled
+;; 	mov	ah,curattr		; get current cursor attribute
+;; 	call	setblink		; blink enable
+;; 	mov	curattr,ah		; store new attribute byte
+;; dgblkon1:ret
+;; dgblkon	endp
 
-dgblkoff proc	near			; Control-O  DG Blink off
-	mov	ah,curattr		; get current cursor attribute
-	call	clrblink		;  blink disable
-	mov	curattr,ah		; store new attribute byte
-	ret
-dgblkoff endp
+;; dgblkoff proc	near			; Control-O  DG Blink off
+;; 	mov	ah,curattr		; get current cursor attribute
+;; 	call	clrblink		;  blink disable
+;; 	mov	curattr,ah		; store new attribute byte
+;; 	ret
+;; dgblkoff endp
 
-dgwinhome proc near			; Control-H  DG window home
-	mov	dl,mar_left		; want to skip protected chars too
-	mov	dh,mar_top
-	jmp	dgsetcur		; do protected mode positioning
-dgwinhome endp
+;; dgwinhome proc near			; Control-H  DG window home
+;; 	mov	dl,mar_left		; want to skip protected chars too
+;; 	mov	dh,mar_top
+;; 	jmp	dgsetcur		; do protected mode positioning
+;; dgwinhome endp
 
-dguson	proc	near			; Control-T  DG underscoring on
-	mov	ah,curattr		; get current cursor attribute
-	call	setunder
-	mov	curattr,ah		; store new attribute byte
-	ret
-dguson	endp
+;; dguson	proc	near			; Control-T  DG underscoring on
+;; 	mov	ah,curattr		; get current cursor attribute
+;; 	call	setunder
+;; 	mov	curattr,ah		; store new attribute byte
+;; 	ret
+;; dguson	endp
 
-dgusoff	proc	near			; Control-U  DG underscoring off
-	mov	ah,curattr		; get current cursor attribute
-	call	clrunder
-	mov	curattr,ah		; store new attribute byte
-	ret
-dgusoff	endp
+;; dgusoff	proc	near			; Control-U  DG underscoring off
+;; 	mov	ah,curattr		; get current cursor attribute
+;; 	call	clrunder
+;; 	mov	curattr,ah		; store new attribute byte
+;; 	ret
+;; dgusoff	endp
 
-dgdimon	proc	near			; Control-\  DG dim on
-	mov	ah,curattr		; get current cursor attribute
-	call	clrbold
-	mov	curattr,ah		; store new attribute byte
-	ret
-dgdimon	endp
+;; dgdimon	proc	near			; Control-\  DG dim on
+;; 	mov	ah,curattr		; get current cursor attribute
+;; 	call	clrbold
+;; 	mov	curattr,ah		; store new attribute byte
+;; 	ret
+;; dgdimon	endp
 
-dgdimoff proc	near			; Control-]  DG dim off
-	mov	ah,curattr		; get current cursor attribute
-	call	setbold
-	mov	curattr,ah		; store new attribute byte
-	ret
-dgdimoff endp
+;; dgdimoff proc	near			; Control-]  DG dim off
+;; 	mov	ah,curattr		; get current cursor attribute
+;; 	call	setbold
+;; 	mov	curattr,ah		; store new attribute byte
+;; 	ret
+;; dgdimoff endp
 
-dgsfc	proc	near			; RS A <color>, set foreground color
-	mov	ttstate,offset dgsfc1	; state to get next char
-	ret
-dgsfc1:	mov	ttstate,offset atnrm	; reset state
-	test	flags.vtflg,ttd463+ttd217 ; D463/D217?
-	jz	dgsfc2			; z = no, D470
-	mov	ah,curattr		; current coloring
-	test	al,0fh			; setting to background?
-	jnz	dgsfc1a			; nz = no
-	mov	cl,4
-	rol	ah,cl			; get background coloring
-dgsfc1a:and	ah,0fh			; keep foreground
-	mov	dg463fore,ah		; polygon foreground coloring
-	ret
-dgsfc2:	cmp	al,100			; select ACM mode?
-	je	dgsfc5			; ne = no
-dgsfc3:	and	al,0fh			; keep lower 4 bits
-	jz	dgsfc4			; z = black
-	xor	al,8			; invert DG intensity bit
-	jnz	dgsfc4
-	or	al,8			; pick up dark grey as second except'n
-dgsfc4:	mov	ah,curattr
-	and	ah,not 0Fh		; remove foreground
-	or	ah,al			; set new foreground
-	mov	ah,scbattr
-	and	ah,not 0Fh
-	or	ah,al
-	mov	curattr,ah		; save it
-	mov	scbattr,ah
-	ret
-dgsfc5:	mov	ah,att_normal		; get normal background colors
-	mov	scbattr,ah
-	mov	curattr,ah		; set current to them
-dgsfcx:	ret
-dgsfc	endp
+;; dgsfc	proc	near			; RS A <color>, set foreground color
+;; 	mov	ttstate,offset dgsfc1	; state to get next char
+;; 	ret
+;; dgsfc1:	mov	ttstate,offset atnrm	; reset state
+;; 	test	flags.vtflg,ttd463+ttd217 ; D463/D217?
+;; 	jz	dgsfc2			; z = no, D470
+;; 	mov	ah,curattr		; current coloring
+;; 	test	al,0fh			; setting to background?
+;; 	jnz	dgsfc1a			; nz = no
+;; 	mov	cl,4
+;; 	rol	ah,cl			; get background coloring
+;; dgsfc1a:and	ah,0fh			; keep foreground
+;; 	mov	dg463fore,ah		; polygon foreground coloring
+;; 	ret
+;; dgsfc2:	cmp	al,100			; select ACM mode?
+;; 	je	dgsfc5			; ne = no
+;; dgsfc3:	and	al,0fh			; keep lower 4 bits
+;; 	jz	dgsfc4			; z = black
+;; 	xor	al,8			; invert DG intensity bit
+;; 	jnz	dgsfc4
+;; 	or	al,8			; pick up dark grey as second except'n
+;; dgsfc4:	mov	ah,curattr
+;; 	and	ah,not 0Fh		; remove foreground
+;; 	or	ah,al			; set new foreground
+;; 	mov	ah,scbattr
+;; 	and	ah,not 0Fh
+;; 	or	ah,al
+;; 	mov	curattr,ah		; save it
+;; 	mov	scbattr,ah
+;; 	ret
+;; dgsfc5:	mov	ah,att_normal		; get normal background colors
+;; 	mov	scbattr,ah
+;; 	mov	curattr,ah		; set current to them
+;; dgsfcx:	ret
+;; dgsfc	endp
 
-dgsbc	proc	near			; RS B <color>, set background color
-	mov	ttstate,offset dgsbc1	; state to get next char
-	ret
-dgsbc1:	mov	ttstate,offset atnrm	; reset state
-	test	flags.vtflg,ttd463+ttd217 ; D463/D217?
-	jnz	dgsbcx			; nz = yes, ignore command
-	cmp	al,100			; select ACM mode?
-	je	dgsbc2			; e = yes
-	and	al,0fh			; mask out all but IBM PC background
-	jz	dgsbc3			; z = black
-	and	al,7			; remove IBM PC blinking bit
-	mov	cl,4
-	shl	al,cl			; move bits to high nibble
-dgsbc3:	mov	ah,curattr
-	and	ah,0fh			; remove background
-	or	ah,al			; set new background
-	mov	curattr,ah		; save it
-	mov	ah,scbattr
-	and	ah,0fh			; remove background
-	or	ah,al			; set new background
-	mov	scbattr,ah		; save it
-	ret
-dgsbc2:	mov	ah,att_normal		; get normal background colors
-	mov	scbattr,ah		; set current to them
-	mov	curattr,ah		; set current to them
-dgsbcx:	ret
-dgsbc	endp
+;; dgsbc	proc	near			; RS B <color>, set background color
+;; 	mov	ttstate,offset dgsbc1	; state to get next char
+;; 	ret
+;; dgsbc1:	mov	ttstate,offset atnrm	; reset state
+;; 	test	flags.vtflg,ttd463+ttd217 ; D463/D217?
+;; 	jnz	dgsbcx			; nz = yes, ignore command
+;; 	cmp	al,100			; select ACM mode?
+;; 	je	dgsbc2			; e = yes
+;; 	and	al,0fh			; mask out all but IBM PC background
+;; 	jz	dgsbc3			; z = black
+;; 	and	al,7			; remove IBM PC blinking bit
+;; 	mov	cl,4
+;; 	shl	al,cl			; move bits to high nibble
+;; dgsbc3:	mov	ah,curattr
+;; 	and	ah,0fh			; remove background
+;; 	or	ah,al			; set new background
+;; 	mov	curattr,ah		; save it
+;; 	mov	ah,scbattr
+;; 	and	ah,0fh			; remove background
+;; 	or	ah,al			; set new background
+;; 	mov	scbattr,ah		; save it
+;; 	ret
+;; dgsbc2:	mov	ah,att_normal		; get normal background colors
+;; 	mov	scbattr,ah		; set current to them
+;; 	mov	curattr,ah		; set current to them
+;; dgsbcx:	ret
+;; dgsbc	endp
 
-dgeol	proc	near			; Control-K DG erase cursor to eol
-	mov	ax,dx			; cursor position
-	mov	bx,ax
-	mov	bl,mar_right		; end of line
-	call	atsclr			; erase from ax to bx
-	ret
-dgeol	endp
+;; dgeol	proc	near			; Control-K DG erase cursor to eol
+;; 	mov	ax,dx			; cursor position
+;; 	mov	bx,ax
+;; 	mov	bl,mar_right		; end of line
+;; 	call	atsclr			; erase from ax to bx
+;; 	ret
+;; dgeol	endp
 
-dgtoansi proc	near			; RS F @  D470 mode to ANSI mode
-	test	flags.vtflg,ttd470	; D470?
-	jz	dgtoansi1		; z = no
-	mov	dgd470mode,1		; say doing ANSI mode
-dgtoansi1:ret
-dgtoansi endp
+;; dgtoansi proc	near			; RS F @  D470 mode to ANSI mode
+;; 	test	flags.vtflg,ttd470	; D470?
+;; 	jz	dgtoansi1		; z = no
+;; 	mov	dgd470mode,1		; say doing ANSI mode
+;; dgtoansi1:ret
+;; dgtoansi endp
 
-dgeeos	proc	near			; RS F F  DG erase cursor to end/scrn
-	jmp	erprot
-dgeeos	endp
+;; dgeeos	proc	near			; RS F F  DG erase cursor to end/scrn
+;; 	jmp	erprot
+;; dgeeos	endp
 
-dgescn	proc	near			; RS F E  DG erase from 0,0 to eos
-	xor	dh,dh
-	mov	dl,mar_left		; left margin, top row
-	call	dggetmar		; get margins for this window
-	call	atsetcur		; set cursor
-	mov	ah,curattr
-	call	clrunder		; clear underline attribute
-	call	clrblink		; clear blink
-	call	setbold			; aka clear dim
-	call	clrrev			; clear reverse video attribute
-	mov	atinvisible,0		; clear invisible attribute
-	mov	curattr,ah		; and cursor attributes
-	mov	extattr,0		; clear extended attributes
-	xor	ax,ax			; erase from 0,0
-	mov	bh,byte ptr low_rgt+1	; to end of screen
-	mov	bl,vswidth-1
-	call	atsclr			; clear screen
-	ret
-dgescn	endp
+;; dgescn	proc	near			; RS F E  DG erase from 0,0 to eos
+;; 	xor	dh,dh
+;; 	mov	dl,mar_left		; left margin, top row
+;; 	call	dggetmar		; get margins for this window
+;; 	call	atsetcur		; set cursor
+;; 	mov	ah,curattr
+;; 	call	clrunder		; clear underline attribute
+;; 	call	clrblink		; clear blink
+;; 	call	setbold			; aka clear dim
+;; 	call	clrrev			; clear reverse video attribute
+;; 	mov	atinvisible,0		; clear invisible attribute
+;; 	mov	curattr,ah		; and cursor attributes
+;; 	mov	extattr,0		; clear extended attributes
+;; 	xor	ax,ax			; erase from 0,0
+;; 	mov	bh,byte ptr low_rgt+1	; to end of screen
+;; 	mov	bl,vswidth-1
+;; 	call	atsclr			; clear screen
+;; 	ret
+;; dgescn	endp
 
-dgewin	proc	near			; Control-L  DG erase window
-	call	dgusoff			; underscore off		
-	call	clrblink		; clear blink
-	call	clrrev			; remove special video attributes
-	mov	ah,mar_top		; from top line of window
-	mov	bh,mar_bot		; to bottom line of window
-	mov	al,mar_left		; left margin
-	mov	bl,mar_right		; right margin
-	cmp	savdgmar,0		; saved permanent margin?
-	je	dgewin1			; e = no, mar_left/right are permanent
-	mov	al,byte ptr savdgmar	; use permanent l/r margins
-	mov	bl,byte ptr savdgmar+1
-dgewin1:call	atsclr			; clear the area
-	jmp	dgwinhome		; do DG window home
-dgewin	endp
+;; dgewin	proc	near			; Control-L  DG erase window
+;; 	call	dgusoff			; underscore off		
+;; 	call	clrblink		; clear blink
+;; 	call	clrrev			; remove special video attributes
+;; 	mov	ah,mar_top		; from top line of window
+;; 	mov	bh,mar_bot		; to bottom line of window
+;; 	mov	al,mar_left		; left margin
+;; 	mov	bl,mar_right		; right margin
+;; 	cmp	savdgmar,0		; saved permanent margin?
+;; 	je	dgewin1			; e = no, mar_left/right are permanent
+;; 	mov	al,byte ptr savdgmar	; use permanent l/r margins
+;; 	mov	bl,byte ptr savdgmar+1
+;; dgewin1:call	atsclr			; clear the area
+;; 	jmp	dgwinhome		; do DG window home
+;; dgewin	endp
 
-dgsleft	proc	near			; RS F C <nn>  DG Scroll Left
-	mov	bx,offset dgslef1	; get <nn>
-	jmp	get2n
-dgslef1:mov	ax,dgnum		; qty columns to scroll
-	jmp	dglrworker		; do common worker
-dgsleft	endp
+;; dgsleft	proc	near			; RS F C <nn>  DG Scroll Left
+;; 	mov	bx,offset dgslef1	; get <nn>
+;; 	jmp	get2n
+;; dgslef1:mov	ax,dgnum		; qty columns to scroll
+;; 	jmp	dglrworker		; do common worker
+;; dgsleft	endp
 
-dgsright proc	near			; RS F D <nn>  DG Scroll Right
-	mov	bx,offset dgsrig1	; get <nn>
-	jmp	get2n
-dgsrig1:mov	ax,dgnum
-	neg	ax			; go right
-	jmp	dglrworker		; do common worker
-dgsright endp
+;; dgsright proc	near			; RS F D <nn>  DG Scroll Right
+;; 	mov	bx,offset dgsrig1	; get <nn>
+;; 	jmp	get2n
+;; dgsrig1:mov	ax,dgnum
+;; 	neg	ax			; go right
+;; 	jmp	dglrworker		; do common worker
+;; dgsright endp
 
-; Worker to assist dgsleft/dgsright horizontal scroll. Enter with AX holding
-; the additional scroll value, negative for scrolling left. Updates array
-; linescroll.
-dglrworker proc	near
-	cmp	dghscrdis,0		; horiz scrolling disabled?
-	je	dglrwor1		; e = no
-	ret				; else ignore request
-dglrwor1:mov	bl,mar_top		; do entire DG window
-	xor	bh,bh
-	mov	cl,mar_bot
-	xor	ch,ch
-	sub	cx,bx
-	inc	cx			; number of lines in the window
-	cmp	cl,byte ptr low_rgt+1	; includes whole screen?
-	jbe	dglrwor2		; be = no
-	inc	cx			; include status line
+;; ; Worker to assist dgsleft/dgsright horizontal scroll. Enter with AX holding
+;; ; the additional scroll value, negative for scrolling left. Updates array
+;; ; linescroll.
+;; dglrworker proc	near
+;; 	cmp	dghscrdis,0		; horiz scrolling disabled?
+;; 	je	dglrwor1		; e = no
+;; 	ret				; else ignore request
+;; dglrwor1:mov	bl,mar_top		; do entire DG window
+;; 	xor	bh,bh
+;; 	mov	cl,mar_bot
+;; 	xor	ch,ch
+;; 	sub	cx,bx
+;; 	inc	cx			; number of lines in the window
+;; 	cmp	cl,byte ptr low_rgt+1	; includes whole screen?
+;; 	jbe	dglrwor2		; be = no
+;; 	inc	cx			; include status line
 
-dglrwor2:push	cx
-	mov	cl,linescroll[bx]	; get horz scroll value
-	xor	ch,ch
-	add	cx,ax			; accumulate scroll
-	jge	dglrwor3		; ge = non-negative
-	xor	cx,cx			; set to zero
-dglrwor3:cmp	cx,127			; max scroll
-	jbe	dglrwor4		; be = in limits
-	mov	cl,127			; set to max left
-dglrwor4:cmp	linescroll[bx],cl	; any change?
-	je	dglrwor5		; e = no
-	mov	linescroll[bx],cl	; set scroll
-	push	dx
-	mov	dl,bl
-	mov	dh,bl			; start/stop line numbers
-	call	touchup			; repaint just this line
-	pop	dx
-dglrwor5:inc	bx			; next line
-	pop	cx
-	loop	dglrwor2
-	ret
-dglrworker endp
+;; dglrwor2:push	cx
+;; 	mov	cl,linescroll[bx]	; get horz scroll value
+;; 	xor	ch,ch
+;; 	add	cx,ax			; accumulate scroll
+;; 	jge	dglrwor3		; ge = non-negative
+;; 	xor	cx,cx			; set to zero
+;; dglrwor3:cmp	cx,127			; max scroll
+;; 	jbe	dglrwor4		; be = in limits
+;; 	mov	cl,127			; set to max left
+;; dglrwor4:cmp	linescroll[bx],cl	; any change?
+;; 	je	dglrwor5		; e = no
+;; 	mov	linescroll[bx],cl	; set scroll
+;; 	push	dx
+;; 	mov	dl,bl
+;; 	mov	dh,bl			; start/stop line numbers
+;; 	call	touchup			; repaint just this line
+;; 	pop	dx
+;; dglrwor5:inc	bx			; next line
+;; 	pop	cx
+;; 	loop	dglrwor2
+;; 	ret
+;; dglrworker endp
 
-dginsl	proc	near			; RS F H  DG Insert Line in window
-	push	dx			; save cursor
-	mov	param,0			; set up ANSI call
-	call	inslin			; do insert line, can scroll
-	pop	dx			; recover cursor
-	jmp	atsetcur		; reset cursor
-dginsl	endp
+;; dginsl	proc	near			; RS F H  DG Insert Line in window
+;; 	push	dx			; save cursor
+;; 	mov	param,0			; set up ANSI call
+;; 	call	inslin			; do insert line, can scroll
+;; 	pop	dx			; recover cursor
+;; 	jmp	atsetcur		; reset cursor
+;; dginsl	endp
 
-dgdell	proc	near			; RS F I  DG Delete Line in window
-	mov	scroll,1		; line count
-	push	word ptr mar_top	; save current scrolling margins
-	mov	mar_top,dh		; temp top margin is here
-	call	atscru			; scroll up
-	pop	word ptr mar_top	; restore scrolling margins
-	ret
-dgdell	endp
+;; dgdell	proc	near			; RS F I  DG Delete Line in window
+;; 	mov	scroll,1		; line count
+;; 	push	word ptr mar_top	; save current scrolling margins
+;; 	mov	mar_top,dh		; temp top margin is here
+;; 	call	atscru			; scroll up
+;; 	pop	word ptr mar_top	; restore scrolling margins
+;; 	ret
+;; dgdell	endp
 
-dgnarrow proc	near			; RS F J  DG select normal spacing
-	mov	cx,dgwindcnt		; number of windows
-	xor	bx,bx
-	jcxz	dgnarr3			; z = none
-	inc	cx			; let implied last window be seen
-dgnarr1:cmp	dh,byte ptr dgwindow[bx+1] ; look at window bottom edge
-	jbe	dgnarr3			; be = cursor is in this window
-	add	bx,2			; skip two margin bytes
-	loop	dgnarr1			; next window
-dgnarr2:ret
+;; dgnarrow proc	near			; RS F J  DG select normal spacing
+;; 	mov	cx,dgwindcnt		; number of windows
+;; 	xor	bx,bx
+;; 	jcxz	dgnarr3			; z = none
+;; 	inc	cx			; let implied last window be seen
+;; dgnarr1:cmp	dh,byte ptr dgwindow[bx+1] ; look at window bottom edge
+;; 	jbe	dgnarr3			; be = cursor is in this window
+;; 	add	bx,2			; skip two margin bytes
+;; 	loop	dgnarr1			; next window
+;; dgnarr2:ret
 
-dgnarr3:mov	cx,dgwindow[bx]		; get mar_top and mar_bot (ch)
-	push	cx			; save margins for touchup below
-	mov	bl,cl			; mar_top
-	xor	bh,bh
-	sub	ch,cl			; mar_bot - mar_top = lines in win -1
-	xchg	ch,cl
-	xor	ch,ch
-	inc	cx
-	xor	ax,ax			; zero and make ah a changed flag
-dgnarr4:mov	al,dgwindcomp[bx]
-	and	dgwindcomp[bx],not 1	; set window to normal width
-	and	al,1			; select width, ignore font
-	or	ah,al			; remember if window line were wide
-	inc	bx
-	loop	dgnarr4			; do all lines in the window
-	mov	cl,byte ptr low_rgt+1	; see if any screen lines are wide
-	inc	cl			; text lines
-	xor	ch,ch
-	xor	bx,bx
-	xor	al,al
-dgnarr5:test	dgwindcomp[bx],1	; count wide lines
-	jz	dgnarr6			; z = narrow
-	inc	al
-	jmp	short dgnarr7		; one wide line is enough to count
-dgnarr6:inc	bx
-	loop	dgnarr5
+;; dgnarr3:mov	cx,dgwindow[bx]		; get mar_top and mar_bot (ch)
+;; 	push	cx			; save margins for touchup below
+;; 	mov	bl,cl			; mar_top
+;; 	xor	bh,bh
+;; 	sub	ch,cl			; mar_bot - mar_top = lines in win -1
+;; 	xchg	ch,cl
+;; 	xor	ch,ch
+;; 	inc	cx
+;; 	xor	ax,ax			; zero and make ah a changed flag
+;; dgnarr4:mov	al,dgwindcomp[bx]
+;; 	and	dgwindcomp[bx],not 1	; set window to normal width
+;; 	and	al,1			; select width, ignore font
+;; 	or	ah,al			; remember if window line were wide
+;; 	inc	bx
+;; 	loop	dgnarr4			; do all lines in the window
+;; 	mov	cl,byte ptr low_rgt+1	; see if any screen lines are wide
+;; 	inc	cl			; text lines
+;; 	xor	ch,ch
+;; 	xor	bx,bx
+;; 	xor	al,al
+;; dgnarr5:test	dgwindcomp[bx],1	; count wide lines
+;; 	jz	dgnarr6			; z = narrow
+;; 	inc	al
+;; 	jmp	short dgnarr7		; one wide line is enough to count
+;; dgnarr6:inc	bx
+;; 	loop	dgnarr5
 
-dgnarr7:pop	cx			; margins
-	test	tekflg,tek_active+tek_sg ; special graphics mode active?
-	jz	dgnarr8			; z = no
-	or	ah,ah			; any line widths changed?
-	jz	dgnarr7a		; z = no
-	push	dx
-	mov	dx,cx			; cx = saved margins 
-	call	touchup			; dl, dh are start stop rows
-	pop	dx
-dgnarr7a:ret
-dgnarr8:or	al,al			; count of wide lines
-	jz	dgnarr9			; z = all are narrow, go to 80 cols
-	ret				; leave screen as-is with wide line(s)
-dgnarr9:mov	al,3			; prep call on atrsm6, 132/80 col
-	mov	modeset,0		; say want 80 columns
-	jmp	atrsm6			; common worker
-dgnarrow endp
+;; dgnarr7:pop	cx			; margins
+;; 	test	tekflg,tek_active+tek_sg ; special graphics mode active?
+;; 	jz	dgnarr8			; z = no
+;; 	or	ah,ah			; any line widths changed?
+;; 	jz	dgnarr7a		; z = no
+;; 	push	dx
+;; 	mov	dx,cx			; cx = saved margins 
+;; 	call	touchup			; dl, dh are start stop rows
+;; 	pop	dx
+;; dgnarr7a:ret
+;; dgnarr8:or	al,al			; count of wide lines
+;; 	jz	dgnarr9			; z = all are narrow, go to 80 cols
+;; 	ret				; leave screen as-is with wide line(s)
+;; dgnarr9:mov	al,3			; prep call on atrsm6, 132/80 col
+;; 	mov	modeset,0		; say want 80 columns
+;; 	jmp	atrsm6			; common worker
+;; dgnarrow endp
 
-dgwide	proc	near			; RS F K  DG select compressed spacing
-	mov	cx,dgwindcnt		; number of windows
-	xor	bx,bx
-	jcxz	dgwide3			; z = none, means one as whole screen
-	inc	cx			; let implied last window be seen
-dgwide1:cmp	dh,byte ptr dgwindow[bx+1] ; look at window bottom edge
-	jbe	dgwide3			; be = cursor is in this window
-	add	bx,2			; skip two margin bytes
-	loop	dgwide1			; next window
-dgwide2:ret
+;; dgwide	proc	near			; RS F K  DG select compressed spacing
+;; 	mov	cx,dgwindcnt		; number of windows
+;; 	xor	bx,bx
+;; 	jcxz	dgwide3			; z = none, means one as whole screen
+;; 	inc	cx			; let implied last window be seen
+;; dgwide1:cmp	dh,byte ptr dgwindow[bx+1] ; look at window bottom edge
+;; 	jbe	dgwide3			; be = cursor is in this window
+;; 	add	bx,2			; skip two margin bytes
+;; 	loop	dgwide1			; next window
+;; dgwide2:ret
 
-dgwide3:mov	cx,dgwindow[bx]		; get mar_top and mar_bot (ch)
-	push	cx			; save them for touchup below
-	mov	bl,cl			; mar_top
-	xor	bh,bh
-	sub	ch,cl			; mar_bot - mar_top = lines in win -1
-	xchg	ch,cl
-	xor	ch,ch
-	inc	cx
-	mov	ax,1			; al is set, ah is changed flag
-dgwide5:mov	al,dgwindcomp[bx]
-	or	dgwindcomp[bx],1	; set this line to wide width
-	xor	al,1			; pick out width bit change
-	or	ah,al			; accumulate changes
-	inc	bx
-	loop	dgwide5			; do all lines in the window
-	pop	cx			; margins
-ifndef	no_graphics
-	test	ah,2			; soft fonts involved?
-	jnz	dgwide5a		; nz = yes, force graphics mode
-	test	tekflg,tek_active+tek_sg ; special graphics mode active?
-	jnz	dgwide7			; nz = yes
-	test	vtemu.vtflgop,vscompress ; allowed to use graphics for it?
-	jnz	dgwide8			; nz = no, use 132 column text mode
-dgwide5a:test	tekflg,tek_active+tek_sg ; special graphics mode active?
-	jnz	dgwide7			; nz = yes
-dgwide6:push	cx
-	push	dx
-	call	dgsettek		; setup special graphics mode
-	pop	dx
-	pop	cx
-	ret
-dgwide7:or	ah,ah			; any changes to width?
-	jz	dgwide7a		; z = no
-	push	dx
-	mov	dx,cx			; saved margins
-	call	touchup			; dl, dh are start stop rows
-	pop	dx
-dgwide7a:ret
-endif	; no_graphics
+;; dgwide3:mov	cx,dgwindow[bx]		; get mar_top and mar_bot (ch)
+;; 	push	cx			; save them for touchup below
+;; 	mov	bl,cl			; mar_top
+;; 	xor	bh,bh
+;; 	sub	ch,cl			; mar_bot - mar_top = lines in win -1
+;; 	xchg	ch,cl
+;; 	xor	ch,ch
+;; 	inc	cx
+;; 	mov	ax,1			; al is set, ah is changed flag
+;; dgwide5:mov	al,dgwindcomp[bx]
+;; 	or	dgwindcomp[bx],1	; set this line to wide width
+;; 	xor	al,1			; pick out width bit change
+;; 	or	ah,al			; accumulate changes
+;; 	inc	bx
+;; 	loop	dgwide5			; do all lines in the window
+;; 	pop	cx			; margins
+;; ifndef	no_graphics
+;; 	test	ah,2			; soft fonts involved?
+;; 	jnz	dgwide5a		; nz = yes, force graphics mode
+;; 	test	tekflg,tek_active+tek_sg ; special graphics mode active?
+;; 	jnz	dgwide7			; nz = yes
+;; 	test	vtemu.vtflgop,vscompress ; allowed to use graphics for it?
+;; 	jnz	dgwide8			; nz = no, use 132 column text mode
+;; dgwide5a:test	tekflg,tek_active+tek_sg ; special graphics mode active?
+;; 	jnz	dgwide7			; nz = yes
+;; dgwide6:push	cx
+;; 	push	dx
+;; 	call	dgsettek		; setup special graphics mode
+;; 	pop	dx
+;; 	pop	cx
+;; 	ret
+;; dgwide7:or	ah,ah			; any changes to width?
+;; 	jz	dgwide7a		; z = no
+;; 	push	dx
+;; 	mov	dx,cx			; saved margins
+;; 	call	touchup			; dl, dh are start stop rows
+;; 	pop	dx
+;; dgwide7a:ret
+;; endif	; no_graphics
 
-dgwide8:mov	al,3			; prep call on atrsm6, 132/80 col
-	mov	modeset,1		; say want 132 columns
-	call	atrsm6			; common worker
-ifndef	no_graphics
-	cmp	byte ptr low_rgt,79
-	jbe	dgwide6			; did not work, use graphics anyway
-endif	; no_graphics
-	ret
-dgwide	endp
+;; dgwide8:mov	al,3			; prep call on atrsm6, 132/80 col
+;; 	mov	modeset,1		; say want 132 columns
+;; 	call	atrsm6			; common worker
+;; ifndef	no_graphics
+;; 	cmp	byte ptr low_rgt,79
+;; 	jbe	dgwide6			; did not work, use graphics anyway
+;; endif	; no_graphics
+;; 	ret
+;; dgwide	endp
 
 ; Toggle Normal/Compressed modes from the keyboard.
 dgnctoggle proc	far
-	mov	dx,cursor		; get cursor
-	mov	bl,dh			; get row
-	xor	bh,bh
-	test	dgwindcomp[bx],1	; normal mode?
-	jz	dgnctog4		; z = yes, do compressed
-	call	dgnarrow		; do normal
+;; 	mov	dx,cursor		; get cursor
+;; 	mov	bl,dh			; get row
+;; 	xor	bh,bh
+;; 	test	dgwindcomp[bx],1	; normal mode?
+;; 	jz	dgnctog4		; z = yes, do compressed
+;; 	call	dgnarrow		; do normal
 	ret
-dgnctog4:call	dgwide			; do compressed
-	ret
+;; dgnctog4:call	dgwide			; do compressed
+;; 	ret
 dgnctoggle endp
 
-dginsc	proc	near			; RS J  DG Insert char
-	mov	dx,cursor
-	cmp	protectena,0		; protected mode enabled?
-	jne	dginsc1			; ne = yes, find new right margin
-	jmp	inschr			; do regular inschr
-dginsc1:cmp	dl,mar_right		; at right margin?
-	jae	dginsc2			; ae = yes
-	call	dgcurpchk		; check for protected char
-	jc	dginsc2			; c = protected
-	inc	dl			; next column right
-	jmp	short dginsc1		; continue scanning
+;; dginsc	proc	near			; RS J  DG Insert char
+;; 	mov	dx,cursor
+;; 	cmp	protectena,0		; protected mode enabled?
+;; 	jne	dginsc1			; ne = yes, find new right margin
+;; 	jmp	inschr			; do regular inschr
+;; dginsc1:cmp	dl,mar_right		; at right margin?
+;; 	jae	dginsc2			; ae = yes
+;; 	call	dgcurpchk		; check for protected char
+;; 	jc	dginsc2			; c = protected
+;; 	inc	dl			; next column right
+;; 	jmp	short dginsc1		; continue scanning
 
-dginsc2:mov	al,mar_right		; save right margin
-	push	ax
-	dec	dl			; do not include margin char
-	mov	mar_right,dl
-	mov	dx,cursor
-	call	inschr			; insert char
-	pop	ax
-	mov	mar_right,al
-	ret
-dginsc	endp
+;; dginsc2:mov	al,mar_right		; save right margin
+;; 	push	ax
+;; 	dec	dl			; do not include margin char
+;; 	mov	mar_right,dl
+;; 	mov	dx,cursor
+;; 	call	inschr			; insert char
+;; 	pop	ax
+;; 	mov	mar_right,al
+;; 	ret
+;; dginsc	endp
 
-dgdelc	proc	near			; RS K  DG Delete char
-	mov	dx,cursor
-	mov	param,0			; set up ANSI call for one char
-	cmp	protectena,0		; protected mode enabled?
-	jne	dgdelc1			; ne = yes, find new right margin
-	jmp	atdelc			; do delete
-dgdelc1:cmp	dl,mar_right		; at right margin?
-	jae	dgdelc2			; ae = yes
-	call	dgcurpchk		; check for protected char
-	jc	dgdelc2			; c = protected
-	inc	dl			; next column right
-	jmp	short dgdelc1		; continue scanning
+;; dgdelc	proc	near			; RS K  DG Delete char
+;; 	mov	dx,cursor
+;; 	mov	param,0			; set up ANSI call for one char
+;; 	cmp	protectena,0		; protected mode enabled?
+;; 	jne	dgdelc1			; ne = yes, find new right margin
+;; 	jmp	atdelc			; do delete
+;; dgdelc1:cmp	dl,mar_right		; at right margin?
+;; 	jae	dgdelc2			; ae = yes
+;; 	call	dgcurpchk		; check for protected char
+;; 	jc	dgdelc2			; c = protected
+;; 	inc	dl			; next column right
+;; 	jmp	short dgdelc1		; continue scanning
 
-dgdelc2:mov	al,mar_right		; save right margin
-	push	ax
-	dec	dl			; do not include margin char
-	mov	mar_right,dl
-	mov	dx,cursor
-	call	atdelc			; do delete
-	pop	ax
-	mov	mar_right,al
-	ret
-dgdelc	endp
+;; dgdelc2:mov	al,mar_right		; save right margin
+;; 	push	ax
+;; 	dec	dl			; do not include margin char
+;; 	mov	mar_right,dl
+;; 	mov	dx,cursor
+;; 	call	atdelc			; do delete
+;; 	pop	ax
+;; 	mov	mar_right,al
+;; 	ret
+;; dgdelc	endp
 
-dgilbm	proc	near			; RS F [ Insert line between margins
-	mov	al,dghscrdis		; save horz scrolling disable flag
-	push	ax			; save til the end
-	mov	dghscrdis,1		; disable horz scrolling for this cmd
-	mov	cursor,dx		; save this
-	mov	dl,mar_left		; start at the left side
-	mov	dh,mar_bot		; bottom of window
-	or	dh,dh			; row zero?
-	jz	dgilbm2			; z = yes, just clear the line
+;; dgilbm	proc	near			; RS F [ Insert line between margins
+;; 	mov	al,dghscrdis		; save horz scrolling disable flag
+;; 	push	ax			; save til the end
+;; 	mov	dghscrdis,1		; disable horz scrolling for this cmd
+;; 	mov	cursor,dx		; save this
+;; 	mov	dl,mar_left		; start at the left side
+;; 	mov	dh,mar_bot		; bottom of window
+;; 	or	dh,dh			; row zero?
+;; 	jz	dgilbm2			; z = yes, just clear the line
 
-dgilbm1:dec	dh			; up one row
-	call	getatch			; read a char
-	inc	dh			; go down a row
-	call	qsetatch		; write the char
-	inc	dl			; next column
-	cmp	dl,mar_right		; off end of row yet?
-	jbe	dgilbm1			; be = no
-	or	dh,dh			; finished top row?
-	jz	dgilbm2			; z = yes
-	dec	dh			; redo this one row up
-	mov	dl,mar_left		; reset to left window margin
-	cmp	dh,byte ptr cursor+1	; finished cursor row yet?
-	jae	dgilbm1			; ae = no
-dgilbm2:mov	dx,cursor		; clear line cursor was on
-	mov	al,mar_left		; from left margin
-	mov	bl,mar_right		; to right window margin
-	call	erinline		; clear the window line
-	mov	dl,dh
-	mov	dh,mar_bot		; lines changed
-	call	touchup			; redisplay the new material
-	mov	dx,cursor
-	pop	ax			; recover horz scroll disable flag
-	mov	dghscrdis,al
-	ret
-dgilbm	endp
+;; dgilbm1:dec	dh			; up one row
+;; 	call	getatch			; read a char
+;; 	inc	dh			; go down a row
+;; 	call	qsetatch		; write the char
+;; 	inc	dl			; next column
+;; 	cmp	dl,mar_right		; off end of row yet?
+;; 	jbe	dgilbm1			; be = no
+;; 	or	dh,dh			; finished top row?
+;; 	jz	dgilbm2			; z = yes
+;; 	dec	dh			; redo this one row up
+;; 	mov	dl,mar_left		; reset to left window margin
+;; 	cmp	dh,byte ptr cursor+1	; finished cursor row yet?
+;; 	jae	dgilbm1			; ae = no
+;; dgilbm2:mov	dx,cursor		; clear line cursor was on
+;; 	mov	al,mar_left		; from left margin
+;; 	mov	bl,mar_right		; to right window margin
+;; 	call	erinline		; clear the window line
+;; 	mov	dl,dh
+;; 	mov	dh,mar_bot		; lines changed
+;; 	call	touchup			; redisplay the new material
+;; 	mov	dx,cursor
+;; 	pop	ax			; recover horz scroll disable flag
+;; 	mov	dghscrdis,al
+;; 	ret
+;; dgilbm	endp
 
-dgdlbm	proc	near			; RS F \ Delete line between margins
-	mov	al,dghscrdis		; get horizontal scroll disable flag
-	push	ax			; save til the end
-	mov	dghscrdis,1		; disable horz scrolling for this cmd
-	mov	cursor,dx		; save cursor position
-	mov	dl,mar_left		; start at the left side
-dgdlbm1:inc	dh			; down one row
-	call	getatch			; read a char
-	dec	dh			; go up a row
-	call	qsetatch		; write the char
-	inc	dl			; next column
-	cmp	dl,mar_right		; off end of row yet?
-	jbe	dgdlbm1			; be = no
-	inc	dh			; redo this one row down
-	mov	dl,mar_left		; reset to left window margin
-	cmp	dh,mar_bot		; finished bottom row yet
-	jbe	dgdlbm1			; be = no
-	mov	dh,mar_bot		; clear last line in window
-	mov	al,mar_left
-	mov	bl,mar_right
-	call	erinline		; clear the window line
-	pop	ax			; recover horz scroll disable flag
-	mov	dghscrdis,al
-	mov	dx,cursor
-	mov	dl,dh			; region changed
-	mov	dh,mar_bot
-	call	touchup
-	ret
-dgdlbm	endp
+;; dgdlbm	proc	near			; RS F \ Delete line between margins
+;; 	mov	al,dghscrdis		; get horizontal scroll disable flag
+;; 	push	ax			; save til the end
+;; 	mov	dghscrdis,1		; disable horz scrolling for this cmd
+;; 	mov	cursor,dx		; save cursor position
+;; 	mov	dl,mar_left		; start at the left side
+;; dgdlbm1:inc	dh			; down one row
+;; 	call	getatch			; read a char
+;; 	dec	dh			; go up a row
+;; 	call	qsetatch		; write the char
+;; 	inc	dl			; next column
+;; 	cmp	dl,mar_right		; off end of row yet?
+;; 	jbe	dgdlbm1			; be = no
+;; 	inc	dh			; redo this one row down
+;; 	mov	dl,mar_left		; reset to left window margin
+;; 	cmp	dh,mar_bot		; finished bottom row yet
+;; 	jbe	dgdlbm1			; be = no
+;; 	mov	dh,mar_bot		; clear last line in window
+;; 	mov	al,mar_left
+;; 	mov	bl,mar_right
+;; 	call	erinline		; clear the window line
+;; 	pop	ax			; recover horz scroll disable flag
+;; 	mov	dghscrdis,al
+;; 	mov	dx,cursor
+;; 	mov	dl,dh			; region changed
+;; 	mov	dh,mar_bot
+;; 	call	touchup
+;; 	ret
+;; dgdlbm	endp
 
-dgscs	proc	near			; RS F S <nn>  DG Select Char Set
-	mov	bx,dgscs1		; setup for <nn> value
-	jmp	get2n
-dgscs1:	mov	bx,dgnum		; get DG char set idents
-	cmp	bl,1fh			; last hard char set
-	jbe	dgscs2			; be = in the hard sets
-	cmp	bl,45h			; end of soft sets
-	jbe	dgscs1a			; be = in range
-	ret				; else ignore command
-dgscs1a:add	bl,100-20h+1		; add local offset for chrsetup
-	jmp	short dgscs4		; prep for chrsetup
+;; dgscs	proc	near			; RS F S <nn>  DG Select Char Set
+;; 	mov	bx,dgscs1		; setup for <nn> value
+;; 	jmp	get2n
+;; dgscs1:	mov	bx,dgnum		; get DG char set idents
+;; 	cmp	bl,1fh			; last hard char set
+;; 	jbe	dgscs2			; be = in the hard sets
+;; 	cmp	bl,45h			; end of soft sets
+;; 	jbe	dgscs1a			; be = in range
+;; 	ret				; else ignore command
+;; dgscs1a:add	bl,100-20h+1		; add local offset for chrsetup
+;; 	jmp	short dgscs4		; prep for chrsetup
 
-dgscs2:	or	bl,bl			; use "keyboard language"?
-	jnz	dgscs3			; nz = no
-	mov	bl,vtemu.vtchset	; get setup char set
-	cmp	bl,13			; top of the NRCs
-	jbe	short dgscs4		;  as keyboard language
-	xor	bx,bx			; default to ASCII
-dgscs3:	mov	bl,dgchtab[bx]		; translate to Kermit idents
-dgscs4:	cmp	GLptr,offset G0set	; are we shifted out?
-	jne	dgscs5			; ne = yes, presume G1set
-	mov	Gsetid,bl		; new set ident for G0
-	jmp	short dgscs6
-dgscs5:	mov	Gsetid+1,bl		; new set ident for G1
-dgscs6:	mov	bx,offset Gsetid	; pass list of sets to setup
-	jmp	chrsetup		; go make the new set
-dgscs	endp
+;; dgscs2:	or	bl,bl			; use "keyboard language"?
+;; 	jnz	dgscs3			; nz = no
+;; 	mov	bl,vtemu.vtchset	; get setup char set
+;; 	cmp	bl,13			; top of the NRCs
+;; 	jbe	short dgscs4		;  as keyboard language
+;; 	xor	bx,bx			; default to ASCII
+;; dgscs3:	mov	bl,dgchtab[bx]		; translate to Kermit idents
+;; dgscs4:	cmp	GLptr,offset G0set	; are we shifted out?
+;; 	jne	dgscs5			; ne = yes, presume G1set
+;; 	mov	Gsetid,bl		; new set ident for G0
+;; 	jmp	short dgscs6
+;; dgscs5:	mov	Gsetid+1,bl		; new set ident for G1
+;; dgscs6:	mov	bx,offset Gsetid	; pass list of sets to setup
+;; 	jmp	chrsetup		; go make the new set
+;; dgscs	endp
 
-dgalign	proc	near			; RS F > char DG fill screen with char
-	mov	ttstate,offset dgalig1	; get char
-	ret
-dgalig1:mov	ttstate,offset atnrm	; reset state
-	jmp	atalig1			; do DEC alignment work, char in AL
-dgalign	endp
+;; dgalign	proc	near			; RS F > char DG fill screen with char
+;; 	mov	ttstate,offset dgalig1	; get char
+;; 	ret
+;; dgalig1:mov	ttstate,offset atnrm	; reset state
+;; 	jmp	atalig1			; do DEC alignment work, char in AL
+;; dgalign	endp
 
-dggrid	proc	near			; RS F 9 char DG fill screen with grid
-	mov	al,'#'			; set grid char in standard place
-	jmp	atalig1			; do DEC alignment work, char in AL
-dggrid	endp
+;; dggrid	proc	near			; RS F 9 char DG fill screen with grid
+;; 	mov	al,'#'			; set grid char in standard place
+;; 	jmp	atalig1			; do DEC alignment work, char in AL
+;; dggrid	endp
 
 	
-dgrolldis:mov	dgroll,0		; Control-S  DG roll disable
-	ret
+;; dgrolldis:mov	dgroll,0		; Control-S  DG roll disable
+;; 	ret
 
-dgrollena:mov	dgroll,1		; Control-R  DG roll enable
-	ret
+;; dgrollena:mov	dgroll,1		; Control-R  DG roll enable
+;; 	ret
 
-dghsena:mov	dghscrdis,0		; RS F ^  DG horiz scroll enable
-	mov	dx,cursor
-	jmp	atsetcur		; set cursor to cause screen update
+;; dghsena:mov	dghscrdis,0		; RS F ^  DG horiz scroll enable
+;; 	mov	dx,cursor
+;; 	jmp	atsetcur		; set cursor to cause screen update
 
-dghsdis:mov	dghscrdis,1		; RS F ]  DG horiz scroll disable
-	ret
+;; dghsdis:mov	dghscrdis,1		; RS F ]  DG horiz scroll disable
+;; 	ret
 
 dgpton:	call	setprot			; RS F L  DG Protect on
 	ret
@@ -8825,2703 +8831,2703 @@ protena:mov	protectena,1		; RS F V  DG Protect enable
 protdis:mov	protectena,0		; RS F W  DG Protect disable
 	ret				; 
 
-dg78bit	proc	near			; RS F U <n>  DG Select 7/8 bit ops
-	mov	bx,dg78bit1		; get <n>
-	jmp	get1n
-dg78bit1:cmp	dgnum,1			; 0 is 7 bit, 1 is 8 bit
-	ja	dg78bit3		; a = illegal value, ignore
-	je	dg78bit2		; e = 1
-	and	flags.remflg,not d8bit	; 7-bit, chop DG high bit
-	ret
-dg78bit2:or	flags.remflg,d8bit	; 8-bit
-dg78bit3:ret
-dg78bit	endp
+;; dg78bit	proc	near			; RS F U <n>  DG Select 7/8 bit ops
+;; 	mov	bx,dg78bit1		; get <n>
+;; 	jmp	get1n
+;; dg78bit1:cmp	dgnum,1			; 0 is 7 bit, 1 is 8 bit
+;; 	ja	dg78bit3		; a = illegal value, ignore
+;; 	je	dg78bit2		; e = 1
+;; 	and	flags.remflg,not d8bit	; 7-bit, chop DG high bit
+;; 	ret
+;; dg78bit2:or	flags.remflg,d8bit	; 8-bit
+;; dg78bit3:ret
+;; dg78bit	endp
 
-dgdhdw	proc	near			; RS R E <n>  DG Double high/wide
-	mov	bx,offset dgdhdw1
-	jmp	get1n			; set up for <n> arg
-dgdhdw1:mov	ax,dgnum		; get <nn> result
-	or	ax,ax			; 2 and above are double highs
-	jz	dgdhdw2
-	mov	al,2			; map double highs to 2
-	jmp	linedbl			; make line double width
-dgdhdw2:jmp	linesgl			; make single width
-dgdhdw	endp
+;; dgdhdw	proc	near			; RS R E <n>  DG Double high/wide
+;; 	mov	bx,offset dgdhdw1
+;; 	jmp	get1n			; set up for <n> arg
+;; dgdhdw1:mov	ax,dgnum		; get <nn> result
+;; 	or	ax,ax			; 2 and above are double highs
+;; 	jz	dgdhdw2
+;; 	mov	al,2			; map double highs to 2
+;; 	jmp	linedbl			; make line double width
+;; dgdhdw2:jmp	linesgl			; make single width
+;; dgdhdw	endp
 
-dgs25l	proc				; RS F z <n>  DG go to/set status line
-	mov	bx,offset dgs25l1	; prep for <n> mode value
-	jmp	get1n
-dgs25l1:mov	ax,dgnum		; get mode
-	or	ax,ax			; 0, 25th line is status?
-	jnz	dgs25l2			; nz = no
-	mov	dspstate,0		; no longer on mode line
-	mov	param,1			; turn on regular mode line
-	call	atssdt1			; do main worker
-	ret
+;; dgs25l	proc				; RS F z <n>  DG go to/set status line
+;; 	mov	bx,offset dgs25l1	; prep for <n> mode value
+;; 	jmp	get1n
+;; dgs25l1:mov	ax,dgnum		; get mode
+;; 	or	ax,ax			; 0, 25th line is status?
+;; 	jnz	dgs25l2			; nz = no
+;; 	mov	dspstate,0		; no longer on mode line
+;; 	mov	param,1			; turn on regular mode line
+;; 	call	atssdt1			; do main worker
+;; 	ret
 
-dgs25l2:cmp	al,3			; blank the line?
-	jne	dgs25l3			; ne = no
-	jmp	atssdt1			; do main worker
-	cmp	al,2			; use as ordinary text?
-	jne	dgs25l3			; ne = no
-	ret				; ignore this request
-dgs25l3:cmp	al,1			; get msg for line?
-	je	dgs25l4			; e = yes
-	ret
-dgs25l4:mov	bx,offset dgs25l5	; prep for <nn> text
-	jmp	get2n
-dgs25l5:mov	dspcmain,dx		; save cursor in special area
-	mov	dspstate,dsptype	; say on status line
-	mov	al,mar_left
-	mov	ah,mar_right
-	mov	dspmsave,ax		; save margins
-	mov	mar_left,0		; set left to screen left
-	call	fclrmod			; clear the line
-	and	yflags,not modoff	; say modeline is not toggled off
-	mov	flags.modflg,2		; say mode line is owned by host
-	mov	dh,byte ptr low_rgt+1	; bottom text line
-	inc	dh			; status line
-	xor	dl,dl			; absolute left margin
-	call	atsetcur		; set cursor
-	cmp	dgnum,0			; number of chars of text
-	je	dgs25l7			; e = none
-	mov	ttstate,offset dgs25l6	; come here for text
-	ret
-dgs25l6:call	atnrm			; write the character
-	dec	dgnum			; one less to do
-	cmp	dgnum,0			; done?
-	jle	dgs25l7			; le = yes
-	ret				; stay on status line
-dgs25l7:mov	ttstate,offset atnrm	; reset state
-	mov	dx,dspcmain		; restore cursor
-	mov	ax,dspmsave		; saved margins
-	mov	mar_left,al
-	mov	mar_right,ah
-	mov	dspstate,0		; no longer on mode line
-	jmp	atsetcur		; set cursor
-dgs25l	endp
+;; dgs25l2:cmp	al,3			; blank the line?
+;; 	jne	dgs25l3			; ne = no
+;; 	jmp	atssdt1			; do main worker
+;; 	cmp	al,2			; use as ordinary text?
+;; 	jne	dgs25l3			; ne = no
+;; 	ret				; ignore this request
+;; dgs25l3:cmp	al,1			; get msg for line?
+;; 	je	dgs25l4			; e = yes
+;; 	ret
+;; dgs25l4:mov	bx,offset dgs25l5	; prep for <nn> text
+;; 	jmp	get2n
+;; dgs25l5:mov	dspcmain,dx		; save cursor in special area
+;; 	mov	dspstate,dsptype	; say on status line
+;; 	mov	al,mar_left
+;; 	mov	ah,mar_right
+;; 	mov	dspmsave,ax		; save margins
+;; 	mov	mar_left,0		; set left to screen left
+;; 	call	fclrmod			; clear the line
+;; 	and	yflags,not modoff	; say modeline is not toggled off
+;; 	mov	flags.modflg,2		; say mode line is owned by host
+;; 	mov	dh,byte ptr low_rgt+1	; bottom text line
+;; 	inc	dh			; status line
+;; 	xor	dl,dl			; absolute left margin
+;; 	call	atsetcur		; set cursor
+;; 	cmp	dgnum,0			; number of chars of text
+;; 	je	dgs25l7			; e = none
+;; 	mov	ttstate,offset dgs25l6	; come here for text
+;; 	ret
+;; dgs25l6:call	atnrm			; write the character
+;; 	dec	dgnum			; one less to do
+;; 	cmp	dgnum,0			; done?
+;; 	jle	dgs25l7			; le = yes
+;; 	ret				; stay on status line
+;; dgs25l7:mov	ttstate,offset atnrm	; reset state
+;; 	mov	dx,dspcmain		; restore cursor
+;; 	mov	ax,dspmsave		; saved margins
+;; 	mov	mar_left,al
+;; 	mov	mar_right,ah
+;; 	mov	dspstate,0		; no longer on mode line
+;; 	jmp	atsetcur		; set cursor
+;; dgs25l	endp
 
-dgnscur	proc	near			; RS F } <n> <n> DG cursor named save
-	mov	bx,offset dgnscu1	; get <n> memory cell (name, 0..15)
-	jmp	get1n
-dgnscu1:mov	ax,dgnum		; get cell number
-	mov	word ptr emubuf,ax	; save here
-	mov	bx,offset dgnscu2	; get <n> save (0) / restore (1)
-	jmp	get1n
-dgnscu2:mov	bx,word ptr emubuf	; get named subscript
-	mov	ax,dgnum		; get op code
-	cmp	ax,1			; save?
-	jb	dgnscu3			; b = save
-	ja	dgnscu4			; a = illegal, ignore
-	mov	al,dgctypesave[bx]	; get cursor size/type
-	mov	atctype,al		; active type
-	call	csrtype			; set it
-	mov	dx,dgcursave[bx]	; restore cursor position from storage
-	jmp	dgsetcur		; set the cursor DG style
-dgnscu3:mov	dgcursave[bx],dx	; save cursor
-	mov	al,atctype		; get cursor type
-	mov	dgctypesave[bx],al	; save
-dgnscu4:ret
-dgnscur	endp
+;; dgnscur	proc	near			; RS F } <n> <n> DG cursor named save
+;; 	mov	bx,offset dgnscu1	; get <n> memory cell (name, 0..15)
+;; 	jmp	get1n
+;; dgnscu1:mov	ax,dgnum		; get cell number
+;; 	mov	word ptr emubuf,ax	; save here
+;; 	mov	bx,offset dgnscu2	; get <n> save (0) / restore (1)
+;; 	jmp	get1n
+;; dgnscu2:mov	bx,word ptr emubuf	; get named subscript
+;; 	mov	ax,dgnum		; get op code
+;; 	cmp	ax,1			; save?
+;; 	jb	dgnscu3			; b = save
+;; 	ja	dgnscu4			; a = illegal, ignore
+;; 	mov	al,dgctypesave[bx]	; get cursor size/type
+;; 	mov	atctype,al		; active type
+;; 	call	csrtype			; set it
+;; 	mov	dx,dgcursave[bx]	; restore cursor position from storage
+;; 	jmp	dgsetcur		; set the cursor DG style
+;; dgnscu3:mov	dgcursave[bx],dx	; save cursor
+;; 	mov	al,atctype		; get cursor type
+;; 	mov	dgctypesave[bx],al	; save
+;; dgnscu4:ret
+;; dgnscur	endp
 
-dgsps	proc	near		     	; DG dual emulation set split screen
-	mov	ttstate,offset dgsps1	; RS R A 0 <nn><n> or RS R A 1 <nn>
-	ret
-dgsps1:	mov	bx,offset atnrm		; setup to ignore command
-	cmp	al,1			; 0 or 1 expected
-	ja	dgsps3			; a = illegal, ignore
-	je	dgsps2			; e = case 1 <nn>
-	jmp	get3n			; case 0 <nn><n> as <nnn>
-dgsps2:	jmp	get2n
-dgsps3:	ret
-dgsps	endp
+;; dgsps	proc	near		     	; DG dual emulation set split screen
+;; 	mov	ttstate,offset dgsps1	; RS R A 0 <nn><n> or RS R A 1 <nn>
+;; 	ret
+;; dgsps1:	mov	bx,offset atnrm		; setup to ignore command
+;; 	cmp	al,1			; 0 or 1 expected
+;; 	ja	dgsps3			; a = illegal, ignore
+;; 	je	dgsps2			; e = case 1 <nn>
+;; 	jmp	get3n			; case 0 <nn><n> as <nnn>
+;; dgsps2:	jmp	get2n
+;; dgsps3:	ret
+;; dgsps	endp
 
-dgdchs	proc	near			; RS F q <nn><nn> Dealloc Char Sets
-	mov	bx,offset dgdchs1	; ignore for now
-	jmp	get2n
-dgdchs1:mov	bx,offset atnrm
-	jmp	get2n
-dgdchs	endp
+;; dgdchs	proc	near			; RS F q <nn><nn> Dealloc Char Sets
+;; 	mov	bx,offset dgdchs1	; ignore for now
+;; 	jmp	get2n
+;; dgdchs1:mov	bx,offset atnrm
+;; 	jmp	get2n
+;; dgdchs	endp
 
-dgdefch	proc	near			; RS F R <char> 10/12<nn>'s Def Char
-	mov	ttstate,offset dgdefc1	; get char
-	ret
-dgdefc1:mov	emubufc,0		; set counter
-	mov	emubuf,al		; char to be defined
-	mov	cl,14			; video cell bytes per char (8x14)
-	mul	cl			; ax = bytes to start of char
-	mov	word ptr emubuf+1,ax	; save string distance
-	mov	ax,10			; assume D470
-	cmp	flags.vtflg,ttd470	; D470?
-	je	dgdefc1a		; e = yes, uses 10 byte pairs
-	mov	ax,12			; D463 uses 12 byte pairs
-dgdefc1a:mov	word ptr emubuf+3,ax	; save string length
-	jmp	dgdefc3			; setup to get data
+;; dgdefch	proc	near			; RS F R <char> 10/12<nn>'s Def Char
+;; 	mov	ttstate,offset dgdefc1	; get char
+;; 	ret
+;; dgdefc1:mov	emubufc,0		; set counter
+;; 	mov	emubuf,al		; char to be defined
+;; 	mov	cl,14			; video cell bytes per char (8x14)
+;; 	mul	cl			; ax = bytes to start of char
+;; 	mov	word ptr emubuf+1,ax	; save string distance
+;; 	mov	ax,10			; assume D470
+;; 	cmp	flags.vtflg,ttd470	; D470?
+;; 	je	dgdefc1a		; e = yes, uses 10 byte pairs
+;; 	mov	ax,12			; D463 uses 12 byte pairs
+;; dgdefc1a:mov	word ptr emubuf+3,ax	; save string length
+;; 	jmp	dgdefc3			; setup to get data
 
-dgdefc2:mov	ax,word ptr emubuf+1	; get char being defined
-	add	ax,emubufc		; plus byte into string
-	inc	emubufc			; count a <nn> pair
-ifndef	no_graphics
-	mov	bx,softptr		; seg of soft font
-else
-	xor	bx,bx
-endif	; no_graphics
-	or	bx,bx			; segment of soft font, defined?
-	jz	dgdefc3			; z = no, do not store
-	push	es
-	mov	es,bx
-	mov	bx,ax			; offset to byte
-	mov	ax,dgnum		; get value
-	cmp	emubuf+3,10		; for D470 (8 bits wide)?
-	je	dgdefc2a		; e = yes
-	shr	ax,1			; D463, 10 bits, chop right most too
-dgdefc2a:mov	es:[bx],al		; store byte
-	pop	es
+;; dgdefc2:mov	ax,word ptr emubuf+1	; get char being defined
+;; 	add	ax,emubufc		; plus byte into string
+;; 	inc	emubufc			; count a <nn> pair
+;; ifndef	no_graphics
+;; 	mov	bx,softptr		; seg of soft font
+;; else
+;; 	xor	bx,bx
+;; endif	; no_graphics
+;; 	or	bx,bx			; segment of soft font, defined?
+;; 	jz	dgdefc3			; z = no, do not store
+;; 	push	es
+;; 	mov	es,bx
+;; 	mov	bx,ax			; offset to byte
+;; 	mov	ax,dgnum		; get value
+;; 	cmp	emubuf+3,10		; for D470 (8 bits wide)?
+;; 	je	dgdefc2a		; e = yes
+;; 	shr	ax,1			; D463, 10 bits, chop right most too
+;; dgdefc2a:mov	es:[bx],al		; store byte
+;; 	pop	es
 
-dgdefc3:mov	ax,word ptr emubuf+3	; wanted string count
-	cmp	emubufc,ax		; done all?
-	jae	dgdefc6			; ae = yes
-	mov	bx,offset dgdefc2	; get char byte pairs
-	cmp	flags.vtflg,ttd470	; D470?
-	je	dgdefc5			; e = yes, use get2nn
-	jmp	getdd			; for D463, 5 bit values
-dgdefc5:jmp	get2n			; for D470, 4 bit values
+;; dgdefc3:mov	ax,word ptr emubuf+3	; wanted string count
+;; 	cmp	emubufc,ax		; done all?
+;; 	jae	dgdefc6			; ae = yes
+;; 	mov	bx,offset dgdefc2	; get char byte pairs
+;; 	cmp	flags.vtflg,ttd470	; D470?
+;; 	je	dgdefc5			; e = yes, use get2nn
+;; 	jmp	getdd			; for D463, 5 bit values
+;; dgdefc5:jmp	get2n			; for D470, 4 bit values
 
-dgdefc6:
-ifndef	no_graphics
-	mov	bx,softptr		; segment of soft font, defined?
-	or	bx,bx
-	jz	dgdefc7			; z = no, do not store
-;JMP DGDEFC7
-	push	es			; repeat last row of dots
-	push	di
-	mov	es,bx
-	mov	di,word ptr emubuf+1	; start plus char offset
-	mov	cx,emubufc		; get current count
-	add	di,cx			; point to last stored char+1
-	sub	cx,14-1			; 14-1 dots high (omit last line)
-	neg	cx			; positive number
-	mov	al,es:[di-1]		; last stored char
-	cmp	al,es:[di-2]		; same as previous (line drawing)?
-	jne	dgdefc6a		; ne = no, do not extend cell
-	cld
-	rep	stosb
-dgdefc6a:pop	di
-	pop	es
-endif	; no_graphics
-dgdefc7:mov	emubufc,0		; clear counter
-	jmp	atnorm			; reset state
-dgdefch	endp
+;; dgdefc6:
+;; ifndef	no_graphics
+;; 	mov	bx,softptr		; segment of soft font, defined?
+;; 	or	bx,bx
+;; 	jz	dgdefc7			; z = no, do not store
+;; ;JMP DGDEFC7
+;; 	push	es			; repeat last row of dots
+;; 	push	di
+;; 	mov	es,bx
+;; 	mov	di,word ptr emubuf+1	; start plus char offset
+;; 	mov	cx,emubufc		; get current count
+;; 	add	di,cx			; point to last stored char+1
+;; 	sub	cx,14-1			; 14-1 dots high (omit last line)
+;; 	neg	cx			; positive number
+;; 	mov	al,es:[di-1]		; last stored char
+;; 	cmp	al,es:[di-2]		; same as previous (line drawing)?
+;; 	jne	dgdefc6a		; ne = no, do not extend cell
+;; 	cld
+;; 	rep	stosb
+;; dgdefc6a:pop	di
+;; 	pop	es
+;; endif	; no_graphics
+;; dgdefc7:mov	emubufc,0		; clear counter
+;; 	jmp	atnorm			; reset state
+;; dgdefch	endp
 
-dgrchr	proc	near			; RS F d  DG Read Chars Remaining
-	mov	al,dgescape		; response string
-	call	prtbout
-	mov	al,'o'
-	call	prtbout
-	mov	al,'9'
-	call	prtbout
-	mov	al,'0'			; high part of 10 bit count
-;graphics
-mov al,'_'
-	call	prtbout
-	mov	al,'0'			; low part of 10 bit count
-;graphics
-mov al,'_'
-	call	prtbout
-	ret
-dgrchr	endp
+;; dgrchr	proc	near			; RS F d  DG Read Chars Remaining
+;; 	mov	al,dgescape		; response string
+;; 	call	prtbout
+;; 	mov	al,'o'
+;; 	call	prtbout
+;; 	mov	al,'9'
+;; 	call	prtbout
+;; 	mov	al,'0'			; high part of 10 bit count
+;; ;graphics
+;; mov al,'_'
+;; 	call	prtbout
+;; 	mov	al,'0'			; low part of 10 bit count
+;; ;graphics
+;; mov al,'_'
+;; 	call	prtbout
+;; 	ret
+;; dgrchr	endp
 
-dgresch	proc	near			; RS F e <n><n>  DG Reserve Character
-	mov	bx,offset atnorm	; discard
-	jmp	get2n
-dgresch	endp
+;; dgresch	proc	near			; RS F e <n><n>  DG Reserve Character
+;; 	mov	bx,offset atnorm	; discard
+;; 	jmp	get2n
+;; dgresch	endp
 
-dgskl	proc	near			; RS F f <n>  DG Set Kbd Language
-	mov	bx,offset dgskl1
-	jmp	get1n			; get parameter
-dgskl1:	mov	ax,dgnum		; 0=setup, 1=DG Int, 2=Latin1
-	cmp	ax,2			; in range?
-	ja	dgskl4			; a = no
-	cmp	ax,1			; DG International?
-	je	dgskl2			; e = yes
-	ja	dgskl3			; a = no, Latin1
-	mov	al,vtemu.vtchset	; get setup char set
-	mov	dgkbl,al		; store keyboard language ident
-	ret
-dgskl2:	mov	dgkbl,20		; DG International
-	ret
-dgskl3:	mov	dgkbl,16		; Latin1
-dgskl4:	ret
-dgskl	endp
+;; dgskl	proc	near			; RS F f <n>  DG Set Kbd Language
+;; 	mov	bx,offset dgskl1
+;; 	jmp	get1n			; get parameter
+;; dgskl1:	mov	ax,dgnum		; 0=setup, 1=DG Int, 2=Latin1
+;; 	cmp	ax,2			; in range?
+;; 	ja	dgskl4			; a = no
+;; 	cmp	ax,1			; DG International?
+;; 	je	dgskl2			; e = yes
+;; 	ja	dgskl3			; a = no, Latin1
+;; 	mov	al,vtemu.vtchset	; get setup char set
+;; 	mov	dgkbl,al		; store keyboard language ident
+;; 	ret
+;; dgskl2:	mov	dgkbl,20		; DG International
+;; 	ret
+;; dgskl3:	mov	dgkbl,16		; Latin1
+;; dgskl4:	ret
+;; dgskl	endp
 
-dgsdo	proc	near			; RS R B <n><n><n> Set Device Options
-	mov	bx,offset dgsdo1	; get first <n>
-	jmp	get1n
-dgsdo1:	mov	bx,offset atnrm		; get second and third <n>'s
-	jmp	get2n			; discard all
-dgsdo	endp
+;; dgsdo	proc	near			; RS R B <n><n><n> Set Device Options
+;; 	mov	bx,offset dgsdo1	; get first <n>
+;; 	jmp	get1n
+;; dgsdo1:	mov	bx,offset atnrm		; get second and third <n>'s
+;; 	jmp	get2n			; discard all
+;; dgsdo	endp
 
-dgsfield:mov	bx,offset dgsfie1	; RS F C <ss><rr>  Field attributes
-	jmp	get2n			; get first <nn>
-dgsfie1:mov	bx,offset atnrm		; discard proc
-	jmp	get2n			; get second <nn>
+;; dgsfield:mov	bx,offset dgsfie1	; RS F C <ss><rr>  Field attributes
+;; 	jmp	get2n			; get first <nn>
+;; dgsfie1:mov	bx,offset atnrm		; discard proc
+;; 	jmp	get2n			; get second <nn>
 
-dgspage:mov	bx,offset dgspag1	; RS F D <ss><rr>  Page attributes
-	jmp	get2n			; get first <nn>
-dgspag1:mov	bx,offset atnrm		; discard proc
-	jmp	get2n			; get second <nn>
+;; dgspage:mov	bx,offset dgspag1	; RS F D <ss><rr>  Page attributes
+;; 	jmp	get2n			; get first <nn>
+;; dgspag1:mov	bx,offset atnrm		; discard proc
+;; 	jmp	get2n			; get second <nn>
 
-dgsetw	proc	near			; RS F B <nn><n>.. Set windows
-	mov	dgwindcnt,0		; count of windows entries
-	mov	emubuf+4,0		; normal(0)/compressed (!0) flag
-dgsetw1:mov	bx,offset dgsetw2	; next processor
-	jmp	get2n			; get a <nn> window length
-dgsetw2:mov	ax,dgnum
-	mov	word ptr emubuf,ax	; save around get1n work
-	mov	bx,offset dgsetw2a	; get <n> 0/1, compressed mode
-	jmp	get1n
-dgsetw2a:mov	ax,dgnum
-	mov	emubuf+4,al		; save copy for just this window
-	mov	ax,word ptr emubuf	; <nn> length, 0 (end) to 24
-	or	ax,ax			; end of set indicator?
-	jnz	dgsetw2b		; nz = no
-	mov	ax,24			; pseudo end
-dgsetw2b:xchg	al,ah			; put row in ah
-	mov	bx,dgwindcnt		; get subscript
-	cmp	bx,24			; too many windows? (24 == DG limit)
-	ja	dgsetw7			; a = yes, else accept data
-	inc	bx
-	mov	dgwindcnt,bx		; update counter (1 == one window)
-	dec	bx
-	shl	bx,1			; index words
-	or	bx,bx			; initial window?
-	jnz	dgsetw3			; nz = no
-	xor	al,al			; start at 0,0
-	jmp	short dgsetw4
-dgsetw3:mov	al,byte ptr dgwindow[bx-1] ; previous ending line
-	inc	al			; start this window down one line
-dgsetw4:add	ah,al			; new mar_bot = new mar_top + skip
-	dec	ah			; count lines from zero
-	cmp	ah,byte ptr low_rgt+1	; bottom of displayable screen?
-	jb	dgsetw5			; b = no
-	mov	ah,byte ptr low_rgt+1	; clamp to that bottom
-dgsetw5:mov	dgwindow[bx],ax		; save [al=mar_top,ah=mar_bot] pair
-	mov	al,ah			; get current bottom
-	mov	ah,byte ptr low_rgt+1	; last text line
-	mov	dgwindow[bx+2],ax	; fill remaining space with next wind
+;; dgsetw	proc	near			; RS F B <nn><n>.. Set windows
+;; 	mov	dgwindcnt,0		; count of windows entries
+;; 	mov	emubuf+4,0		; normal(0)/compressed (!0) flag
+;; dgsetw1:mov	bx,offset dgsetw2	; next processor
+;; 	jmp	get2n			; get a <nn> window length
+;; dgsetw2:mov	ax,dgnum
+;; 	mov	word ptr emubuf,ax	; save around get1n work
+;; 	mov	bx,offset dgsetw2a	; get <n> 0/1, compressed mode
+;; 	jmp	get1n
+;; dgsetw2a:mov	ax,dgnum
+;; 	mov	emubuf+4,al		; save copy for just this window
+;; 	mov	ax,word ptr emubuf	; <nn> length, 0 (end) to 24
+;; 	or	ax,ax			; end of set indicator?
+;; 	jnz	dgsetw2b		; nz = no
+;; 	mov	ax,24			; pseudo end
+;; dgsetw2b:xchg	al,ah			; put row in ah
+;; 	mov	bx,dgwindcnt		; get subscript
+;; 	cmp	bx,24			; too many windows? (24 == DG limit)
+;; 	ja	dgsetw7			; a = yes, else accept data
+;; 	inc	bx
+;; 	mov	dgwindcnt,bx		; update counter (1 == one window)
+;; 	dec	bx
+;; 	shl	bx,1			; index words
+;; 	or	bx,bx			; initial window?
+;; 	jnz	dgsetw3			; nz = no
+;; 	xor	al,al			; start at 0,0
+;; 	jmp	short dgsetw4
+;; dgsetw3:mov	al,byte ptr dgwindow[bx-1] ; previous ending line
+;; 	inc	al			; start this window down one line
+;; dgsetw4:add	ah,al			; new mar_bot = new mar_top + skip
+;; 	dec	ah			; count lines from zero
+;; 	cmp	ah,byte ptr low_rgt+1	; bottom of displayable screen?
+;; 	jb	dgsetw5			; b = no
+;; 	mov	ah,byte ptr low_rgt+1	; clamp to that bottom
+;; dgsetw5:mov	dgwindow[bx],ax		; save [al=mar_top,ah=mar_bot] pair
+;; 	mov	al,ah			; get current bottom
+;; 	mov	ah,byte ptr low_rgt+1	; last text line
+;; 	mov	dgwindow[bx+2],ax	; fill remaining space with next wind
 
-	push	bx			; setup new margins, keep window ptr
-	mov	dghscrdis,0		; horz scroll disable is disabled
-	mov	cx,slen			; max screen length
-	mov	al,mar_left
-	xor	bx,bx
-dgsetw6:mov	linescroll[bx],al	; horiz scroll left margin to edge
-	inc	bx
-	loop	dgsetw6
-	pop	bx			; recover current line count in bx
+;; 	push	bx			; setup new margins, keep window ptr
+;; 	mov	dghscrdis,0		; horz scroll disable is disabled
+;; 	mov	cx,slen			; max screen length
+;; 	mov	al,mar_left
+;; 	xor	bx,bx
+;; dgsetw6:mov	linescroll[bx],al	; horiz scroll left margin to edge
+;; 	inc	bx
+;; 	loop	dgsetw6
+;; 	pop	bx			; recover current line count in bx
 
-	mov	al,emubuf+4		; get compressed/normal for this wind
-	mov	dh,byte ptr dgwindow[bx+1]; set cursor to bottom row of window
-	or	al,al			; to regular width?
-	jnz	dgsetw7			; nz = no, to compressed
-	call	dgnarrow		; to normal width
-	jmp	short dgsetw8
-dgsetw7:call	dgwide			; compress things
+;; 	mov	al,emubuf+4		; get compressed/normal for this wind
+;; 	mov	dh,byte ptr dgwindow[bx+1]; set cursor to bottom row of window
+;; 	or	al,al			; to regular width?
+;; 	jnz	dgsetw7			; nz = no, to compressed
+;; 	call	dgnarrow		; to normal width
+;; 	jmp	short dgsetw8
+;; dgsetw7:call	dgwide			; compress things
 
-dgsetw8:mov	bx,dgwindcnt		; get window count
-	or	bx,bx			; any windows (0 = no)
-	jz	dgsetw9
-	dec	bx			; count from 0
-	shl	bx,1			; count words
-	mov	al,byte ptr low_rgt+1	; last text line on screen (typ 23)
-	cmp	byte ptr dgwindow[bx+1],al ; DG limit of 24 lines?
-	jb	dgsetw1			; b = not reached yet, keep going
+;; dgsetw8:mov	bx,dgwindcnt		; get window count
+;; 	or	bx,bx			; any windows (0 = no)
+;; 	jz	dgsetw9
+;; 	dec	bx			; count from 0
+;; 	shl	bx,1			; count words
+;; 	mov	al,byte ptr low_rgt+1	; last text line on screen (typ 23)
+;; 	cmp	byte ptr dgwindow[bx+1],al ; DG limit of 24 lines?
+;; 	jb	dgsetw1			; b = not reached yet, keep going
 
-dgsetw9:call	dgshome			; do necessary DG Screen Home
-	ret
-dgsetw	endp
+;; dgsetw9:call	dgshome			; do necessary DG Screen Home
+;; 	ret
+;; dgsetw	endp
 
-dgwwa	proc	near			; Control-P col row
-	mov	ttstate,offset dgwwa1	; DG Write window address (win rel)
-	ret				; get raw binary col
-dgwwa1:	mov	emubuf,al		; save col
-	mov	ttstate,offset dgwwa2	; get raw binary row
-	ret
-dgwwa2:	mov	ttstate,offset atnrm	; reset state
-	cmp	al,127			; 127 means use current row
-	je	dgwwa3			; e = yes
-	add	al,mar_top		; relative to window top
-	mov	dh,al			; set cursor row
-dgwwa3:	xor	al,al			; get a zero
-	xchg	al,emubuf		; get raw column, clear temp word
-	cmp	al,127			; 127 means use current column
-	je	dgwwa4			; e = yes
-	add	al,mar_left		; add left margin
-	mov	dl,al			; new cursor position
-dgwwa4:	cmp	dh,mar_bot		; below bottom of window?
-	jbe	dgwwa5			; be = no, in bounds
-	mov	dh,mar_bot		; peg at bottom
-dgwwa5:	cmp	dl,mar_right		; beyond right margin?
-	jbe	dgwwa6			; be = no, in bounds
-	mov	dl,mar_right		; peg at right
-dgwwa6:	jmp	dgsetcur		; set cursor within window
-dgwwa	endp
+;; dgwwa	proc	near			; Control-P col row
+;; 	mov	ttstate,offset dgwwa1	; DG Write window address (win rel)
+;; 	ret				; get raw binary col
+;; dgwwa1:	mov	emubuf,al		; save col
+;; 	mov	ttstate,offset dgwwa2	; get raw binary row
+;; 	ret
+;; dgwwa2:	mov	ttstate,offset atnrm	; reset state
+;; 	cmp	al,127			; 127 means use current row
+;; 	je	dgwwa3			; e = yes
+;; 	add	al,mar_top		; relative to window top
+;; 	mov	dh,al			; set cursor row
+;; dgwwa3:	xor	al,al			; get a zero
+;; 	xchg	al,emubuf		; get raw column, clear temp word
+;; 	cmp	al,127			; 127 means use current column
+;; 	je	dgwwa4			; e = yes
+;; 	add	al,mar_left		; add left margin
+;; 	mov	dl,al			; new cursor position
+;; dgwwa4:	cmp	dh,mar_bot		; below bottom of window?
+;; 	jbe	dgwwa5			; be = no, in bounds
+;; 	mov	dh,mar_bot		; peg at bottom
+;; dgwwa5:	cmp	dl,mar_right		; beyond right margin?
+;; 	jbe	dgwwa6			; be = no, in bounds
+;; 	mov	dl,mar_right		; peg at right
+;; dgwwa6:	jmp	dgsetcur		; set cursor within window
+;; dgwwa	endp
 
-dgwsa	proc	near			; RS F P <nn><nn> Write screen address
-	mov	bx,offset dgwsa1	; get <nn> col
-	jmp	get2n
-dgwsa1:	mov	ax,dgnum		; absolute column
-	mov	ah,mar_right		; right most virtual column
-	cmp	al,-1			; means same screen column?
-	je	dgwsa2a			; e = yes
-	cmp	al,ah			; beyond right screen limit?
-	jbe	dgwsa2			; be = no
-	mov	al,ah			; peg at the right
-dgwsa2:	mov	byte ptr cursor,al	; column of cursor
-dgwsa2a:mov	bx,offset dgwsa3	; get <nn> row
-	jmp	get2n
-dgwsa3:	mov	ax,dgnum		; get absolute row
-	mov	ah,byte ptr low_rgt+1	; last text row
-	cmp	al,-1			; means same screen row?
-	je	dgwsa5			; e = yes
-	cmp	al,ah			; below text screen?
-	jbe	dgwsa4			; be = no
-	mov	al,ah			; peg at the bottom
-dgwsa4:	mov	byte ptr cursor+1,al	; new row
-dgwsa5:	mov	dx,cursor
-	call	dggetmar		; get margins for this dx
-	add	dl,mar_left		; add left margin
-	jmp	dgsetcur		; set cursor, protection included
-dgwsa	endp
+;; dgwsa	proc	near			; RS F P <nn><nn> Write screen address
+;; 	mov	bx,offset dgwsa1	; get <nn> col
+;; 	jmp	get2n
+;; dgwsa1:	mov	ax,dgnum		; absolute column
+;; 	mov	ah,mar_right		; right most virtual column
+;; 	cmp	al,-1			; means same screen column?
+;; 	je	dgwsa2a			; e = yes
+;; 	cmp	al,ah			; beyond right screen limit?
+;; 	jbe	dgwsa2			; be = no
+;; 	mov	al,ah			; peg at the right
+;; dgwsa2:	mov	byte ptr cursor,al	; column of cursor
+;; dgwsa2a:mov	bx,offset dgwsa3	; get <nn> row
+;; 	jmp	get2n
+;; dgwsa3:	mov	ax,dgnum		; get absolute row
+;; 	mov	ah,byte ptr low_rgt+1	; last text row
+;; 	cmp	al,-1			; means same screen row?
+;; 	je	dgwsa5			; e = yes
+;; 	cmp	al,ah			; below text screen?
+;; 	jbe	dgwsa4			; be = no
+;; 	mov	al,ah			; peg at the bottom
+;; dgwsa4:	mov	byte ptr cursor+1,al	; new row
+;; dgwsa5:	mov	dx,cursor
+;; 	call	dggetmar		; get margins for this dx
+;; 	add	dl,mar_left		; add left margin
+;; 	jmp	dgsetcur		; set cursor, protection included
+;; dgwsa	endp
 
-dgshome	proc	near			; RS F G  DG Screen Home
-	xor	dh,dh			; absolute screen top
-	call	dggetmar		; get margins for this dx
-	mov	dl,mar_left		; go to left margin
-	jmp	dgsetcur		; set the cursor
-dgshome	endp
+;; dgshome	proc	near			; RS F G  DG Screen Home
+;; 	xor	dh,dh			; absolute screen top
+;; 	call	dggetmar		; get margins for this dx
+;; 	mov	dl,mar_left		; go to left margin
+;; 	jmp	dgsetcur		; set the cursor
+;; dgshome	endp
 
-dgsetmar proc	near			; RS F X <nn> <nn> Set margins
-	call	dggetmar		; get margins for this window row
-	mov	bx,offset dgsetm1	; get <nn> left margin
-	jmp	get2n
-dgsetm1:mov	al,mar_left		; current left margin
-	mov	emubuf,al
-	mov	ax,dgnum		; get left margin info
-	cmp	al,-1			; use current margin?
-	je	dgsetm2			; e = yes
-	mov	emubuf,al		; set left margin
-dgsetm2:mov	bx,offset dgsetm3	; get right margin
-	jmp	get2n
-dgsetm3:mov	ax,dgnum		; get right margin info
-	cmp	al,-1			; use current margin?
-	jne	dgsetm4			; ne = no
-	mov	al,vswidth-1		; use full screen
-dgsetm4:cmp	al,vswidth-1		; check sanity
-	ja	dgsetmx			; a = too large a right margin
-	cmp	al,emubuf		; getting things on the wrong side?
-	jb	dgsetmx			; b = yes (ok for left=right)
-dgsetm5:cmp	emubuf,vswidth-1	; this side too
-	jae	dgsetmx			; ae = too large
-	mov	mar_right,al		; set right margin
-	mov	al,emubuf		; new left
-	mov	mar_left,al		; new left
-	mov	byte ptr cursor,al	; set cursor to left margin
-	mov	dx,cursor
-	mov	emubuf,al		; preset args for dgschw1
-	mov	al,mar_right
-	mov	emubuf+1,al
-	jmp	dgschw1			; try to show both margins, set cursor
-dgsetmx:ret				; ignore command
-dgsetmar endp
+;; dgsetmar proc	near			; RS F X <nn> <nn> Set margins
+;; 	call	dggetmar		; get margins for this window row
+;; 	mov	bx,offset dgsetm1	; get <nn> left margin
+;; 	jmp	get2n
+;; dgsetm1:mov	al,mar_left		; current left margin
+;; 	mov	emubuf,al
+;; 	mov	ax,dgnum		; get left margin info
+;; 	cmp	al,-1			; use current margin?
+;; 	je	dgsetm2			; e = yes
+;; 	mov	emubuf,al		; set left margin
+;; dgsetm2:mov	bx,offset dgsetm3	; get right margin
+;; 	jmp	get2n
+;; dgsetm3:mov	ax,dgnum		; get right margin info
+;; 	cmp	al,-1			; use current margin?
+;; 	jne	dgsetm4			; ne = no
+;; 	mov	al,vswidth-1		; use full screen
+;; dgsetm4:cmp	al,vswidth-1		; check sanity
+;; 	ja	dgsetmx			; a = too large a right margin
+;; 	cmp	al,emubuf		; getting things on the wrong side?
+;; 	jb	dgsetmx			; b = yes (ok for left=right)
+;; dgsetm5:cmp	emubuf,vswidth-1	; this side too
+;; 	jae	dgsetmx			; ae = too large
+;; 	mov	mar_right,al		; set right margin
+;; 	mov	al,emubuf		; new left
+;; 	mov	mar_left,al		; new left
+;; 	mov	byte ptr cursor,al	; set cursor to left margin
+;; 	mov	dx,cursor
+;; 	mov	emubuf,al		; preset args for dgschw1
+;; 	mov	al,mar_right
+;; 	mov	emubuf+1,al
+;; 	jmp	dgschw1			; try to show both margins, set cursor
+;; dgsetmx:ret				; ignore command
+;; dgsetmar endp
 
-dgsetamar proc	near			; DG RS F Y <nn><nn><nn>
-	cmp	savdgmar,0		; have we saved l/r margins?
-	jne	dgsetam0		; ne = yes, don't save current
-	mov	ah,mar_right		; save originals
-	mov	al,mar_left
-	mov	savdgmar,ax		; saved
-dgsetam0:mov	bx,offset dgsetam1	; Set Alternate Margins
-	jmp	get2n			; get cursor row
-dgsetam1:mov	ax,dgnum		; cursor row wrt top margin
-	mov	bl,dh			; row of cursor
-	cmp	al,-1			; use current row?
-	je	dgsetam2		; e = yes
-	mov	bl,mar_top		; get row at top of this window
-	add	bl,al			; new cursor row is mar_top + new
-dgsetam2:cmp	bl,mar_bot		; below window?
-	jbe	dgsetam3		; be = no
-	mov	bl,mar_bot		; clamp to window bottom
-dgsetam3:mov	emubuf,bl		; save cursor row
-	mov	bx,offset dgsetam4	; get <nn> col of new left margin
-	jmp	get2n
-dgsetam4:mov	ax,dgnum
-	mov	bl,byte ptr savdgmar	; get permanent left margin
-	cmp	al,-1			; use current left margin?
-	je	dgsetam5		; e = yes
-	add	bl,al			; new left, wrt old left
-dgsetam5:mov	word ptr emubuf+2,bx	; save left margin
-	mov	bx,offset dgsetam6	; get <nn> right margin
-	jmp	get2n
-dgsetam6:mov	ax,dgnum
-	mov	bl,byte ptr savdgmar+1	; current right margin
-	cmp	al,-1			; use current right margin?
-	je	dgsetam7		; e = yes
-	mov	bl,al			; new relative right margin
-	add	bl,mar_left		; relative to old left margin
-	cmp	bl,byte ptr savdgmar+1	; exceeds old right_margin?
-	jbe	dgsetam7		; be = no
-	mov	bl,byte ptr savdgmar+1	; yes, use old right_margin
-dgsetam7:cmp	bl,vswidth-1		; too far right?
-	ja	dgsetam9		; a = yes, abandon the command
-	mov	mar_right,bl		; alt right margin
-	mov	al,emubuf+2		; get alt left margin
-	mov	mar_left,al
-	mov	dl,al			; cursor to left margin
-	mov	dh,emubuf		; get row for cursor
-	mov	dghscrdis,1		; horz scroll disabled (if 1)
-	call	dgsetcur		; set cursor
-dgsetam9:ret
-dgsetamar endp
+;; dgsetamar proc	near			; DG RS F Y <nn><nn><nn>
+;; 	cmp	savdgmar,0		; have we saved l/r margins?
+;; 	jne	dgsetam0		; ne = yes, don't save current
+;; 	mov	ah,mar_right		; save originals
+;; 	mov	al,mar_left
+;; 	mov	savdgmar,ax		; saved
+;; dgsetam0:mov	bx,offset dgsetam1	; Set Alternate Margins
+;; 	jmp	get2n			; get cursor row
+;; dgsetam1:mov	ax,dgnum		; cursor row wrt top margin
+;; 	mov	bl,dh			; row of cursor
+;; 	cmp	al,-1			; use current row?
+;; 	je	dgsetam2		; e = yes
+;; 	mov	bl,mar_top		; get row at top of this window
+;; 	add	bl,al			; new cursor row is mar_top + new
+;; dgsetam2:cmp	bl,mar_bot		; below window?
+;; 	jbe	dgsetam3		; be = no
+;; 	mov	bl,mar_bot		; clamp to window bottom
+;; dgsetam3:mov	emubuf,bl		; save cursor row
+;; 	mov	bx,offset dgsetam4	; get <nn> col of new left margin
+;; 	jmp	get2n
+;; dgsetam4:mov	ax,dgnum
+;; 	mov	bl,byte ptr savdgmar	; get permanent left margin
+;; 	cmp	al,-1			; use current left margin?
+;; 	je	dgsetam5		; e = yes
+;; 	add	bl,al			; new left, wrt old left
+;; dgsetam5:mov	word ptr emubuf+2,bx	; save left margin
+;; 	mov	bx,offset dgsetam6	; get <nn> right margin
+;; 	jmp	get2n
+;; dgsetam6:mov	ax,dgnum
+;; 	mov	bl,byte ptr savdgmar+1	; current right margin
+;; 	cmp	al,-1			; use current right margin?
+;; 	je	dgsetam7		; e = yes
+;; 	mov	bl,al			; new relative right margin
+;; 	add	bl,mar_left		; relative to old left margin
+;; 	cmp	bl,byte ptr savdgmar+1	; exceeds old right_margin?
+;; 	jbe	dgsetam7		; be = no
+;; 	mov	bl,byte ptr savdgmar+1	; yes, use old right_margin
+;; dgsetam7:cmp	bl,vswidth-1		; too far right?
+;; 	ja	dgsetam9		; a = yes, abandon the command
+;; 	mov	mar_right,bl		; alt right margin
+;; 	mov	al,emubuf+2		; get alt left margin
+;; 	mov	mar_left,al
+;; 	mov	dl,al			; cursor to left margin
+;; 	mov	dh,emubuf		; get row for cursor
+;; 	mov	dghscrdis,1		; horz scroll disabled (if 1)
+;; 	call	dgsetcur		; set cursor
+;; dgsetam9:ret
+;; dgsetamar endp
 
-dgrnmar	proc	near			; RS F Z  DG Restore normal margins
-	cmp	savdgmar,0		; anything saved?
-	jz	dgrnma1			; z = no, do nothing
-	xor	ax,ax			; get a null
-	xchg	ax,savdgmar		; recover saved margins, clear saved
-	mov	mar_left,al
-	mov	mar_right,ah
-dgrnma1:ret
-dgrnmar	endp
+;; dgrnmar	proc	near			; RS F Z  DG Restore normal margins
+;; 	cmp	savdgmar,0		; anything saved?
+;; 	jz	dgrnma1			; z = no, do nothing
+;; 	xor	ax,ax			; get a null
+;; 	xchg	ax,savdgmar		; recover saved margins, clear saved
+;; 	mov	mar_left,al
+;; 	mov	mar_right,ah
+;; dgrnma1:ret
+;; dgrnmar	endp
 
-; Worker. Given cursor in dx, set mar_top, mar_bot based on finding the 
-; DG window for that cursor row.
-dggetmar proc	near
-	mov	cx,dgwindcnt		; number of windows
-	xor	bx,bx
-	jcxz	dggetma2		; z = none
-	inc	cx			; let implied last window be seen
-dggetma1:cmp	dh,byte ptr dgwindow[bx+1] ; look at window bottom edge
-	jbe	dggetma3		; be = cursor is in this window
-	add	bx,2			; skip two margin bytes
-	loop	dggetma1		; next window
-dggetma2:ret
+;; ; Worker. Given cursor in dx, set mar_top, mar_bot based on finding the 
+;; ; DG window for that cursor row.
+;; dggetmar proc	near
+;; 	mov	cx,dgwindcnt		; number of windows
+;; 	xor	bx,bx
+;; 	jcxz	dggetma2		; z = none
+;; 	inc	cx			; let implied last window be seen
+;; dggetma1:cmp	dh,byte ptr dgwindow[bx+1] ; look at window bottom edge
+;; 	jbe	dggetma3		; be = cursor is in this window
+;; 	add	bx,2			; skip two margin bytes
+;; 	loop	dggetma1		; next window
+;; dggetma2:ret
 
-dggetma3:mov	ax,dgwindow[bx]		; DG Window structure
-	mov	mar_top,al
-	mov	mar_bot,ah
-	ret
-dggetmar endp
+;; dggetma3:mov	ax,dgwindow[bx]		; DG Window structure
+;; 	mov	mar_top,al
+;; 	mov	mar_bot,ah
+;; 	ret
+;; dggetmar endp
 
-; Worker. Given cursor in dx, and al=mar_top, ah=mar_bot
-; store these margins in the window structure for that row, based on
-; finding the DG window for that cursor row.
-dgstoremar proc	near
-	push	cx
-	mov	cx,dgwindcnt		; number of windows
-	xor	bx,bx
-	jcxz	dgstore2		; z = none
-dgstore1:cmp	dh,byte ptr dgwindow[bx+1] ; look at window bottom edge
-	jbe	dgstore2		; be = cursor is in this window
-	add	bx,2			; skip two margin bytes
-	loop	dgstore1		; next window
-	xor	bx,bx			; fail, use first window slot
-dgstore2:pop	cx
-	mov	dgwindow[bx],ax
-	ret
-dgstoremar endp
+;; ; Worker. Given cursor in dx, and al=mar_top, ah=mar_bot
+;; ; store these margins in the window structure for that row, based on
+;; ; finding the DG window for that cursor row.
+;; dgstoremar proc	near
+;; 	push	cx
+;; 	mov	cx,dgwindcnt		; number of windows
+;; 	xor	bx,bx
+;; 	jcxz	dgstore2		; z = none
+;; dgstore1:cmp	dh,byte ptr dgwindow[bx+1] ; look at window bottom edge
+;; 	jbe	dgstore2		; be = cursor is in this window
+;; 	add	bx,2			; skip two margin bytes
+;; 	loop	dgstore1		; next window
+;; 	xor	bx,bx			; fail, use first window slot
+;; dgstore2:pop	cx
+;; 	mov	dgwindow[bx],ax
+;; 	ret
+;; dgstoremar endp
 
-dgsmid	proc	near			; RS F { <nn><n> DG Set Model ID
-	mov	bx,offset dgsmid1	; setup for <nn>
-	jmp	get2n
-dgsmid1:mov	ax,dgnum		; get new model id
-	mov	byte ptr dgaltid,al	; save
-	mov	bx,dgsmid2		; get graphics possible (1) bit
-	jmp	get1n
-dgsmid2:mov	ax,dgnum
-	mov	byte ptr dgaltid+1,al
-	ret
-dgsmid	endp
+;; dgsmid	proc	near			; RS F { <nn><n> DG Set Model ID
+;; 	mov	bx,offset dgsmid1	; setup for <nn>
+;; 	jmp	get2n
+;; dgsmid1:mov	ax,dgnum		; get new model id
+;; 	mov	byte ptr dgaltid,al	; save
+;; 	mov	bx,dgsmid2		; get graphics possible (1) bit
+;; 	jmp	get1n
+;; dgsmid2:mov	ax,dgnum
+;; 	mov	byte ptr dgaltid+1,al
+;; 	ret
+;; dgsmid	endp
 
-dgscrup	proc	near			; DG  RS H
-	mov	scroll,1
-	call	atscru			; scroll up one line
-	jmp	dgsetcur		; place according to protected mode
-dgscrup endp
+;; dgscrup	proc	near			; DG  RS H
+;; 	mov	scroll,1
+;; 	call	atscru			; scroll up one line
+;; 	jmp	dgsetcur		; place according to protected mode
+;; dgscrup endp
 
-dgscrdn	proc	near			; DG  RS I
-	mov	scroll,1
-	call	atscrd			; scroll down one line
-	jmp	dgsetcur		; place according to protected mode
-dgscrdn	endp
+;; dgscrdn	proc	near			; DG  RS I
+;; 	mov	scroll,1
+;; 	call	atscrd			; scroll down one line
+;; 	jmp	dgsetcur		; place according to protected mode
+;; dgscrdn	endp
 
-dgcuu	proc	near			; Control-W  DG cursor up
-dgcuu1:	cmp	dh,mar_top		; above the top margin?
-	ja	dgcuu2			; a = not on top margin
-	mov	dh,mar_bot		; roll to bottom margin
-	inc	dh
-dgcuu2:	dec	dh			; go up one row
-	call	dgcurpchk		; do proteced mode check
-	jc	dgcub1			; c = protected, do cursor back
-	jmp	atsetcur		; set the cursor
-dgcuu	endp
+;; dgcuu	proc	near			; Control-W  DG cursor up
+;; dgcuu1:	cmp	dh,mar_top		; above the top margin?
+;; 	ja	dgcuu2			; a = not on top margin
+;; 	mov	dh,mar_bot		; roll to bottom margin
+;; 	inc	dh
+;; dgcuu2:	dec	dh			; go up one row
+;; 	call	dgcurpchk		; do proteced mode check
+;; 	jc	dgcub1			; c = protected, do cursor back
+;; 	jmp	atsetcur		; set the cursor
+;; dgcuu	endp
 
-dgcud	proc	near			; Control-Z  DG cursor down
-dgcud1:	cmp	dh,mar_bot		; below the bottom text line?
-	jb	dgcud2			; b = no
-	mov	dh,mar_top		; roll to top margin
-	dec	dh
-dgcud2:	inc	dh			; go down one row
-	call	dgcurpchk		; check for protected cell
-	jc	dgcuf1			; c = on protected cell, go forward
-	jmp	dgsetcur		; set cursor
-dgcud	endp
+;; dgcud	proc	near			; Control-Z  DG cursor down
+;; dgcud1:	cmp	dh,mar_bot		; below the bottom text line?
+;; 	jb	dgcud2			; b = no
+;; 	mov	dh,mar_top		; roll to top margin
+;; 	dec	dh
+;; dgcud2:	inc	dh			; go down one row
+;; 	call	dgcurpchk		; check for protected cell
+;; 	jc	dgcuf1			; c = on protected cell, go forward
+;; 	jmp	dgsetcur		; set cursor
+;; dgcud	endp
 
-dgcuf	proc	near			; Control-X  DG cursor forward
-	cmp	dl,mar_right		; test for about to wrap
-	jb	dgcuf1			; b = not wrapping
-	test	anspflg,vtautop		; printing desired?
-	jz	dgcuf1			; e = no
-	push	dx			; save cursor value
-	call	pntlin			; print line current line
-	mov	al,LF			; terminate in LF
-	call	fpntchr
-	call	fpntflsh		; flush printer buffer
-	mov	atwrap,0
-	pop	dx
+;; dgcuf	proc	near			; Control-X  DG cursor forward
+;; 	cmp	dl,mar_right		; test for about to wrap
+;; 	jb	dgcuf1			; b = not wrapping
+;; 	test	anspflg,vtautop		; printing desired?
+;; 	jz	dgcuf1			; e = no
+;; 	push	dx			; save cursor value
+;; 	call	pntlin			; print line current line
+;; 	mov	al,LF			; terminate in LF
+;; 	call	fpntchr
+;; 	call	fpntflsh		; flush printer buffer
+;; 	mov	atwrap,0
+;; 	pop	dx
 
-dgcuf1:	cmp	dl,mar_right		; to right of right margin?
-	jb	dgcuf5			; b = not on right margin
-	mov	dl,mar_left		; go to left margin
-	inc	dh			; and down one
-	cmp	dh,mar_bot		; below bottom line now?
-	jbe	dgcuf6			; be = no
-	mov	dh,mar_bot		; stay on bottom line
-	cmp	dgroll,0		; is roll mode disabled?
-	jne	dgcuf3			; ne = no, do the scroll
-	mov	dh,mar_top		; yes, wrap to top
-	jmp	short dgcuf6
-dgcuf3:	mov	scroll,1
-	call	atsetcur		; set cursor before the scroll
-	call	atscru			; scroll up one line
-	ret
-dgcuf5:	inc	dl			; go right one column
-dgcuf6:	cmp	dx,cursor		; is this the same place?
-	je	dgcuf7			; e = yes, stop here
-	call	dgcurpchk		; check protection
-	jc	dgcuf1			; c = stepped on protected cell
-dgcuf7:	jmp	atsetcur		; set cursor
-dgcuf	endp
+;; dgcuf1:	cmp	dl,mar_right		; to right of right margin?
+;; 	jb	dgcuf5			; b = not on right margin
+;; 	mov	dl,mar_left		; go to left margin
+;; 	inc	dh			; and down one
+;; 	cmp	dh,mar_bot		; below bottom line now?
+;; 	jbe	dgcuf6			; be = no
+;; 	mov	dh,mar_bot		; stay on bottom line
+;; 	cmp	dgroll,0		; is roll mode disabled?
+;; 	jne	dgcuf3			; ne = no, do the scroll
+;; 	mov	dh,mar_top		; yes, wrap to top
+;; 	jmp	short dgcuf6
+;; dgcuf3:	mov	scroll,1
+;; 	call	atsetcur		; set cursor before the scroll
+;; 	call	atscru			; scroll up one line
+;; 	ret
+;; dgcuf5:	inc	dl			; go right one column
+;; dgcuf6:	cmp	dx,cursor		; is this the same place?
+;; 	je	dgcuf7			; e = yes, stop here
+;; 	call	dgcurpchk		; check protection
+;; 	jc	dgcuf1			; c = stepped on protected cell
+;; dgcuf7:	jmp	atsetcur		; set cursor
+;; dgcuf	endp
 
-dgcub	proc	near			; Control-Y  DG cursor left
-dgcub1:	cmp	dl,mar_left		; to left of left margin?
-	ja	dgcub2			; a = no
-	mov	dl,mar_right		; go to right margin 
-	jmp	dgcuu1			; and do a cursor up
-dgcub2:	dec	dl			; go left one column
-	call	dgcurpchk		; check protection
-	jc	dgcub1			; c = stepped on protected cell
-	jmp	atsetcur		; set real cursor and exit
-dgcub	endp
+;; dgcub	proc	near			; Control-Y  DG cursor left
+;; dgcub1:	cmp	dl,mar_left		; to left of left margin?
+;; 	ja	dgcub2			; a = no
+;; 	mov	dl,mar_right		; go to right margin 
+;; 	jmp	dgcuu1			; and do a cursor up
+;; dgcub2:	dec	dl			; go left one column
+;; 	call	dgcurpchk		; check protection
+;; 	jc	dgcub1			; c = stepped on protected cell
+;; 	jmp	atsetcur		; set real cursor and exit
+;; dgcub	endp
 
-dgcurpchk proc	near
-	cmp	protectena,0		; protected mode enabled?
-	je	dgcurpc1		; e = no
-	push	dx
-	push	bx
-	mov	bl,dh			; row
-	xor	bh,bh
-	cmp	linetype[bx],0		; single width?
-	pop	bx
-	je	dgcurpc2		; e = yes
-	shl	dl,1			; double cursor position
-dgcurpc2:call	getatch			; read char under new cursor position
-	pop	dx
-	test	cl,att_protect		; protected?
-	jz	dgcurpc1		; z = no, accept this position
-	stc				; say stepping on protected char cell
-	ret
-dgcurpc1:clc				; say no other action needed
-	ret
-dgcurpchk endp
+;; dgcurpchk proc	near
+;; 	cmp	protectena,0		; protected mode enabled?
+;; 	je	dgcurpc1		; e = no
+;; 	push	dx
+;; 	push	bx
+;; 	mov	bl,dh			; row
+;; 	xor	bh,bh
+;; 	cmp	linetype[bx],0		; single width?
+;; 	pop	bx
+;; 	je	dgcurpc2		; e = yes
+;; 	shl	dl,1			; double cursor position
+;; dgcurpc2:call	getatch			; read char under new cursor position
+;; 	pop	dx
+;; 	test	cl,att_protect		; protected?
+;; 	jz	dgcurpc1		; z = no, accept this position
+;; 	stc				; say stepping on protected char cell
+;; 	ret
+;; dgcurpc1:clc				; say no other action needed
+;; 	ret
+;; dgcurpchk endp
 
-; Worker for cursor cmds. Skips protected fields, but remembers if we have
-; come full circle and then does a cursor right from there. Enter with
-; pre-motion cursor in "cursor", new desired position in dx.
-dgsetcur proc	near
-	call	dgcurpchk		; call protected cell checker
-	jnc	dgsetcu1		; nc = ok, accept this position
-	jmp	dgcuf1			; do cursor forward
-dgsetcu1:mov	bl,dh			; get row
-	xor	bh,bh
-	cmp	dl,linescroll[bx]	; to left of visible screen?
-	jae	dgsetcu2		; ae = no
-	mov	emubuf,dl		; set desired left margin
-	mov	cl,mar_right
-	mov	emubuf+2,cl		; set desired right margin
-	mov	cursor,dx		; preset for dgschw1
-	jmp	dgschw1			; do Show Window to track cursor
+;; ; Worker for cursor cmds. Skips protected fields, but remembers if we have
+;; ; come full circle and then does a cursor right from there. Enter with
+;; ; pre-motion cursor in "cursor", new desired position in dx.
+;; dgsetcur proc	near
+;; 	call	dgcurpchk		; call protected cell checker
+;; 	jnc	dgsetcu1		; nc = ok, accept this position
+;; 	jmp	dgcuf1			; do cursor forward
+;; dgsetcu1:mov	bl,dh			; get row
+;; 	xor	bh,bh
+;; 	cmp	dl,linescroll[bx]	; to left of visible screen?
+;; 	jae	dgsetcu2		; ae = no
+;; 	mov	emubuf,dl		; set desired left margin
+;; 	mov	cl,mar_right
+;; 	mov	emubuf+2,cl		; set desired right margin
+;; 	mov	cursor,dx		; preset for dgschw1
+;; 	jmp	dgschw1			; do Show Window to track cursor
 
-dgsetcu2:jmp	atsetcur		; set real cursor and exit
-dgsetcur endp
+;; dgsetcu2:jmp	atsetcur		; set real cursor and exit
+;; dgsetcur endp
 
 dglf	proc	near			; Control-J  DG New Line
-	test	anspflg,vtautop		; printing desired?
-	jz	dglf1			; e = no
-	push	dx			; save cursor
-	call	pntlin			; print line
-	mov	al,LF			; terminate in LF
-	call	fpntchr
-	call	fpntflsh		; flush printer buffer
-	mov	atwrap,0
-	pop	dx
-dglf1:	mov	dl,mar_left		; to left margin
-	cmp	dh,mar_bot		; on bottom margin?
-	jb	dglf3			; b = no
-	cmp	dgroll,0		; is roll disabled
-	je	dglf2			; e = yes, do home
-	mov	bl,dh			; row
-	xor	bh,bh
-	mov	al,linescroll[bx]	; save current line scroll
-	push	dx
-	push	bx
-	push	ax
-	mov	scroll,1
-	call	atscru			; do a scroll up by one line
-	pop	ax
-	pop	bx
-	pop	dx
-	mov	linescroll[bx],al	; set line scroll for new line
-	jmp	dgsetcur		; set cursor, does show columns too
+;; 	test	anspflg,vtautop		; printing desired?
+;; 	jz	dglf1			; e = no
+;; 	push	dx			; save cursor
+;; 	call	pntlin			; print line
+;; 	mov	al,LF			; terminate in LF
+;; 	call	fpntchr
+;; 	call	fpntflsh		; flush printer buffer
+;; 	mov	atwrap,0
+;; 	pop	dx
+;; dglf1:	mov	dl,mar_left		; to left margin
+;; 	cmp	dh,mar_bot		; on bottom margin?
+;; 	jb	dglf3			; b = no
+;; 	cmp	dgroll,0		; is roll disabled
+;; 	je	dglf2			; e = yes, do home
+;; 	mov	bl,dh			; row
+;; 	xor	bh,bh
+;; 	mov	al,linescroll[bx]	; save current line scroll
+;; 	push	dx
+;; 	push	bx
+;; 	push	ax
+;; 	mov	scroll,1
+;; 	call	atscru			; do a scroll up by one line
+;; 	pop	ax
+;; 	pop	bx
+;; 	pop	dx
+;; 	mov	linescroll[bx],al	; set line scroll for new line
+;; 	jmp	dgsetcur		; set cursor, does show columns too
 
-dglf2:	mov	dh,mar_top		; do window Home
-	jmp	short dglf4
-dglf3:	inc	dh			; down one row
-dglf4:	jmp	dgsetcur		; set cursor wrt protected mode
+;; dglf2:	mov	dh,mar_top		; do window Home
+;; 	jmp	short dglf4
+;; dglf3:	inc	dh			; down one row
+;; dglf4:	jmp	dgsetcur		; set cursor wrt protected mode
 dglf	endp
 
-dgcr	proc	near			; DG Control-M
-	mov	dl,mar_left		; go to left margin, same row
-	jmp	dgsetcur		; set cursor, with protected mode
-dgcr	endp
+;; dgcr	proc	near			; DG Control-M
+;; 	mov	dl,mar_left		; go to left margin, same row
+;; 	jmp	dgsetcur		; set cursor, with protected mode
+;; dgcr	endp
 
-dgrmid	proc	near			; RS C  DG Read Model ID
-	mov	al,dgescape		; resp RS o # <mm> <x> <y>
-	call	prtbout
-	mov	al,'o'
-	call	prtbout
-	mov	al,'#'
-	call	prtbout
-	mov	al,'5'			; 5 is DG D217
-	test	flags.vtflg,ttd217	; D217?
-	jnz	dgrmid6			; nz = yes
-	mov	al,'6'			; 6 is DG D413/D463
-	test	flags.vtflg,ttd470	; D470?
-	jz	dgrmid6			; z = no
-	mov	al,44			; 44 is DG D470
-dgrmid6:cmp	byte ptr dgaltid,0	; alternate ID given?
-	je	dgrmid1			; e = no
-	mov	al,byte ptr dgaltid	; use alternate
-dgrmid1:call	prtbout
-	xor	al,al			; <x> byte, clear it
-	test	flags.remflg,d8bit	; using 8 bits?
-	jz	dgrmid2			; z = no
-	or	al,10h			; say 8-bit mode
-dgrmid2:push	ax
-	mov	ah,ioctl		; get printer status, via DOS
-	mov	al,7			; status for output
-	push	bx
-	mov	bx,4			; std handle for system printer
-	int	dos
-	pop	bx
-	jnc	dgrmid3			; nc = call succeeded
-	mov	al,0ffh
-dgrmid3:cmp	al,0ffh			; code for Ready
-	pop	ax
-	jne	dgrmid4			; ne = not ready
-	or	al,8			; say printer present
-dgrmid4:or	al,40h
-	call	prtbout			; send composite byte
-	mov	bl,vtemu.vtchset	; get Kermit NRC code (0-13)
-	xor	bh,bh
-	mov	al,nrcdgkbd[bx]		; <y>, get DG keyboard code from table
-	or	al,50h			; 01+kbd installed (no graphics)
-	or	al,20h			; say have graphics
-	cmp	byte ptr dgaltid,0	; alternate id given?
-	je	dgrmid5			; e = no
-	cmp	byte ptr dgaltid+1,0	; host wants to say no graphics?
-	jne	dgrmid5			; ne = no, let things stand
-	and	al,not 20h		; remove graphics bit
-dgrmid5:call	prtbout
-	ret
-dgrmid	endp
-					; D470 command, absent from D463's
-dgscmap	proc	near			; RS F c <n><n><n><n> DG set color map
-	mov	bx,offset dgscmap1	; get language ident
-	jmp	get3n			; get three of the <n>'s
-dgscmap1:mov	bx,offset dgscmap2	; get the fourth
-	jmp	get1n
-dgscmap2:ret
-dgscmap	endp
+;; dgrmid	proc	near			; RS C  DG Read Model ID
+;; 	mov	al,dgescape		; resp RS o # <mm> <x> <y>
+;; 	call	prtbout
+;; 	mov	al,'o'
+;; 	call	prtbout
+;; 	mov	al,'#'
+;; 	call	prtbout
+;; 	mov	al,'5'			; 5 is DG D217
+;; 	test	flags.vtflg,ttd217	; D217?
+;; 	jnz	dgrmid6			; nz = yes
+;; 	mov	al,'6'			; 6 is DG D413/D463
+;; 	test	flags.vtflg,ttd470	; D470?
+;; 	jz	dgrmid6			; z = no
+;; 	mov	al,44			; 44 is DG D470
+;; dgrmid6:cmp	byte ptr dgaltid,0	; alternate ID given?
+;; 	je	dgrmid1			; e = no
+;; 	mov	al,byte ptr dgaltid	; use alternate
+;; dgrmid1:call	prtbout
+;; 	xor	al,al			; <x> byte, clear it
+;; 	test	flags.remflg,d8bit	; using 8 bits?
+;; 	jz	dgrmid2			; z = no
+;; 	or	al,10h			; say 8-bit mode
+;; dgrmid2:push	ax
+;; 	mov	ah,ioctl		; get printer status, via DOS
+;; 	mov	al,7			; status for output
+;; 	push	bx
+;; 	mov	bx,4			; std handle for system printer
+;; 	int	dos
+;; 	pop	bx
+;; 	jnc	dgrmid3			; nc = call succeeded
+;; 	mov	al,0ffh
+;; dgrmid3:cmp	al,0ffh			; code for Ready
+;; 	pop	ax
+;; 	jne	dgrmid4			; ne = not ready
+;; 	or	al,8			; say printer present
+;; dgrmid4:or	al,40h
+;; 	call	prtbout			; send composite byte
+;; 	mov	bl,vtemu.vtchset	; get Kermit NRC code (0-13)
+;; 	xor	bh,bh
+;; 	mov	al,nrcdgkbd[bx]		; <y>, get DG keyboard code from table
+;; 	or	al,50h			; 01+kbd installed (no graphics)
+;; 	or	al,20h			; say have graphics
+;; 	cmp	byte ptr dgaltid,0	; alternate id given?
+;; 	je	dgrmid5			; e = no
+;; 	cmp	byte ptr dgaltid+1,0	; host wants to say no graphics?
+;; 	jne	dgrmid5			; ne = no, let things stand
+;; 	and	al,not 20h		; remove graphics bit
+;; dgrmid5:call	prtbout
+;; 	ret
+;; dgrmid	endp
+;; 					; D470 command, absent from D463's
+;; dgscmap	proc	near			; RS F c <n><n><n><n> DG set color map
+;; 	mov	bx,offset dgscmap1	; get language ident
+;; 	jmp	get3n			; get three of the <n>'s
+;; dgscmap1:mov	bx,offset dgscmap2	; get the fourth
+;; 	jmp	get1n
+;; dgscmap2:ret
+;; dgscmap	endp
 
-dgshcol	proc	near			; RS F _ <nn><nn>  DG Show Columns
-	mov	bx,offset dgshco1	; get left col to show
-	jmp	get2n
-dgshco1:mov	ax,dgnum		; left column to show, is dominant
-	mov	cx,vswidth		; max columns in vscreen
-	dec	cx			; max column ident
-	sub	cl,byte ptr low_rgt	; visible display width - 1
-	sbb	ch,0			; max left column showable
-	cmp	ax,cx			; want further right than this?
-	jbe	dgshco2			; be = no
-	mov	ax,cx			; limit to max
-dgshco2:mov	emubuf,al		; save max left col to show
-	mov	bx,offset dgshco3	; get right col to show
-	jmp	get2n
-dgshco3:mov	ax,dgnum		; right col
-	cmp	al,emubuf		; right less than left?
-	jae	dgshco4			; ae = no
-	ret				; else ignore command
-dgshco4:mov	emubuf+1,al
-	cmp	dghscrdis,0		; is horizontal scrolling disabled?
-	je	dgschw1			; e = no
-	ret				; disabled, ignore this command
+;; dgshcol	proc	near			; RS F _ <nn><nn>  DG Show Columns
+;; 	mov	bx,offset dgshco1	; get left col to show
+;; 	jmp	get2n
+;; dgshco1:mov	ax,dgnum		; left column to show, is dominant
+;; 	mov	cx,vswidth		; max columns in vscreen
+;; 	dec	cx			; max column ident
+;; 	sub	cl,byte ptr low_rgt	; visible display width - 1
+;; 	sbb	ch,0			; max left column showable
+;; 	cmp	ax,cx			; want further right than this?
+;; 	jbe	dgshco2			; be = no
+;; 	mov	ax,cx			; limit to max
+;; dgshco2:mov	emubuf,al		; save max left col to show
+;; 	mov	bx,offset dgshco3	; get right col to show
+;; 	jmp	get2n
+;; dgshco3:mov	ax,dgnum		; right col
+;; 	cmp	al,emubuf		; right less than left?
+;; 	jae	dgshco4			; ae = no
+;; 	ret				; else ignore command
+;; dgshco4:mov	emubuf+1,al
+;; 	cmp	dghscrdis,0		; is horizontal scrolling disabled?
+;; 	je	dgschw1			; e = no
+;; 	ret				; disabled, ignore this command
 
-; worker. emubuf=wanted visible left, emubuf+1=wanted visible right margin
-dgschw1:mov	bl,mar_top		; get window top
-	xor	bh,bh
-	mov	cl,mar_bot
-	sub	cl,bl
-	inc	cl
-	xor	ch,ch			; lines in window
-	mov	al,emubuf+1		; desired right margin
-	sub	al,emubuf		; minus desired left
-	cmp	al,byte ptr low_rgt	; more than a screen's width?
-	jbe	dgschw2			; be = no
-	mov	al,emubuf		; desired left
-	add	al,byte ptr low_rgt	; plus screen width
-	mov	emubuf+1,al		; chop desired rm to give one screen
+;; ; worker. emubuf=wanted visible left, emubuf+1=wanted visible right margin
+;; dgschw1:mov	bl,mar_top		; get window top
+;; 	xor	bh,bh
+;; 	mov	cl,mar_bot
+;; 	sub	cl,bl
+;; 	inc	cl
+;; 	xor	ch,ch			; lines in window
+;; 	mov	al,emubuf+1		; desired right margin
+;; 	sub	al,emubuf		; minus desired left
+;; 	cmp	al,byte ptr low_rgt	; more than a screen's width?
+;; 	jbe	dgschw2			; be = no
+;; 	mov	al,emubuf		; desired left
+;; 	add	al,byte ptr low_rgt	; plus screen width
+;; 	mov	emubuf+1,al		; chop desired rm to give one screen
 
-dgschw2:mov	al,linescroll[bx]	; get scroll now in effect
-	cmp	emubuf,al		; is left margin to left of screen?
-	jb	dgshw4			; b = yes, put it on screen
-	je	dgshw8			; e = there now, do nothing
-	mov	ah,emubuf+1		; right margin to use
-	add	al,byte ptr low_rgt	; visible right edge
-	cmp	al,ah			; visible vs wanted right edge
-	jae	dgshw8			; ae = rm visible now, do nothing
-	sub	ah,al			; distance right margin is invisible
-	xchg	ah,al
-	add	al,linescroll[bx]	; new shift plus current shift
-	jmp	short dgshw5
+;; dgschw2:mov	al,linescroll[bx]	; get scroll now in effect
+;; 	cmp	emubuf,al		; is left margin to left of screen?
+;; 	jb	dgshw4			; b = yes, put it on screen
+;; 	je	dgshw8			; e = there now, do nothing
+;; 	mov	ah,emubuf+1		; right margin to use
+;; 	add	al,byte ptr low_rgt	; visible right edge
+;; 	cmp	al,ah			; visible vs wanted right edge
+;; 	jae	dgshw8			; ae = rm visible now, do nothing
+;; 	sub	ah,al			; distance right margin is invisible
+;; 	xchg	ah,al
+;; 	add	al,linescroll[bx]	; new shift plus current shift
+;; 	jmp	short dgshw5
 
-dgshw4:	mov	al,emubuf		; new scroll
-dgshw5:	mov	linescroll[bx],al	; horiz scroll for this line (window)
-	inc	bx
-	loop	dgshw5			; do all lines in this window
-	mov	dx,cursor
-	cmp	dl,al			; is cursor off to the left?
-	jae	dgshw6			; ae = no
-	mov	dl,al			; offset cursor too
-dgshw6:	add	al,byte ptr low_rgt	; visible right edge
-	cmp	dl,al			; cursor is on screen?
-	jbe	dgshw7			; be = yes
-	mov	dl,al			; move cursor to right edge
-dgshw7:	push	dx
-	mov	dl,mar_top		; region affected
-	mov	dh,mar_bot
-	call	touchup			; repaint based on new linescroll
-	pop	dx
-dgshw8:	jmp	dgsetcur		; set cursor, updates screen
-dgshcol	endp
+;; dgshw4:	mov	al,emubuf		; new scroll
+;; dgshw5:	mov	linescroll[bx],al	; horiz scroll for this line (window)
+;; 	inc	bx
+;; 	loop	dgshw5			; do all lines in this window
+;; 	mov	dx,cursor
+;; 	cmp	dl,al			; is cursor off to the left?
+;; 	jae	dgshw6			; ae = no
+;; 	mov	dl,al			; offset cursor too
+;; dgshw6:	add	al,byte ptr low_rgt	; visible right edge
+;; 	cmp	dl,al			; cursor is on screen?
+;; 	jbe	dgshw7			; be = yes
+;; 	mov	dl,al			; move cursor to right edge
+;; dgshw7:	push	dx
+;; 	mov	dl,mar_top		; region affected
+;; 	mov	dh,mar_bot
+;; 	call	touchup			; repaint based on new linescroll
+;; 	pop	dx
+;; dgshw8:	jmp	dgsetcur		; set cursor, updates screen
+;; dgshcol	endp
 
-dgrnmod	proc	near			; RS F w  DG Read New Model ID
-	mov	al,dgescape		; resp RS o w <c><s><r><n><res>
-	call	prtbout
-	mov	al,'o'
-	call	prtbout
-	mov	al,'w'
-	call	prtbout
-	mov	al,'1'			; <c> D217 terminal
-	test	flags.vtflg,ttd217 ; DG D217?
-	je	dgrnmod3		; e = yes
-;	mov	al,'3'			; <c> D413 level graphics terminal
-	mov	al,'8'			; <c> D470/D463 graphics terminal
-dgrnmod3:call	prtbout
-	mov	al,'0'			; <s> pair, 01 is D470/D463
-	call	prtbout
-	mov	al,'1'
-	call	prtbout
-	mov	al,'0'			; <r> rev level as <nn>
-	call	prtbout			; report 00
-	mov	al,'0'
-	call	prtbout
-	mov	cx,4
-;;	mov	si,offset d413model	; 8 char name, all printables
-	mov	si,offset d463model	; graphics term name, 8 printables
-	test	flags.vtflg,ttd470	; D470?
-	jz	dgrnmo1			; z = no
-	mov	si,offset d470model
-dgrnmo1:lodsb
-	push	cx
-	call	prtbout
-	pop	cx
-	loop	dgrnmo1
-	mov	cx,4+4			; <reserved> four spaces
-dgrnmo2:mov	al,' '
-	push	cx
-	call	prtbout
-	pop	cx
-	loop	dgrnmo2
-	ret
-dgrnmod	endp
+;; dgrnmod	proc	near			; RS F w  DG Read New Model ID
+;; 	mov	al,dgescape		; resp RS o w <c><s><r><n><res>
+;; 	call	prtbout
+;; 	mov	al,'o'
+;; 	call	prtbout
+;; 	mov	al,'w'
+;; 	call	prtbout
+;; 	mov	al,'1'			; <c> D217 terminal
+;; 	test	flags.vtflg,ttd217 ; DG D217?
+;; 	je	dgrnmod3		; e = yes
+;; ;	mov	al,'3'			; <c> D413 level graphics terminal
+;; 	mov	al,'8'			; <c> D470/D463 graphics terminal
+;; dgrnmod3:call	prtbout
+;; 	mov	al,'0'			; <s> pair, 01 is D470/D463
+;; 	call	prtbout
+;; 	mov	al,'1'
+;; 	call	prtbout
+;; 	mov	al,'0'			; <r> rev level as <nn>
+;; 	call	prtbout			; report 00
+;; 	mov	al,'0'
+;; 	call	prtbout
+;; 	mov	cx,4
+;; ;;	mov	si,offset d413model	; 8 char name, all printables
+;; 	mov	si,offset d463model	; graphics term name, 8 printables
+;; 	test	flags.vtflg,ttd470	; D470?
+;; 	jz	dgrnmo1			; z = no
+;; 	mov	si,offset d470model
+;; dgrnmo1:lodsb
+;; 	push	cx
+;; 	call	prtbout
+;; 	pop	cx
+;; 	loop	dgrnmo1
+;; 	mov	cx,4+4			; <reserved> four spaces
+;; dgrnmo2:mov	al,' '
+;; 	push	cx
+;; 	call	prtbout
+;; 	pop	cx
+;; 	loop	dgrnmo2
+;; 	ret
+;; dgrnmod	endp
 
-dgunix	proc	near			; RS P @ <n>  DG Unix mode
-	mov	ttstate,offset dgunix1	; setup to ignore @
-	ret
-dgunix1:mov	bx,offset atnrm		; consume the <n>
-	jmp	get1n
-dgunix	endp
+;; dgunix	proc	near			; RS P @ <n>  DG Unix mode
+;; 	mov	ttstate,offset dgunix1	; setup to ignore @
+;; 	ret
+;; dgunix1:mov	bx,offset atnrm		; consume the <n>
+;; 	jmp	get1n
+;; dgunix	endp
 
-dgsct	proc	near			; RS F Q <n>  DG Set Cursor Type
-	mov	bx,offset dgsct1
-	jmp	get1n			; get the <n> arg
-dgsct1:	mov	ax,dgnum		; get cursor type
-	or	al,al			; case 0, invisible/off?
-	jnz	dgsct2			; nz = no
-	call	csrtype			; set text cursor bits, keep kind
-	or	atctype,4		; remember, is off
-	jmp	short dgsct5
+;; dgsct	proc	near			; RS F Q <n>  DG Set Cursor Type
+;; 	mov	bx,offset dgsct1
+;; 	jmp	get1n			; get the <n> arg
+;; dgsct1:	mov	ax,dgnum		; get cursor type
+;; 	or	al,al			; case 0, invisible/off?
+;; 	jnz	dgsct2			; nz = no
+;; 	call	csrtype			; set text cursor bits, keep kind
+;; 	or	atctype,4		; remember, is off
+;; 	jmp	short dgsct5
 
-dgsct2:	cmp	al,2			; standard 1,2? (underline, block)
-	jbe	dgsct4			; be = yes
-	sub	al,5
-	neg	al			; 5 - AL
-	js	dgsct6			; s = out of range, ignore
-	jnz	dgsct4			; nz = cases 3 and 4 (block, uline)
-	mov	al,atctype		; case 5, use saved cursor type
-	and	al,not 4		; remove invisible bit
-dgsct4:	mov	atctype,al		; save text cursor type here
-	push	ax
-	or	vtemu.vtflgop,vscursor ; set to underlined
-	test	al,2			; setting to block?
-	jz	dgsct4a			; z = no, underline
-	and	vtemu.vtflgop,not vscursor ; say block in status word
-dgsct4a:call	csrtype			; set the cursor bits
-	pop	ax
-dgsct5:	test	tekflg,tek_active+tek_sg ; special graphics mode active?
-	jz	dgsct6			; z = no
-	mov	dx,cursor
-ifndef	no_graphics
-	call	teksetcursor		; set new cursor
-endif	; no_graphics
-dgsct6:	ret
-dgsct	endp
+;; dgsct2:	cmp	al,2			; standard 1,2? (underline, block)
+;; 	jbe	dgsct4			; be = yes
+;; 	sub	al,5
+;; 	neg	al			; 5 - AL
+;; 	js	dgsct6			; s = out of range, ignore
+;; 	jnz	dgsct4			; nz = cases 3 and 4 (block, uline)
+;; 	mov	al,atctype		; case 5, use saved cursor type
+;; 	and	al,not 4		; remove invisible bit
+;; dgsct4:	mov	atctype,al		; save text cursor type here
+;; 	push	ax
+;; 	or	vtemu.vtflgop,vscursor ; set to underlined
+;; 	test	al,2			; setting to block?
+;; 	jz	dgsct4a			; z = no, underline
+;; 	and	vtemu.vtflgop,not vscursor ; say block in status word
+;; dgsct4a:call	csrtype			; set the cursor bits
+;; 	pop	ax
+;; dgsct5:	test	tekflg,tek_active+tek_sg ; special graphics mode active?
+;; 	jz	dgsct6			; z = no
+;; 	mov	dx,cursor
+;; ifndef	no_graphics
+;; 	call	teksetcursor		; set new cursor
+;; endif	; no_graphics
+;; dgsct6:	ret
+;; dgsct	endp
 
-dgchatr	proc	near			; RS F N <nnn><n><n> DG change attrib
-	mov	bx,offset dgchat1	; get <nnn> qty chars to change
-	jmp	get3n
-dgchat1:mov	ax,dgnum		; qty chars to change
-	mov	word ptr emubuf,ax	; save
-	mov	bx,offset dgchat2	; get <n> set list
-	jmp	get1n
-dgchat2:mov	ax,dgnum		; bitfield for characteristics
-	mov	emubuf+2,al		; save set list
-	mov	bx,offset dgchat3	; get final <n> reset list
-	jmp	get1n
-dgchat3:mov	bl,byte ptr dgnum	; get reset list to BL
-	mov	emubuf+3,bl		; save reset list
-	mov	bh,emubuf+2		; set list
-	and	bh,bl			; get toggle bits
-	mov	emubuf+4,bh		; save toggle list here
-	not	bh			; clear out bits processed here
-	and	emubuf+2,bh		; update set list
-	and	emubuf+3,bh		; update reset list
-	mov	cursor,dx		; save cursor location
+;; dgchatr	proc	near			; RS F N <nnn><n><n> DG change attrib
+;; 	mov	bx,offset dgchat1	; get <nnn> qty chars to change
+;; 	jmp	get3n
+;; dgchat1:mov	ax,dgnum		; qty chars to change
+;; 	mov	word ptr emubuf,ax	; save
+;; 	mov	bx,offset dgchat2	; get <n> set list
+;; 	jmp	get1n
+;; dgchat2:mov	ax,dgnum		; bitfield for characteristics
+;; 	mov	emubuf+2,al		; save set list
+;; 	mov	bx,offset dgchat3	; get final <n> reset list
+;; 	jmp	get1n
+;; dgchat3:mov	bl,byte ptr dgnum	; get reset list to BL
+;; 	mov	emubuf+3,bl		; save reset list
+;; 	mov	bh,emubuf+2		; set list
+;; 	and	bh,bl			; get toggle bits
+;; 	mov	emubuf+4,bh		; save toggle list here
+;; 	not	bh			; clear out bits processed here
+;; 	and	emubuf+2,bh		; update set list
+;; 	and	emubuf+3,bh		; update reset list
+;; 	mov	cursor,dx		; save cursor location
 
-	mov	cx,word ptr emubuf	; qty of bytes to change, max
-	or	cx,cx			; some count?
-	jnz	dgchag4			; nz = something to do
-	ret
-dgchag4:mov	al,extattr		; preserve settable attributes
-	mov	ah,scbattr
-	push	ax
-dgchag4a:push	cx			; save loop counter
-	call	getatch			; get video in ah, extended att in cl
-	mov	extattr,cl		; place extended where procs can see
-	mov	emubuf+5,al		; save char
-	call	dgchag10		; process this char
-	mov	al,emubuf+5		; restore char
-	call	qsetatch		; quietly update the char
-	pop	cx
-	inc	dl			; next column
-	cmp	dl,mar_right		; at the right margin?
-	jbe	dgchag5			; be = no, not yet
-	mov	dl,mar_left		; wrap to left and next line
-	inc	dh			; next line down
-	cmp	dh,mar_bot		; below the window bottom?
-	ja	dgchag6			; a = yes, all done
-dgchag5:loop	dgchag4a		; do more chars
-dgchag6:pop	ax
-	mov	extattr,al		; restore setables
-	mov	scbattr,ah
-	mov	dl,byte ptr cursor+1	; dl = starting row, dh = ending row
-	mov	dh,mar_bot
-	call	touchup			; repaint part of screen
-	mov	dx,cursor		; reset cursor location
-	ret
+;; 	mov	cx,word ptr emubuf	; qty of bytes to change, max
+;; 	or	cx,cx			; some count?
+;; 	jnz	dgchag4			; nz = something to do
+;; 	ret
+;; dgchag4:mov	al,extattr		; preserve settable attributes
+;; 	mov	ah,scbattr
+;; 	push	ax
+;; dgchag4a:push	cx			; save loop counter
+;; 	call	getatch			; get video in ah, extended att in cl
+;; 	mov	extattr,cl		; place extended where procs can see
+;; 	mov	emubuf+5,al		; save char
+;; 	call	dgchag10		; process this char
+;; 	mov	al,emubuf+5		; restore char
+;; 	call	qsetatch		; quietly update the char
+;; 	pop	cx
+;; 	inc	dl			; next column
+;; 	cmp	dl,mar_right		; at the right margin?
+;; 	jbe	dgchag5			; be = no, not yet
+;; 	mov	dl,mar_left		; wrap to left and next line
+;; 	inc	dh			; next line down
+;; 	cmp	dh,mar_bot		; below the window bottom?
+;; 	ja	dgchag6			; a = yes, all done
+;; dgchag5:loop	dgchag4a		; do more chars
+;; dgchag6:pop	ax
+;; 	mov	extattr,al		; restore setables
+;; 	mov	scbattr,ah
+;; 	mov	dl,byte ptr cursor+1	; dl = starting row, dh = ending row
+;; 	mov	dh,mar_bot
+;; 	call	touchup			; repaint part of screen
+;; 	mov	dx,cursor		; reset cursor location
+;; 	ret
 
-; worker for dgchag			; do toggle mode
-dgchag10:mov	bh,emubuf+4		; toggle list
-	or	bh,bh			; any work?
-	jz	dgchag20		; z = no
-	test	bh,1			; blink?
-	jz	dgchag11		; z = no
-	xor	ah,att_blink		; xor blink
-dgchag11:test	bh,2			; underscore?
-	jz	dgchag13		; z = no
-	test	cl,att_uline		; is it set now?
-	jz	dgchag12		; z = no
-	call	clrunder		; reset it
-	jmp	short dgchag13
-dgchag12:call	setunder		; set it
-dgchag13:test	bh,4			; reverse video
-	jz	dgchag15		; z = no
-	test	cl,att_rev		; reversed now?
-	jz	dgchag14		; z = no
-	call	clrrev			; unreverse it
-	jmp	short dgchag15
-dgchag14:call	setrev			; reverse it
-dgchag15:test	bh,8			; Dim
-	jz	dgchag20
-	xor	ah,att_bold
-					; do set list from emubuf+2
-dgchag20:mov	bh,emubuf+2		; get set list
-	or	bh,bh			; any work?
-	jz	dgchag30		; z = no
-	test	bh,1			; blink?
-	jz	dgchag21		; z = no
-	call	setblink		; set blink
-dgchag21:test	bh,2			; underscore?
-	jz	dgchag22		; z = no
-	call	setunder		; set underline
-dgchag22:test	bh,4			; reverse video?
-	jz	dgchag23		; z = no
-	call	setrev			; set reverse video
-dgchag23:test	bh,8			; dim?
-	jz	dgchag30		; z = no
-	call	clrbold			; set Dim
-					; do reset list from emubuf+3
-dgchag30:mov	bh,emubuf+3		; get reset list
-	or	bh,bh			; any work?
-	jz	dgchag34		; z = no
-	test	bh,1			; blink?
-	jz	dgchag31		; z = no
-	call	clrblink		; clear blink
-dgchag31:test	bh,2			; underscore?
-	jz	dgchag32		; z = no
-	call	clrunder		; clear underscore
-dgchag32:test	bh,4			; reverse video?
-	jz	dgchag33		; z = no
-	call	clrrev
-dgchag33:test	bh,8			; Dim?
-	jz	dgchag34		; z = no
-	call	setbold			; reset dim
-dgchag34:ret				; end of callable worker
-dgchatr	endp
+;; ; worker for dgchag			; do toggle mode
+;; dgchag10:mov	bh,emubuf+4		; toggle list
+;; 	or	bh,bh			; any work?
+;; 	jz	dgchag20		; z = no
+;; 	test	bh,1			; blink?
+;; 	jz	dgchag11		; z = no
+;; 	xor	ah,att_blink		; xor blink
+;; dgchag11:test	bh,2			; underscore?
+;; 	jz	dgchag13		; z = no
+;; 	test	cl,att_uline		; is it set now?
+;; 	jz	dgchag12		; z = no
+;; 	call	clrunder		; reset it
+;; 	jmp	short dgchag13
+;; dgchag12:call	setunder		; set it
+;; dgchag13:test	bh,4			; reverse video
+;; 	jz	dgchag15		; z = no
+;; 	test	cl,att_rev		; reversed now?
+;; 	jz	dgchag14		; z = no
+;; 	call	clrrev			; unreverse it
+;; 	jmp	short dgchag15
+;; dgchag14:call	setrev			; reverse it
+;; dgchag15:test	bh,8			; Dim
+;; 	jz	dgchag20
+;; 	xor	ah,att_bold
+;; 					; do set list from emubuf+2
+;; dgchag20:mov	bh,emubuf+2		; get set list
+;; 	or	bh,bh			; any work?
+;; 	jz	dgchag30		; z = no
+;; 	test	bh,1			; blink?
+;; 	jz	dgchag21		; z = no
+;; 	call	setblink		; set blink
+;; dgchag21:test	bh,2			; underscore?
+;; 	jz	dgchag22		; z = no
+;; 	call	setunder		; set underline
+;; dgchag22:test	bh,4			; reverse video?
+;; 	jz	dgchag23		; z = no
+;; 	call	setrev			; set reverse video
+;; dgchag23:test	bh,8			; dim?
+;; 	jz	dgchag30		; z = no
+;; 	call	clrbold			; set Dim
+;; 					; do reset list from emubuf+3
+;; dgchag30:mov	bh,emubuf+3		; get reset list
+;; 	or	bh,bh			; any work?
+;; 	jz	dgchag34		; z = no
+;; 	test	bh,1			; blink?
+;; 	jz	dgchag31		; z = no
+;; 	call	clrblink		; clear blink
+;; dgchag31:test	bh,2			; underscore?
+;; 	jz	dgchag32		; z = no
+;; 	call	clrunder		; clear underscore
+;; dgchag32:test	bh,4			; reverse video?
+;; 	jz	dgchag33		; z = no
+;; 	call	clrrev
+;; dgchag33:test	bh,8			; Dim?
+;; 	jz	dgchag34		; z = no
+;; 	call	setbold			; reset dim
+;; dgchag34:ret				; end of callable worker
+;; dgchatr	endp
 
-dgsclk	proc	near			; RS r <n> <pos> <time> DG Set Clock
-	mov	bx,offset dgsclk1	; set up to get <n><0000>
-	jmp	get3n
-dgsclk1:mov	bx,offset dgsclk2	; setup to get HH
-	jmp	get1n
-dgsclk2:mov	ttstate,offset dgsclk3	; setup to get ":"
-	ret
-dgsclk3:mov	bx,offset atnrm		; absorb final MM
-	jmp	get1n
-dgsclk	endp
+;; dgsclk	proc	near			; RS r <n> <pos> <time> DG Set Clock
+;; 	mov	bx,offset dgsclk1	; set up to get <n><0000>
+;; 	jmp	get3n
+;; dgsclk1:mov	bx,offset dgsclk2	; setup to get HH
+;; 	jmp	get1n
+;; dgsclk2:mov	ttstate,offset dgsclk3	; setup to get ":"
+;; 	ret
+;; dgsclk3:mov	bx,offset atnrm		; absorb final MM
+;; 	jmp	get1n
+;; dgsclk	endp
 
-dgrss	proc	near			; RS F t  DG Report Screen Size
-	mov	al,dgescape		; resp RS o < <5 more items>
-	call	prtbout
-	mov	al,'o'
-	call	prtbout
-	mov	al,'<'
-	call	prtbout
-	mov	al,byte ptr low_rgt+1	; number of screen rows -1
-	inc	al
-	call	out2n			; first item
-	mov	al,207			; number of screen cols (DG hard #)
-	call	out2n			; second item
-	mov	al,mar_bot
-	sub	al,mar_top
-	inc	al			; third item, num rows in window
-	call	out2n
-	mov	al,mar_right
-	sub	al,mar_left
-	inc	al			; fourth item, num cols in window
-	call	out2n
-	mov	al,01110000b		; fifth item, status
-	call	prtbout
-	ret
-dgrss	endp
+;; dgrss	proc	near			; RS F t  DG Report Screen Size
+;; 	mov	al,dgescape		; resp RS o < <5 more items>
+;; 	call	prtbout
+;; 	mov	al,'o'
+;; 	call	prtbout
+;; 	mov	al,'<'
+;; 	call	prtbout
+;; 	mov	al,byte ptr low_rgt+1	; number of screen rows -1
+;; 	inc	al
+;; 	call	out2n			; first item
+;; 	mov	al,207			; number of screen cols (DG hard #)
+;; 	call	out2n			; second item
+;; 	mov	al,mar_bot
+;; 	sub	al,mar_top
+;; 	inc	al			; third item, num rows in window
+;; 	call	out2n
+;; 	mov	al,mar_right
+;; 	sub	al,mar_left
+;; 	inc	al			; fourth item, num cols in window
+;; 	call	out2n
+;; 	mov	al,01110000b		; fifth item, status
+;; 	call	prtbout
+;; 	ret
+;; dgrss	endp
 
-dgrhso	proc	near			; RS F O  DG Read Horz Scroll Offset
-	mov	al,dgescape		; resp RS o : <nn>
-	call	prtbout
-	mov	al,'o'
-	call	prtbout
-	mov	al,':'
-	call	prtbout
-	mov	bl,dh			; get current row
-	xor	bh,bh
-	mov	al,linescroll[bx]	; get scroll value
-	call	out2na
-	ret
-dgrhso	endp
+;; dgrhso	proc	near			; RS F O  DG Read Horz Scroll Offset
+;; 	mov	al,dgescape		; resp RS o : <nn>
+;; 	call	prtbout
+;; 	mov	al,'o'
+;; 	call	prtbout
+;; 	mov	al,':'
+;; 	call	prtbout
+;; 	mov	bl,dh			; get current row
+;; 	xor	bh,bh
+;; 	mov	al,linescroll[bx]	; get scroll value
+;; 	call	out2na
+;; 	ret
+;; dgrhso	endp
 
 dgrwa	proc	near			; Control-E  DG Read Window Address
-	mov	al,1fh			; Response string Control-_ col row
-	call	prtbout
-	mov	al,dl			; col, raw binary
-	call	prtbout
-	mov	al,dh			; row, raw binary
-	call	prtbout
+	;; mov	al,1fh			; Response string Control-_ col row
+	;; call	prtbout
+	;; mov	al,dl			; col, raw binary
+	;; call	prtbout
+	;; mov	al,dh			; row, raw binary
+	;; call	prtbout
 	ret
 dgrwa	endp
 
-dgrsa	proc	near			; RS F b  DG Read Screen Address
-	mov	al,dgescape		; resp RS o 8 <nn> <nn>
-	call	prtbout
-	mov	al,'o'
-	call	prtbout
-	mov	al,'8'
-	call	prtbout
-	mov	al,byte ptr cursor	; column
-	call	out2na
-	mov	al,byte ptr cursor+1	; row
-	call	out2na
-	ret
-dgrsa	endp
+;; dgrsa	proc	near			; RS F b  DG Read Screen Address
+;; 	mov	al,dgescape		; resp RS o 8 <nn> <nn>
+;; 	call	prtbout
+;; 	mov	al,'o'
+;; 	call	prtbout
+;; 	mov	al,'8'
+;; 	call	prtbout
+;; 	mov	al,byte ptr cursor	; column
+;; 	call	out2na
+;; 	mov	al,byte ptr cursor+1	; row
+;; 	call	out2na
+;; 	ret
+;; dgrsa	endp
 
-dgrwc	proc	near			; RS F v <r1> <c1> <r2> <c2>
-	mov	emubufc,0		; counter. DG Read Window Contents
-dgrwc1:	mov	bx,offset dgrwc2
-	jmp	get2n			; read <nn>
-dgrwc2:	mov	bx,emubufc		; get counter
-	inc	emubufc
-	mov	ax,dgnum		; r1, c1, r2, or c2
-	mov	emubuf[bx],al		; save here
-	cmp	bx,3			; done all four?
-	jb	dgrwc1			; b = no, get more
-	mov	dh,emubuf		; starting row
-	cmp	dh,emubuf+2		; versus ending row
-	ja	dgrwc8			; a = fail if wrong order
-dgrwc3:	mov	dl,emubuf+3		; ending column
-	mov	cl,dl
-	sub	cl,emubuf+1		; minus starting column
-	jl	dgrwc8			; fail if wrong order
-	inc	cl			; number of cells to examine
-	xor	ch,ch
+;; dgrwc	proc	near			; RS F v <r1> <c1> <r2> <c2>
+;; 	mov	emubufc,0		; counter. DG Read Window Contents
+;; dgrwc1:	mov	bx,offset dgrwc2
+;; 	jmp	get2n			; read <nn>
+;; dgrwc2:	mov	bx,emubufc		; get counter
+;; 	inc	emubufc
+;; 	mov	ax,dgnum		; r1, c1, r2, or c2
+;; 	mov	emubuf[bx],al		; save here
+;; 	cmp	bx,3			; done all four?
+;; 	jb	dgrwc1			; b = no, get more
+;; 	mov	dh,emubuf		; starting row
+;; 	cmp	dh,emubuf+2		; versus ending row
+;; 	ja	dgrwc8			; a = fail if wrong order
+;; dgrwc3:	mov	dl,emubuf+3		; ending column
+;; 	mov	cl,dl
+;; 	sub	cl,emubuf+1		; minus starting column
+;; 	jl	dgrwc8			; fail if wrong order
+;; 	inc	cl			; number of cells to examine
+;; 	xor	ch,ch
 
-dgrwc4:	push	cx
-	push	dx
-	call	direction
-	call	getatch			; read char into AL at cursor dx
-	pop	dx
-	pop	cx
-	cmp	al,' '			; space?
-	jne	dgrwc5			; found non-space
-	dec	dl
-	loop	dgrwc4
-dgrwc5:	jcxz	dgrwc7			; z = only spaces on the line
-	mov	dl,emubuf+1		; staring column
-dgrwc6:	push	cx
-	push	dx
-	call	direction
-	call	getatch			; get char and attribute
-	call	prtbout			; send char in al
-	pop	dx
-	pop	cx
-	inc	dl			; across the row
-	loop	dgrwc6			; do all interesting cols
-dgrwc7:	push	dx
-	mov	al,CR			; send line terminators
-	call	prtbout
-	mov	al,LF
-	call	prtbout
-	pop	dx
-	inc	dh			; next row down
-	cmp	dh,emubuf+2		; beyond last row?
-	jbe	dgrwc3			; be = no
-	mov	dx,cursor
-	mov	emubufc,0		; clear counter
-dgrwc8:	ret
-dgrwc	endp
-		; Data General D463/D470 graphics commands
+;; dgrwc4:	push	cx
+;; 	push	dx
+;; 	call	direction
+;; 	call	getatch			; read char into AL at cursor dx
+;; 	pop	dx
+;; 	pop	cx
+;; 	cmp	al,' '			; space?
+;; 	jne	dgrwc5			; found non-space
+;; 	dec	dl
+;; 	loop	dgrwc4
+;; dgrwc5:	jcxz	dgrwc7			; z = only spaces on the line
+;; 	mov	dl,emubuf+1		; staring column
+;; dgrwc6:	push	cx
+;; 	push	dx
+;; 	call	direction
+;; 	call	getatch			; get char and attribute
+;; 	call	prtbout			; send char in al
+;; 	pop	dx
+;; 	pop	cx
+;; 	inc	dl			; across the row
+;; 	loop	dgrwc6			; do all interesting cols
+;; dgrwc7:	push	dx
+;; 	mov	al,CR			; send line terminators
+;; 	call	prtbout
+;; 	mov	al,LF
+;; 	call	prtbout
+;; 	pop	dx
+;; 	inc	dh			; next row down
+;; 	cmp	dh,emubuf+2		; beyond last row?
+;; 	jbe	dgrwc3			; be = no
+;; 	mov	dx,cursor
+;; 	mov	emubufc,0		; clear counter
+;; dgrwc8:	ret
+;; dgrwc	endp
+;; 		; Data General D463/D470 graphics commands
 
-dggline	proc	near			; RS L and RS G 8  DG line drawing
-	call	dgsettek		; setup special graphics mode
-dggline1:mov	bx,offset dggline2	; get <NNN> x coord
-	jmp	get3loc
-dggline2:jc	dggline9		; c = read null terminator
-	mov	ax,dgnum		; start x coord
-	mov	word ptr emubuf+0,ax	; save here
-	mov	word ptr emubuf+4,ax	; and here
-	mov	bx,offset dggline3	; get <NNN> y coord
-	jmp	get3loc
-dggline3:jc	dggline9
-	mov	ax,dgnum
-	mov	word ptr emubuf+2,ax	; start y
-	mov	word ptr emubuf+6,ax	; and here
-dggline4:mov	bx,offset dggline5	; get <NNN> end x coord
-	jmp	get3loc
-dggline5:jc	dggline8		; c = ending on single coord, do a dot
-	mov	ax,dgnum
-	mov	word ptr emubuf+4,ax	; end x
-	mov	bx,offset dggline6	; get <NNN> end y coord
-	jmp	get3loc
-dggline6:jc	dggline9		; c = null char
-	mov	ax,dgnum		; end y
-	mov	word ptr emubuf+6,ax
-	call	dggline8		; plot line
-	jmp	short dggline4		; continue gathering coord pairs
+;; dggline	proc	near			; RS L and RS G 8  DG line drawing
+;; 	call	dgsettek		; setup special graphics mode
+;; dggline1:mov	bx,offset dggline2	; get <NNN> x coord
+;; 	jmp	get3loc
+;; dggline2:jc	dggline9		; c = read null terminator
+;; 	mov	ax,dgnum		; start x coord
+;; 	mov	word ptr emubuf+0,ax	; save here
+;; 	mov	word ptr emubuf+4,ax	; and here
+;; 	mov	bx,offset dggline3	; get <NNN> y coord
+;; 	jmp	get3loc
+;; dggline3:jc	dggline9
+;; 	mov	ax,dgnum
+;; 	mov	word ptr emubuf+2,ax	; start y
+;; 	mov	word ptr emubuf+6,ax	; and here
+;; dggline4:mov	bx,offset dggline5	; get <NNN> end x coord
+;; 	jmp	get3loc
+;; dggline5:jc	dggline8		; c = ending on single coord, do a dot
+;; 	mov	ax,dgnum
+;; 	mov	word ptr emubuf+4,ax	; end x
+;; 	mov	bx,offset dggline6	; get <NNN> end y coord
+;; 	jmp	get3loc
+;; dggline6:jc	dggline9		; c = null char
+;; 	mov	ax,dgnum		; end y
+;; 	mov	word ptr emubuf+6,ax
+;; 	call	dggline8		; plot line
+;; 	jmp	short dggline4		; continue gathering coord pairs
 
-dggline8:				; worker called above
-ifndef	no_graphics
-	push	word ptr mar_top	; mar_top in low byte
-	push	dglinepat		; line pattern
-	push	word ptr emubuf+6	; end y
-	push	word ptr emubuf+4	; end x
-	push	word ptr emubuf+2	; start y
-	push	word ptr emubuf+0	; start x
-	call	dgline			; do the line
-	add	sp,12			; clear the argument stack
-	mov	ax,word ptr emubuf+4	; old end is new beginning
-	mov	word ptr emubuf,ax
-	mov	ax,word ptr emubuf+6
-	mov	word ptr emubuf+2,ax
-endif	; no_graphics
-dggline9:ret
-dggline	endp
+;; dggline8:				; worker called above
+;; ifndef	no_graphics
+;; 	push	word ptr mar_top	; mar_top in low byte
+;; 	push	dglinepat		; line pattern
+;; 	push	word ptr emubuf+6	; end y
+;; 	push	word ptr emubuf+4	; end x
+;; 	push	word ptr emubuf+2	; start y
+;; 	push	word ptr emubuf+0	; start x
+;; 	call	dgline			; do the line
+;; 	add	sp,12			; clear the argument stack
+;; 	mov	ax,word ptr emubuf+4	; old end is new beginning
+;; 	mov	word ptr emubuf,ax
+;; 	mov	ax,word ptr emubuf+6
+;; 	mov	word ptr emubuf+2,ax
+;; endif	; no_graphics
+;; dggline9:ret
+;; dggline	endp
 
-dggarc	proc	near			; RS G 0  DG arc drawing
-	mov	bx,offset dggarc1	; get <NNN> x coord
-	jmp	get3loc
-dggarc1:jc	dggarc9			; unexpected terminator
-	mov	ax,dgnum		; x coord
-	mov	word ptr emubuf,ax	; save here
-	mov	bx,offset dggarc2	; get <NNN> y coord
-	jmp	get3loc
-dggarc2:jc	dggarc9
-	mov	ax,dgnum
-	mov	word ptr emubuf+2,ax
-	mov	bx,offset dggarc3	; get <NNN> radius
-	jmp	get3loc
-dggarc3:jc	dggarc9
-	mov	ax,dgnum
-	mov	word ptr emubuf+4,ax
-	mov	bx,offset dggarc4	; get <NNN> start angle
-	jmp	get3loc
-dggarc4:jc	dggarc9
-	mov	ax,dgnum
-	mov	word ptr emubuf+6,ax
-	mov	bx,offset dggarc5	; get <NNN> end angle
-	jmp	get3loc
-dggarc5:
-ifndef	no_graphics
-	call	dgsettek		; setup graphics mode
-	mov	al,mar_bot		; bottom margin in PC text lines
-	xor	ah,ah
-	push	ax
-	mov	al,mar_top		; top margin in PC text lines
-	push	ax
-	push	dgnum			; end angle
-	push	word ptr emubuf+6	; start angle
-	push	word ptr emubuf+4	; radius
-	push	word ptr emubuf+2	; start y
-	push	word ptr emubuf+0	; start x
-	call	dgarc			; draw the arc in msgibm
-	add	sp,14			; clean stack
-endif	; no_graphics
-dggarc9:ret
-dggarc	endp
+;; dggarc	proc	near			; RS G 0  DG arc drawing
+;; 	mov	bx,offset dggarc1	; get <NNN> x coord
+;; 	jmp	get3loc
+;; dggarc1:jc	dggarc9			; unexpected terminator
+;; 	mov	ax,dgnum		; x coord
+;; 	mov	word ptr emubuf,ax	; save here
+;; 	mov	bx,offset dggarc2	; get <NNN> y coord
+;; 	jmp	get3loc
+;; dggarc2:jc	dggarc9
+;; 	mov	ax,dgnum
+;; 	mov	word ptr emubuf+2,ax
+;; 	mov	bx,offset dggarc3	; get <NNN> radius
+;; 	jmp	get3loc
+;; dggarc3:jc	dggarc9
+;; 	mov	ax,dgnum
+;; 	mov	word ptr emubuf+4,ax
+;; 	mov	bx,offset dggarc4	; get <NNN> start angle
+;; 	jmp	get3loc
+;; dggarc4:jc	dggarc9
+;; 	mov	ax,dgnum
+;; 	mov	word ptr emubuf+6,ax
+;; 	mov	bx,offset dggarc5	; get <NNN> end angle
+;; 	jmp	get3loc
+;; dggarc5:
+;; ifndef	no_graphics
+;; 	call	dgsettek		; setup graphics mode
+;; 	mov	al,mar_bot		; bottom margin in PC text lines
+;; 	xor	ah,ah
+;; 	push	ax
+;; 	mov	al,mar_top		; top margin in PC text lines
+;; 	push	ax
+;; 	push	dgnum			; end angle
+;; 	push	word ptr emubuf+6	; start angle
+;; 	push	word ptr emubuf+4	; radius
+;; 	push	word ptr emubuf+2	; start y
+;; 	push	word ptr emubuf+0	; start x
+;; 	call	dgarc			; draw the arc in msgibm
+;; 	add	sp,14			; clean stack
+;; endif	; no_graphics
+;; dggarc9:ret
+;; dggarc	endp
 
-dggbar	proc	near			; RS G 1  DG bar drawing
-	call	dgsettek		; setup special graphics mode
-	mov	bx,offset dggbar1	; get <NNN> x coord, lower left
-	jmp	get3loc
-dggbar1:jc	dggbar9			; c = unexpected terminator
-	mov	ax,dgnum		; x coord
-	mov	word ptr emubuf,ax	; save here
-	mov	bx,offset dggbar2	; get <NNN> y coord
-	jmp	get3loc
-dggbar2:jc	dggbar9
-	mov	ax,dgnum
-	mov	word ptr emubuf+2,ax
-	mov	bx,offset dggbar3	; get <NNN> width
-	jmp	get3loc
-dggbar3:jc	dggbar9
-	mov	ax,dgnum
-	mov	word ptr emubuf+4,ax
-	mov	bx,offset dggbar4	; get <NNN> height
-	jmp	get3loc
-dggbar4:jc	dggbar9
-	mov	ax,dgnum
-	mov	word ptr emubuf+6,ax
-	mov	bx,offset dggbar5	; get <n> foreground/background
-	jmp	get1n
-dggbar5:jc	dggbar9
-ifndef	no_graphics
-	xor	ah,ah
-	mov	al,mar_bot
-	push	ax
-	mov	al,mar_top
-	push	ax
-	push	dgnum			; fore(1) or background (0) color
-	push	word ptr emubuf+6	; height
-	push	word ptr emubuf+4	; width
-	push	word ptr emubuf+2	; start y lower left corner
-	push	word ptr emubuf+0	; start x
-	call	dgbar			; msgibm bar drawer
-	add	sp,14			; clean stack
-endif	; no_graphics
-dggbar9:ret
-dggbar	endp
+;; dggbar	proc	near			; RS G 1  DG bar drawing
+;; 	call	dgsettek		; setup special graphics mode
+;; 	mov	bx,offset dggbar1	; get <NNN> x coord, lower left
+;; 	jmp	get3loc
+;; dggbar1:jc	dggbar9			; c = unexpected terminator
+;; 	mov	ax,dgnum		; x coord
+;; 	mov	word ptr emubuf,ax	; save here
+;; 	mov	bx,offset dggbar2	; get <NNN> y coord
+;; 	jmp	get3loc
+;; dggbar2:jc	dggbar9
+;; 	mov	ax,dgnum
+;; 	mov	word ptr emubuf+2,ax
+;; 	mov	bx,offset dggbar3	; get <NNN> width
+;; 	jmp	get3loc
+;; dggbar3:jc	dggbar9
+;; 	mov	ax,dgnum
+;; 	mov	word ptr emubuf+4,ax
+;; 	mov	bx,offset dggbar4	; get <NNN> height
+;; 	jmp	get3loc
+;; dggbar4:jc	dggbar9
+;; 	mov	ax,dgnum
+;; 	mov	word ptr emubuf+6,ax
+;; 	mov	bx,offset dggbar5	; get <n> foreground/background
+;; 	jmp	get1n
+;; dggbar5:jc	dggbar9
+;; ifndef	no_graphics
+;; 	xor	ah,ah
+;; 	mov	al,mar_bot
+;; 	push	ax
+;; 	mov	al,mar_top
+;; 	push	ax
+;; 	push	dgnum			; fore(1) or background (0) color
+;; 	push	word ptr emubuf+6	; height
+;; 	push	word ptr emubuf+4	; width
+;; 	push	word ptr emubuf+2	; start y lower left corner
+;; 	push	word ptr emubuf+0	; start x
+;; 	call	dgbar			; msgibm bar drawer
+;; 	add	sp,14			; clean stack
+;; endif	; no_graphics
+;; dggbar9:ret
+;; dggbar	endp
 
-dggpoly	proc	near			; RS G :  DG polygon fill drawing
-	mov	word ptr rdbuf,0	; count argument pairs
-dggpol1:mov	bx,offset dggpol2	; get <NNN> x coord
-	jmp	get3loc
-dggpol2:jc	dggpol4			; c = got null terminator
-	mov	ax,dgnum		; x coord
-	mov	word ptr emubuf,ax	; save here
-	mov	bx,offset dggpol3	; get <NNN> y coord
-	jmp	get3loc
-dggpol3:jc	dggpol4
-	mov	bx,word ptr rdbuf	; vertex index
-	shl	bx,1			; count words
-	shl	bx,1			; count pairs
-	mov	cx,word ptr emubuf	; x coord
-	mov	ax,dgnum		; y coord
-	mov	word ptr (rdbuf+2)[bx],cx	; stuff x
-	mov	word ptr (rdbuf+2)[bx+2],ax 	; stuff y
-	inc	word ptr rdbuf		; another vertex in list
-	jmp	short dggpol1		; get another vertex
-dggpol4:cmp	word ptr rdbuf,3	; minimum viable point count
-	jb	dggpol6			; b = insufficient qty
-	mov	bx,word ptr rdbuf	; vertex index
-	shl	bx,1			; count words
-	shl	bx,1			; count pairs
-	mov	al,mar_top
-	xor	ah,ah
-	mov	word ptr (rdbuf+2)[bx],ax	; top margin, PC text lines
-	mov	al,mar_bot
-	mov	word ptr (rdbuf+2)[bx+2],ax	; bottom margin, PC text lines
-	call	dgsettek		; setup special graphics mode
-	mov	al,curattr		; save current coloring
-	push	ax
-	test	flags.vtflg,ttd463+ttd217 ; D463/D217?
-	jz	dgpoly5			; z = no
-	and	al,0f0h			; remove foreground
-	or	al,dg463fore		; OR in D463 foreground color
-	mov	curattr,al		; set drawing coloring
-dgpoly5:
-ifndef	no_graphics
-	call	dgpoly			; call worker in msgibm
-endif	; no_graphics
-	pop	ax
-	mov	curattr,al		; restore coloring
-dggpol6:ret
-dggpoly	endp
+;; dggpoly	proc	near			; RS G :  DG polygon fill drawing
+;; 	mov	word ptr rdbuf,0	; count argument pairs
+;; dggpol1:mov	bx,offset dggpol2	; get <NNN> x coord
+;; 	jmp	get3loc
+;; dggpol2:jc	dggpol4			; c = got null terminator
+;; 	mov	ax,dgnum		; x coord
+;; 	mov	word ptr emubuf,ax	; save here
+;; 	mov	bx,offset dggpol3	; get <NNN> y coord
+;; 	jmp	get3loc
+;; dggpol3:jc	dggpol4
+;; 	mov	bx,word ptr rdbuf	; vertex index
+;; 	shl	bx,1			; count words
+;; 	shl	bx,1			; count pairs
+;; 	mov	cx,word ptr emubuf	; x coord
+;; 	mov	ax,dgnum		; y coord
+;; 	mov	word ptr (rdbuf+2)[bx],cx	; stuff x
+;; 	mov	word ptr (rdbuf+2)[bx+2],ax 	; stuff y
+;; 	inc	word ptr rdbuf		; another vertex in list
+;; 	jmp	short dggpol1		; get another vertex
+;; dggpol4:cmp	word ptr rdbuf,3	; minimum viable point count
+;; 	jb	dggpol6			; b = insufficient qty
+;; 	mov	bx,word ptr rdbuf	; vertex index
+;; 	shl	bx,1			; count words
+;; 	shl	bx,1			; count pairs
+;; 	mov	al,mar_top
+;; 	xor	ah,ah
+;; 	mov	word ptr (rdbuf+2)[bx],ax	; top margin, PC text lines
+;; 	mov	al,mar_bot
+;; 	mov	word ptr (rdbuf+2)[bx+2],ax	; bottom margin, PC text lines
+;; 	call	dgsettek		; setup special graphics mode
+;; 	mov	al,curattr		; save current coloring
+;; 	push	ax
+;; 	test	flags.vtflg,ttd463+ttd217 ; D463/D217?
+;; 	jz	dgpoly5			; z = no
+;; 	and	al,0f0h			; remove foreground
+;; 	or	al,dg463fore		; OR in D463 foreground color
+;; 	mov	curattr,al		; set drawing coloring
+;; dgpoly5:
+;; ifndef	no_graphics
+;; 	call	dgpoly			; call worker in msgibm
+;; endif	; no_graphics
+;; 	pop	ax
+;; 	mov	curattr,al		; restore coloring
+;; dggpol6:ret
+;; dggpoly	endp
 
-dggsetp	proc	near			; RS G p 1  DG Set Pattern
-	mov	ttstate,offset dggset1	; setup to read the 1
-	ret
-dggset1:cmp	al,'1'			; correct?
-	je	dggset2			; e = yes
-dggsetx:jmp	atnorm			; fail and reset state
-dggset2:mov	ttstate,offset dggset3	; setup to read <offset>
-	mov	dglinepat,0		; init line pattern to all zeros
-	call	dgsettek		; setup special graphics mode
-	ret
-dggset3:sub	al,'@'			; remove ASCII bias
-	jc	dggset9			; c = failure
-	and	al,1fh			; keep lower five bits
-	xor	ah,ah
-	mov	word ptr emubuf,ax	; save initial bit position
-	mov	cl,al
-	rcl	dglinepat,cl		; rotate initial pattern
-	mov	ttstate,offset dggset4	; setup to read <n> 0/1 bit
-	ret
-dggset4:or	al,al			; null terminator?
-	jz	dggset6			; z = yes
-	and	al,0fh			; keep lower four bits of <n>
-	cmp	al,1			; legal values are 0, 1, and other
-	jbe	dggset5			; be = 0 or 1
-	xor	al,al			; above 1 is made to be zero
-dggset5:rcr	al,1
-	rcr	dglinepat,1		; put into line pattern high bit
-	inc	word ptr emubuf		; count bit added to pattern
-	ret				; continue in state dggset4
+;; dggsetp	proc	near			; RS G p 1  DG Set Pattern
+;; 	mov	ttstate,offset dggset1	; setup to read the 1
+;; 	ret
+;; dggset1:cmp	al,'1'			; correct?
+;; 	je	dggset2			; e = yes
+;; dggsetx:jmp	atnorm			; fail and reset state
+;; dggset2:mov	ttstate,offset dggset3	; setup to read <offset>
+;; 	mov	dglinepat,0		; init line pattern to all zeros
+;; 	call	dgsettek		; setup special graphics mode
+;; 	ret
+;; dggset3:sub	al,'@'			; remove ASCII bias
+;; 	jc	dggset9			; c = failure
+;; 	and	al,1fh			; keep lower five bits
+;; 	xor	ah,ah
+;; 	mov	word ptr emubuf,ax	; save initial bit position
+;; 	mov	cl,al
+;; 	rcl	dglinepat,cl		; rotate initial pattern
+;; 	mov	ttstate,offset dggset4	; setup to read <n> 0/1 bit
+;; 	ret
+;; dggset4:or	al,al			; null terminator?
+;; 	jz	dggset6			; z = yes
+;; 	and	al,0fh			; keep lower four bits of <n>
+;; 	cmp	al,1			; legal values are 0, 1, and other
+;; 	jbe	dggset5			; be = 0 or 1
+;; 	xor	al,al			; above 1 is made to be zero
+;; dggset5:rcr	al,1
+;; 	rcr	dglinepat,1		; put into line pattern high bit
+;; 	inc	word ptr emubuf		; count bit added to pattern
+;; 	ret				; continue in state dggset4
 
-dggset6:mov	cx,16			; bits in pattern
-	sub	cx,word ptr emubuf	; get pattern bit count
-	jle	dggset9			; le = rotated enough
-	mov	ax,dglinepat		; pattern
-	mov	bx,ax			; a copy
-	mov	cx,word ptr emubuf	; pattern bit count
-	mov	dx,16			; overall bits
-dggset6a:sub	dx,cx			; minus original pattern
-	jg	dggset7			; g = still have room to copy
-	je	dggset8			; e = all done
-	neg	dx
-	mov	cx,dx			; else tag end
-dggset7:ror	ax,cl			; rotate pattern to starting position
-	or	ax,bx			; move in a copy
-	jmp	short dggset6a
+;; dggset6:mov	cx,16			; bits in pattern
+;; 	sub	cx,word ptr emubuf	; get pattern bit count
+;; 	jle	dggset9			; le = rotated enough
+;; 	mov	ax,dglinepat		; pattern
+;; 	mov	bx,ax			; a copy
+;; 	mov	cx,word ptr emubuf	; pattern bit count
+;; 	mov	dx,16			; overall bits
+;; dggset6a:sub	dx,cx			; minus original pattern
+;; 	jg	dggset7			; g = still have room to copy
+;; 	je	dggset8			; e = all done
+;; 	neg	dx
+;; 	mov	cx,dx			; else tag end
+;; dggset7:ror	ax,cl			; rotate pattern to starting position
+;; 	or	ax,bx			; move in a copy
+;; 	jmp	short dggset6a
 
-dggset8:mov	dglinepat,ax		; store line pattern
-dggset9:jmp	atnorm
-dggsetp	endp
+;; dggset8:mov	dglinepat,ax		; store line pattern
+;; dggset9:jmp	atnorm
+;; dggsetp	endp
 
-dggrcl	proc	near			; RS G ? |  DG Read Cursor Location
-	mov	ttstate,offset dggrcl1
-	ret
-dggrcl1:mov	ttstate,atnrm		; reset state
-	cmp	al,'|'			; correct terminator?
-	jne	dggrcl3			; ne = no
-dggrcl2:
-ifndef	no_graphics
-	call	dgcrossrpt		; generate report in msgibm
-endif	; no_graphics
-dggrcl3:ret
-dggrcl	endp
+;; dggrcl	proc	near			; RS G ? |  DG Read Cursor Location
+;; 	mov	ttstate,offset dggrcl1
+;; 	ret
+;; dggrcl1:mov	ttstate,atnrm		; reset state
+;; 	cmp	al,'|'			; correct terminator?
+;; 	jne	dggrcl3			; ne = no
+;; dggrcl2:
+;; ifndef	no_graphics
+;; 	call	dgcrossrpt		; generate report in msgibm
+;; endif	; no_graphics
+;; dggrcl3:ret
+;; dggrcl	endp
 
-dggcon	proc	near			; RS G B  DG Cursor on
-ifndef	no_graphics
-	call	dgsettek		; setup special graphics mode
-	call	dgcrosson		; turn on crosshair
-endif	; no_grpahics
-	ret
-dggcon	endp
+;; dggcon	proc	near			; RS G B  DG Cursor on
+;; ifndef	no_graphics
+;; 	call	dgsettek		; setup special graphics mode
+;; 	call	dgcrosson		; turn on crosshair
+;; endif	; no_grpahics
+;; 	ret
+;; dggcon	endp
 
-dggcoff	proc	near			; RS G C  DG Cursor off
-ifndef	no_graphics
-	call	dgcrossoff		; turn off crosshair
-endif	; no_graphics
-	ret
-dggcoff	endp
+;; dggcoff	proc	near			; RS G C  DG Cursor off
+;; ifndef	no_graphics
+;; 	call	dgcrossoff		; turn off crosshair
+;; endif	; no_graphics
+;; 	ret
+;; dggcoff	endp
 
-dggcloc	proc	near			; RS G > | <NNN> <NNN> DG Cursor loc
-	mov	ttstate,offset dggclo1	; get vertical bar
-	ret
-dggclo1:mov	ttstate,offset atnrm	; reset state
-	cmp	al,'|'			; correct character?
-	je	dggclo2			; e = yes
-	ret
-dggclo2:mov	bx,offset dggclo3	; get <nnn> x ordinate
-	jmp	get3loc			; as 15 bit location argument
-dggclo3:mov	ax,dgnum
-	mov	word ptr emubuf,ax	; got x ordinate
-	mov	bx,offset dggclo4	; get <nnn> y ordinate
-	jmp	get3loc			; as 15 bit location argument
-dggclo4:mov	bx,dgnum		; setup registers for call
-	mov	ax,word ptr emubuf
-ifndef	no_graphics
-	call	dgsetcrloc		; setup crosshair location
-endif	; no_graphics
-	ret
-dggcloc	endp
+;; dggcloc	proc	near			; RS G > | <NNN> <NNN> DG Cursor loc
+;; 	mov	ttstate,offset dggclo1	; get vertical bar
+;; 	ret
+;; dggclo1:mov	ttstate,offset atnrm	; reset state
+;; 	cmp	al,'|'			; correct character?
+;; 	je	dggclo2			; e = yes
+;; 	ret
+;; dggclo2:mov	bx,offset dggclo3	; get <nnn> x ordinate
+;; 	jmp	get3loc			; as 15 bit location argument
+;; dggclo3:mov	ax,dgnum
+;; 	mov	word ptr emubuf,ax	; got x ordinate
+;; 	mov	bx,offset dggclo4	; get <nnn> y ordinate
+;; 	jmp	get3loc			; as 15 bit location argument
+;; dggclo4:mov	bx,dgnum		; setup registers for call
+;; 	mov	ax,word ptr emubuf
+;; ifndef	no_graphics
+;; 	call	dgsetcrloc		; setup crosshair location
+;; endif	; no_graphics
+;; 	ret
+;; dggcloc	endp
 
-dggctrk	proc	near			; RS G H <n>  DG Cursor track
-	mov	bx,offset dggctr1
-	jmp	get1n
-dggctr1:and	al,2+4			; pick out our trackables
-	and	dgcross,not (2+4)	; preserve on/of bit (1)
-	or	dgcross,al		; track keypad (2) and/or mouse (4)
-	ret
-dggctrk	endp
+;; dggctrk	proc	near			; RS G H <n>  DG Cursor track
+;; 	mov	bx,offset dggctr1
+;; 	jmp	get1n
+;; dggctr1:and	al,2+4			; pick out our trackables
+;; 	and	dgcross,not (2+4)	; preserve on/of bit (1)
+;; 	or	dgcross,al		; track keypad (2) and/or mouse (4)
+;; 	ret
+;; dggctrk	endp
 
-dggcatt	proc	near			; RS G @  DG graphics cursor attribute
-	mov	al,dgescape
-	call	prtbout
-	mov	al,'o'
-	call	prtbout
-	mov	al,','
-	call	prtbout
-	mov	al,'0'			; say crosshair is off
-	test	dgcross,1		; is it on?
-	jz	dggcatt1		; z = no
-	inc	al			; say '1' for on
-dggcatt1:call	prtbout			; output <v1>
-	mov	al,'0'			; <v2> is always 0 for not blinking
-	call	prtbout
-	mov	al,'1'			; <v3> is 1 for long crosshair, D463
-	test	flags.vtflg,ttd470	; D470?
-	jz	dggcatt2		; z = no
-	dec	al			; <v3> is 0 for short crosshair, D470
-dggcatt2:call	prtbout
-	mov	al,dgcross		; get tracked devices
-	and	al,2+4			; pick out just devices
-	add	al,'0'			; bias
-	call	prtbout			; output <v4>
-	mov	al,CR			; terminal character
-	call	prtbout
-	ret
-dggcatt	endp
+;; dggcatt	proc	near			; RS G @  DG graphics cursor attribute
+;; 	mov	al,dgescape
+;; 	call	prtbout
+;; 	mov	al,'o'
+;; 	call	prtbout
+;; 	mov	al,','
+;; 	call	prtbout
+;; 	mov	al,'0'			; say crosshair is off
+;; 	test	dgcross,1		; is it on?
+;; 	jz	dggcatt1		; z = no
+;; 	inc	al			; say '1' for on
+;; dggcatt1:call	prtbout			; output <v1>
+;; 	mov	al,'0'			; <v2> is always 0 for not blinking
+;; 	call	prtbout
+;; 	mov	al,'1'			; <v3> is 1 for long crosshair, D463
+;; 	test	flags.vtflg,ttd470	; D470?
+;; 	jz	dggcatt2		; z = no
+;; 	dec	al			; <v3> is 0 for short crosshair, D470
+;; dggcatt2:call	prtbout
+;; 	mov	al,dgcross		; get tracked devices
+;; 	and	al,2+4			; pick out just devices
+;; 	add	al,'0'			; bias
+;; 	call	prtbout			; output <v4>
+;; 	mov	al,CR			; terminal character
+;; 	call	prtbout
+;; 	ret
+;; dggcatt	endp
 
-dggcrst	proc	near			; RS G A  DG Cursor reset
-ifndef	no_graphics
-	call	dgcrossoff		; turn off crosshair
-endif	; no_graphics
-	mov	dgcross,0		; and no kind of tracking
-	ret
-dggcrst	endp
+;; dggcrst	proc	near			; RS G A  DG Cursor reset
+;; ifndef	no_graphics
+;; 	call	dgcrossoff		; turn off crosshair
+;; endif	; no_graphics
+;; 	mov	dgcross,0		; and no kind of tracking
+;; 	ret
+;; dggcrst	endp
 
-; D470 ANSI mode support routines
+;; ; D470 ANSI mode support routines
 
-dgesc_ch proc	near			; ESC <Gn> <set> Select character set
-	cmp	ninter,1		; just one intermediate?
-	je	dgesc_ch2		; e = yes, designator
-	cmp	inter+1,' '		; DRCB 1..16?
-	je	dgesc_ch1		; e = yes
-	cmp	inter+1,'!'		; DRCB 17..22?
-	je	dgesc_ch1		; e = yes
-	ret				; else ignore
-dgesc_ch1:mov	bx,20h			; identify one soft set
-	jmp	short dgesc_ch4
+;; dgesc_ch proc	near			; ESC <Gn> <set> Select character set
+;; 	cmp	ninter,1		; just one intermediate?
+;; 	je	dgesc_ch2		; e = yes, designator
+;; 	cmp	inter+1,' '		; DRCB 1..16?
+;; 	je	dgesc_ch1		; e = yes
+;; 	cmp	inter+1,'!'		; DRCB 17..22?
+;; 	je	dgesc_ch1		; e = yes
+;; 	ret				; else ignore
+;; dgesc_ch1:mov	bx,20h			; identify one soft set
+;; 	jmp	short dgesc_ch4
 
-dgesc_ch2:cmp	al,'0'			; final char, use keyboard language?
-	jne	dgesc_ch3		; ne = no, look it up
-	xor	bh,bh
-	mov	bl,vtemu.vtchset	; get setup char set
-	cmp	bl,13			; top of the NRCs
-	jbe	short dgesc_ch4		;  as keyboard language
-	xor	bx,bx			; default to ASCII
-	jmp	short dgesc_ch4
-dgesc_ch3:xor	bx,bx			; look up set in table
-	push	es
-	mov	di,seg d470chr		; get translation table address
-	mov	es,di
-	mov	di,offset d470chr
-	mov	cx,d470chrlen		; get table length
-	cld
-	repne	scasb			; look for match
-	pop	es
-	dec	di			; backup on match
-	jne	dgesc_ch5		; ne = no match, ignore
-	sub	di,offset d470chr	; compute index
-	mov	bl,mskchr[di]		; get Kermit equivalent code
-	xor	bh,bh
-dgesc_ch4:				; bx holds Kermit set ident
-	mov	al,inter		; get set designator
-	sub	al,'('			; minus bias
-	xor	ah,ah
-	cmp	al,3			; range check 0..3
-	ja	dgesc_ch5		; a = out of range
-	mov	si,ax			; point at set id
-	mov	Gsetid[si],bl		; indentify new set
-	mov	bx,offset Gsetid	; tell chrset where to get info
-	jmp	chrsetup		; create new set
-dgesc_ch5:ret
-dgesc_ch endp
+;; dgesc_ch2:cmp	al,'0'			; final char, use keyboard language?
+;; 	jne	dgesc_ch3		; ne = no, look it up
+;; 	xor	bh,bh
+;; 	mov	bl,vtemu.vtchset	; get setup char set
+;; 	cmp	bl,13			; top of the NRCs
+;; 	jbe	short dgesc_ch4		;  as keyboard language
+;; 	xor	bx,bx			; default to ASCII
+;; 	jmp	short dgesc_ch4
+;; dgesc_ch3:xor	bx,bx			; look up set in table
+;; 	push	es
+;; 	mov	di,seg d470chr		; get translation table address
+;; 	mov	es,di
+;; 	mov	di,offset d470chr
+;; 	mov	cx,d470chrlen		; get table length
+;; 	cld
+;; 	repne	scasb			; look for match
+;; 	pop	es
+;; 	dec	di			; backup on match
+;; 	jne	dgesc_ch5		; ne = no match, ignore
+;; 	sub	di,offset d470chr	; compute index
+;; 	mov	bl,mskchr[di]		; get Kermit equivalent code
+;; 	xor	bh,bh
+;; dgesc_ch4:				; bx holds Kermit set ident
+;; 	mov	al,inter		; get set designator
+;; 	sub	al,'('			; minus bias
+;; 	xor	ah,ah
+;; 	cmp	al,3			; range check 0..3
+;; 	ja	dgesc_ch5		; a = out of range
+;; 	mov	si,ax			; point at set id
+;; 	mov	Gsetid[si],bl		; indentify new set
+;; 	mov	bx,offset Gsetid	; tell chrset where to get info
+;; 	jmp	chrsetup		; create new set
+;; dgesc_ch5:ret
+;; dgesc_ch endp
 
-dgesc_c	proc	near			; DG ESC c  reset terminal
-	cmp	ninter,0		; any intermediates?
-	jne	dgesc_c1		; ne = yes, not this command
-	cmp	nparam,0		; no params too?
-	jne	dgesc_c1		; ne = no, ignore
-	jmp	atreset			; reset
-dgesc_c1:ret
-dgesc_c endp
+;; dgesc_c	proc	near			; DG ESC c  reset terminal
+;; 	cmp	ninter,0		; any intermediates?
+;; 	jne	dgesc_c1		; ne = yes, not this command
+;; 	cmp	nparam,0		; no params too?
+;; 	jne	dgesc_c1		; ne = no, ignore
+;; 	jmp	atreset			; reset
+;; dgesc_c1:ret
+;; dgesc_c endp
 
-dgesc_D	proc	near			; DG ESC D index
-	cmp	ninter,0		; any intermediates?
-	jne	dgesc_D5		; ne = yes, not this command
-	test	anspflg,vtautop		; printing desired?
-	jz	dgesc_D1		; e = no
-	push	dx			; save cursor
-	call	pntlin			; print line
-	mov	al,LF			; terminate in LF
-	call	fpntchr
-	call	fpntflsh		; flush printer buffer
-	mov	atwrap,0
-	pop	dx
-dgesc_D1:cmp	dh,mar_bot		; on bottom margin?
-	jb	dgesc_D3		; b = no
-	cmp	dgroll,0		; is roll disabled
-	je	dgesc_D2		; e = yes, do home
-	push	dx
-	mov	scroll,1
-	call	atscru			; do a scroll up by one line
-	pop	dx
-	jmp	dgsetcur		; set cursor, does show columns too
+;; dgesc_D	proc	near			; DG ESC D index
+;; 	cmp	ninter,0		; any intermediates?
+;; 	jne	dgesc_D5		; ne = yes, not this command
+;; 	test	anspflg,vtautop		; printing desired?
+;; 	jz	dgesc_D1		; e = no
+;; 	push	dx			; save cursor
+;; 	call	pntlin			; print line
+;; 	mov	al,LF			; terminate in LF
+;; 	call	fpntchr
+;; 	call	fpntflsh		; flush printer buffer
+;; 	mov	atwrap,0
+;; 	pop	dx
+;; dgesc_D1:cmp	dh,mar_bot		; on bottom margin?
+;; 	jb	dgesc_D3		; b = no
+;; 	cmp	dgroll,0		; is roll disabled
+;; 	je	dgesc_D2		; e = yes, do home
+;; 	push	dx
+;; 	mov	scroll,1
+;; 	call	atscru			; do a scroll up by one line
+;; 	pop	dx
+;; 	jmp	dgsetcur		; set cursor, does show columns too
 
-dgesc_D2:mov	dh,mar_top		; do window Home
-	jmp	short dgesc_D4
-dgesc_D3:inc	dh			; down one row
-dgesc_D4:jmp	dgsetcur		; set cursor wrt protected mode
-dgesc_D5:ret
-dgesc_D endp
+;; dgesc_D2:mov	dh,mar_top		; do window Home
+;; 	jmp	short dgesc_D4
+;; dgesc_D3:inc	dh			; down one row
+;; dgesc_D4:jmp	dgsetcur		; set cursor wrt protected mode
+;; dgesc_D5:ret
+;; dgesc_D endp
 
-dgesc_E	proc	near			; DG ESC E next line
-	cmp	ninter,0		; any intermediates?
-	jne	dgesc_E1		; ne = yes, not this command
-	jmp	dglf			; do line feed
-dgesc_E1:ret
-dgesc_E	endp
+;; dgesc_E	proc	near			; DG ESC E next line
+;; 	cmp	ninter,0		; any intermediates?
+;; 	jne	dgesc_E1		; ne = yes, not this command
+;; 	jmp	dglf			; do line feed
+;; dgesc_E1:ret
+;; dgesc_E	endp
 
-dgesc_M	proc	near			; DG ESC M reverse index
-	cmp	ninter,0		; any intermediates?
-	jne	dgesc_M3		; ne = yes, not this command
-	test	anspflg,vtautop		; printing desired?
-	jz	dgesc_M1		; e = no
-	push	dx			; save cursor
-	call	pntlin			; print line
-	mov	al,LF			; terminate in LF
-	call	fpntchr
-	call	fpntflsh		; flush printer buffer
-	mov	atwrap,0
-	pop	dx
-dgesc_M1:cmp	dh,mar_top		; on top margin?
-	ja	dgesc_M2		; a = no
-	cmp	dgroll,0		; is roll disabled
-	je	dgesc_M3		; e = yes, do nothing
-	push	dx
-	mov	scroll,1
-	call	atscrd			; do a scroll down by one line
-	pop	dx
-	jmp	dgsetcur		; set cursor, does show columns too
+;; dgesc_M	proc	near			; DG ESC M reverse index
+;; 	cmp	ninter,0		; any intermediates?
+;; 	jne	dgesc_M3		; ne = yes, not this command
+;; 	test	anspflg,vtautop		; printing desired?
+;; 	jz	dgesc_M1		; e = no
+;; 	push	dx			; save cursor
+;; 	call	pntlin			; print line
+;; 	mov	al,LF			; terminate in LF
+;; 	call	fpntchr
+;; 	call	fpntflsh		; flush printer buffer
+;; 	mov	atwrap,0
+;; 	pop	dx
+;; dgesc_M1:cmp	dh,mar_top		; on top margin?
+;; 	ja	dgesc_M2		; a = no
+;; 	cmp	dgroll,0		; is roll disabled
+;; 	je	dgesc_M3		; e = yes, do nothing
+;; 	push	dx
+;; 	mov	scroll,1
+;; 	call	atscrd			; do a scroll down by one line
+;; 	pop	dx
+;; 	jmp	dgsetcur		; set cursor, does show columns too
 	
-dgesc_M2:jmp	dgcuu			; do cursor up
-dgesc_M3:ret
-dgesc_M	endp
-
-
-dgesc_V	proc	near			; DG ESC V start protected area
-	cmp	ninter,0		; any intermediates?
-	jne	dgesc_V1		; ne = yes, not this command
-	call	setprot			; protect on
-dgesc_V1:ret
-dgesc_V endp
-
-dgesc_W	proc	near			; DG ESC W end protected area
-	cmp	ninter,0		; any intermediates?
-	jne	dgesc_W1		; ne = yes, not this command
-	call	clrprot			; protect off
-dgesc_W1:ret
-dgesc_W endp
-
-dgcsi_@	proc	near			; DG CSI Pc @  ins chars, scroll left
-	cmp	inter,' '		; see if ends in space
-	je	dgcsi_@1		; e = yes
-	mov	cx,param		; do cx chars
-	or	cx,cx			; zero?
-	jnz	dgcsi_@2		; nz = no
-	inc	cx			; zero means one
-dgcsi_@2:mov	bh,1			; insert operation
-	jmp	insdel			; insert space
-dgcsi_@1:mov	bx,offset dgsleft	; scroll left
-	jmp	dec2getn		; convert param
-dgcsi_@ endp
-
-dgcsi_A	proc	near			; DC CSI Pc A cursor up, scroll right
-	cmp	inter,' '		; see if ends in space
-	je	dgcsi_A2		; e = yes
-	mov	cx,param		; do cx chars
-	or	cx,cx			; zero?
-	jnz	dgcsi_A1		; nz = no
-	inc	cx			; do once
-dgcsi_A1:push	cx
-	call	dgcuu			; cursor up
-	pop	cx
-	loop	dgcsi_A1
-	ret
-dgcsi_A2:mov	bx,offset dgsright	; scroll left
-	jmp	dec2getn		; convert param
-dgcsi_A endp
-
-dgcsi_B	proc	near			; DC CSI Pc B cursor down
-	mov	cx,param		; do cx chars
-	or	cx,cx			; zero?
-	jnz	dgcsi_B1		; nz = no
-	inc	cx			; do once
-dgcsi_B1:push	cx
-	call	dgcud			; cursor down
-	pop	cx
-	loop	dgcsi_B1
-	ret
-dgcsi_B endp
-
-dgcsi_C	proc	near			; DC CSI Pc C cursor forward
-	mov	cx,param		; do cx chars
-	or	cx,cx			; zero?
-	jnz	dgcsi_C1		; nz = no
-	inc	cx			; do once
-dgcsi_C1:push	cx
-	call	dgcuf			; cursor forward
-	pop	cx
-	loop	dgcsi_C1
-	ret
-dgcsi_C endp
-
-dgcsi_D	proc	near			; DC CSI Pc D cursor back
-	mov	cx,param		; do cx chars
-	or	cx,cx			; zero?
-	jnz	dgcsi_D1		; nz = no
-	inc	cx			; do once
-dgcsi_D1:push	cx
-	call	dgcub			; cursor back
-	pop	cx
-	loop	dgcsi_D1
-	ret
-dgcsi_D endp
-
-dgcsi_L	proc	near			; DG CSI Pc L  insert Pc lines
-	push	dx			; save cursor
-	call	inslin			; do insert line, can scroll
-	pop	dx			; recover cursor
-	jmp	atsetcur		; reset cursor
-dgcsi_L endp
-
-dgcsi_M	proc	near			; DG CSI Pc M  delete Pc lines
-	push	dx			; save cursor
-	call	dellin			; delete lines
-	pop	dx
-	jmp	atsetcur		; reset cursor
-dgcsi_M	endp
-
-dgcsi_S	proc	near			; DC CSI Pc S  scroll up
-	mov	ax,param		; scroll count
-	or	al,al			; zero?
-	jnz	dgcsi_S1		; nz = no
-	inc	al
-dgcsi_S1:mov	scroll,al		; scroll amount
-	call	atscru			; scroll up
-	ret
-dgcsi_S	endp
-
-dgcsi_T	proc	near			; DC CSI Pc T  scroll down
-	mov	ax,param		; scroll count
-	or	al,al			; zero?
-	jnz	dgcsi_T1		; nz = no
-	inc	al
-dgcsi_T1:mov	scroll,al		; scroll amount
-	call	atscrd			; scroll down
-	ret
-dgcsi_T	endp
-
-dgcsi_f	proc	near			; DG CSI row; col f
-	mov	ax,param+2		; get column
-	or	al,al			; zero now?
-	jz	dgcsi_f1		; z = yes
-	dec	al			; count from 0
-dgcsi_f1:mov	emubuf,al		; column
-	mov	ax,param		; get row
-	or	al,al			; zero now?
-	jz	dgcsi_f2		; z = yes
-	dec	al			; count from 0
-dgcsi_f2:jmp	dgwwa2			; do Control-P col row
-dgcsi_f endp
-
-dgcsi_h	proc	near			; DG CSI Pc; Pc h  set mode
-	mov	modeset,1		; say setting modes
-	cmp	lparam,'<'
-	jne	dgcsi_h1
-	mov	di,offset dgcsi_rsm	; set/reset routine
-	call	atreps			; repeat for all parameters
-dgcsi_h1:ret
-dgcsi_h endp
-
-dgcsi_i	proc	near			; DG CSI Pc i  media copy
-	cmp	lparam,'<'		; CSI < 0 ?
-	jne	dgcsi_i1		; ne = no
-	ret				; ignore CSI <0
-dgcsi_i1:mov	ax,param		; get parameter
-	cmp	ax,4			; stop media copy?
-	je	dgcsi_i2		; e = yes
-	cmp	ax,5			; start media copy?
-	je	dgcsi_i2		; e = yes
-	or	ax,ax			; print window?
-	je	dgcsi_i3		; e = yes
-	ret				; ignore others
-dgcsi_i2:jmp	ansmc			; do 4, 5 as ANSI transparent print
-dgcsi_i3:mov	al,':'			; setup for window print
-	jmp	dgprt6			; print window
-dgcsi_i	endp
-
-dgcsi_sl proc	near			; DG CSI Pc; Pc l  reset mode
-	mov	modeset,0		; say resetting modes
-	cmp	lparam,'<'		; this letter parameter?
-	jne	dgcsi_sl1		; ne = no
-	mov	di,offset dgcsi_rsm	; set/reset routine
-	call	atreps			; repeat for all parameters
-dgcsi_sl1:
-	ret
-dgcsi_sl endp
-
-; Worker for set/reset routines. Invoke via atreps with modeset for set/reset
-dgcsi_rsm proc	near
-	mov	ax,param[si]		; get parameter
-	mov	ah,modeset		; get set (1), reset (0) mode
-	cmp	al,0			; roll mode?
-	jne	dgcsi_rsm1		; ne = no
-	mov	dgroll,ah		; roll mode
-	ret
-dgcsi_rsm1:cmp	al,1			; blink mode
-	jne	dgcsi_rsm2		; ne = no
-	neg	ah			; invert sense
-	mov	blinkdis,ah		; blink disable
-	ret
-dgcsi_rsm2:cmp	al,2			; horizontal scroll?
-	jne	dgcsi_rsm3		; ne = no
-	neg	ah			; invert sense
-	mov	dghscrdis,ah		; horizontal scroll disable
-	ret
-dgcsi_rsm3:cmp	al,3			; DG D470 ANSI mode?
-	jne	dgcsi_rsm4		; ne = no
-	mov	dgd470mode,ah		; set ANSI mode
-	ret
-dgcsi_rsm4:cmp	al,4			; forms mode?
-	jne	dgcsi_rsm5		; ne = no
-	ret
-dgcsi_rsm5:cmp	al,5			; margins mode?
-	jne	dgcsi_rsm6
-	ret
-dgcsi_rsm6:ret
-dgcsi_rsm endp
-
-dgcsi_n	proc	near			; DC CSI Pc n  device status report
-	cmp	param,5			; send ready report?
-	jne	dgcsi_n1		; ne = no
-	mov	al,ESCAPE		; response is Esc [ 0 n
-	call	prtbout			; meaning "ready"
-	mov	al,'['
-	call	prtbout
-	mov	al,'0'
-	call	prtbout
-	mov	al,'n'
-	call	prtbout
-	ret
-dgcsi_n1:cmp	param,6			; cursor position report?
-	jne	dgcsi_n2		; ne = no
-	mov	al,ESCAPE		; response is ESC [ row; col R
-	call	prtbout
-	mov	al,'['
-	call	prtbout
-	mov	al,byte ptr cursor+1	; get current row
-	call	prtnout			; output number as decimal ASCII
-	mov	al,';'
-	call	prtbout
-	mov	al,byte ptr cursor	; column
-	call	prtnout
-	mov	al,'R'
-	call	prtbout
-dgcsi_n2:ret
-dgcsi_n	endp
-
-dgcsi_sp proc	near			; DG CSI..p  draw bar or arc
-	cmp	inter,' '		; ends on space?
-	je	dgcsi_sp1		; e = yes, do draw arc
-	mov	bx,offset dggbar	; draw bar
-	jmp	dec2getn		; convert params to <loc> form
-dgcsi_sp1:mov	bx,offset dggarc	; draw arc
-	jmp	dec2getn		; convert params to <loc> form
-dgcsi_sp endp
-
-dgcsi_q	proc	near			; DG CSI Pc q  change attributes
-	cmp	inter,' '		; read graphics cursor signature?
-	je	dgcsi_q1		; e = yes
-	mov	bx,offset dgchatr	; change attributes routine
-	jmp	dec2getn		; convert args to DG <n> form
-dgcsi_q1:				; similar to RS G ? |
-ifndef	no_graphics
-	call	dgcrossrpt		; do report via MSGIBM
-endif	; no_graphics
-	ret
-dgcsi_q	endp
-
-dgcsi_r	proc	near			; DG CSI <space> r  read cursor att
-	mov	al,Escape		; response similar to RS G @
-	call	prtbout
-	mov	al,'['
-	call	prtbout
-	mov	al,'0'			; say crosshair is off
-	test	dgcross,1		; is it on?
-	jz	dgcsi_r1		; z = no
-	inc	al			; say '1' for on
-dgcsi_r1:call	prtbout			; output <v1>
-	mov	al,';'
-	call	prtbout
-	mov	al,'0'			; <v2> is always 0 for not blinking
-	call	prtbout
-	mov	al,';'
-	call	prtbout
-	mov	al,'0'			; <v3> is 0 for short crosshair, D470
-	call	prtbout
-	mov	al,';'
-	call	prtbout
-	mov	al,dgcross		; get tracked devices
-	and	al,2+4			; pick out just devices
-	add	al,'0'			; bias
-	call	prtbout			; output <v4>
-	mov	al,'r'			; terminal character
-	call	prtbout
-	ret
-dgcsi_r	endp
-
-dgcsi_ss proc	near			; DG CSI Pc s read/reserve characters
-	mov	ax,param		; get parameter
-	or	ax,ax			; do report?
-	jnz	dgcsi_ss2		; nz = no, reserve (do nothing here)
-	mov	al,ESCAPE		; report is ESC [ <qty> s
-	call	prtbout
-	mov	al,'['
-	call	prtbout
-	mov	al,'2'			; say <qty> is 2000
-	call	prtbout
-	mov	cx,3
-dgcsi_ss1:push	cx
-	mov	al,'0'
-	call	prtbout
-	pop	cx
-	loop	dgcsi_ss1
-	mov	al,'s'			; terminator
-	call	prtbout
-dgcsi_ss2:ret
-dgcsi_ss endp
-
-dgcsi_st proc	near			; DG CSI Pc t  read offset/show cols
-	cmp	inter,' '		; Write graphics cursor command?
-	je	dgcsi_st3		; e = yes
-	cmp	param,0			; read offset?
-	jne	dgcsi_st1		; ne = no
-	mov	al,ESCAPE		; response is Esc [ col t
-	call	prtbout
-	mov	al,'['
-	call	prtbout
-	mov	bl,dh			; get current row
-	xor	bh,bh
-	mov	al,linescroll[bx]	; get scroll value
-	call	prtnout			; output number as decimal ASCII
-	mov	al,'t'
-	call	prtbout
-	ret
-dgcsi_st1:cmp	param,1			; show columns?
-	jne	dgcsi_st2		; ne = no
-	mov	ax,param+2		; remove initial param
-	mov	param,ax
-	mov	ax,param+4
-	mov	param+2,ax
-	mov	nparam,2		; setup for call
-	mov	bx,offset dgshcol	; show columns, RS F _
-	jmp	dec2getn		; perform the routine
-dgcsi_st2:ret
-
-dgcsi_st3:mov	ax,param		; x graphics coord
-	mov	bx,param+2		; y graphics coord
-ifndef	no_graphics
-	call	dgsetcrloc		; set crosshairs to x,y
-endif	; no_graphics
-	ret
-dgcsi_st endp
-
-dgcsi_u	proc	near			; DG CSI Pc <space> u
-	cmp	inter,' '		; ends on space
-	je	dgcsi_u1		; e = yes, cursor off
-	mov	inter,0
-	mov	ninter,0		; best to clear these
-	jmp	dgcsi_f			; it's cursor row, col
-dgcsi_u1:jmp	dggcoff			; do RS G C  graphics cursor off
-dgcsi_u	endp
-
-dgcsi_v	proc	near			; DG CSI <space> v cursor on
-	cmp	inter,' '		; proper form?
-	jne	dgcsi_v1		; ne = no
-	jmp	dggcon			; do RS G B  graphics cursor on
-dgcsi_v1:ret
-dgcsi_v	endp
-
-dgcsi_w	proc	near			; DG CSI Pn; Pc w  set margins
-	cmp	inter,' '		; graphics cursor reset indicator?
-	jne	dgcsi_w4		; ne = no, must be margins
-ifndef	no_graphics
-	call	dgcrossoff		; turn off crosshair
-endif	; no_graphics
-	mov	dgcross,0		; and no kind of tracking
-	ret
-dgcsi_w4:mov	bx,param		; set margins
-	mov	ax,param+2
-	mov	param,ax
-	mov	ax,param+4
-	mov	param+2,ax		; remove leading param
-	mov	ax,param+6
-	mov	param+4,ax
-	dec	nparam			; one less parameter
-	cmp	bx,1			; set margins?
-	je	dgcsi_w1		; e = 1 = yes, do draw arc
-	ja	dgcsi_w2		; a = 2 = set alt margins
-	jmp	dgrnmar			; 0 = restore normal margins
-dgcsi_w1:mov	bx,offset dgsetmar	; set margins
-	jmp	dec2getn		; convert params to <nn> form
-dgcsi_w2:mov	bx,offset dgsetamar	; set alt margins
-	jmp	dec2getn		; convert params to <nn> form
-dgcsi_w endp
-
-dgcsi_x	proc	near			; DG CSI Pc x   cursor track
-	cmp	inter,' '		; proper form for cursor track?
-	jne	dgcsi_x1		; ne = no
-	mov	ax,param		; get arg
-	and	al,2+4			; pick out our trackables
-	and	dgcross,not (2+4)	; preserve on/of bit (1)
-	or	dgcross,al		; track keypad (2) and/or mouse (4)
-dgcsi_x1:				; like RS C  DG Read Model ID
-	mov	al,escape		; resp ESC [ <mm> <x> <y>
-	call	prtbout
-	mov	al,'['
-	call	prtbout
-	mov	al,'5'			; 5 is DG D470 in ANSI mode
-	call	prtbout
-	mov	al,'4'			; 4 is DG D470
-	call	prtbout
-	mov	al,';'
-	call	prtbout
-	mov	al,'0'			; two bytes here
-	call	prtbout
-	mov	al,'0'
-	test	flags.remflg,d8bit	; using 8 bits?
-	jz	dgcsi_x2		; z = no
-	or	al,2			; say 8-bit mode
-dgcsi_x2:push	ax
-	mov	ah,ioctl		; get printer status, via DOS
-	mov	al,7			; status for output
-	push	bx
-	mov	bx,4			; std handle for system printer
-	int	dos
-	pop	bx
-	jnc	dgcsi_x3		; nc = call succeeded
-	mov	al,0ffh
-dgcsi_x3:cmp	al,0ffh			; code for Ready
-	pop	ax
-	jne	dgcsi_x4		; ne = not ready
-	or	al,1			; say printer present
-dgcsi_x4:call	prtbout			; send composite byte
-	mov	al,';'
-	call	prtbout
-	mov	al,'0'			; revision 0
-	call	prtbout
-	mov	al,';'
-	call	prtbout
-	mov	bl,vtemu.vtchset	; get Kermit NRC code (0-13)
-	xor	bh,bh
-	mov	al,nrcdgkbd[bx]		; get DG keyboard code from table
-	call	prtnout
-	mov	al,'x'
-	call	prtbout
-	ret
-dgcsi_x	endp
-
-dgdcs_F	proc	near			; DC DCS F ST  failure report
-	mov	al,Escape		; report DCS F ST for no failure
-	call	prtbout
-	mov	al,'P'
-	call	prtbout
-	mov	al,'F'
-	call	prtbout
-	mov	al,Escape
-	call	prtbout
-	mov	al,'\'
-	call	prtbout
-	jmp	atnorm
-dgdcs_F	endp
-
-		; End of Data General specific routines
-
-		; Start Wyse-50 specific routines
-
-wyenq	proc	near			; Control E, ESC sp  inquire
-	mov	al,'5'
-	call	prtbout			; send 5 0 CR
-	mov	al,'0'
-	call	prtbout
-	mov	al,CR
-	call	prtbout
-	ret
-wyenq	endp
-
-wycub	proc	near			; Control H  cursor left (back)
-	sub	dl,1			; column, one to the left
-	jns	wycub1			; ns = no wrap
-	mov	dl,mar_right		; wrap left to right
-	sub	dh,1			; up one row
-	jns	wycub1			; ns = no wrap
-	mov	dh,mar_bot		; wrap top to bottom
-wycub1:	jmp	atsetcur		; set cursor
-wycub	endp
-
-wycup	proc	near			; Control K (VT) cursor up
-	mov	dx,cursor
-	sub	dh,1			; compute new cursor position
-	jnc	wycu1			; nc = ok
-	mov	dh,mar_bot		; overflow, wrap to last line
-wycu1:	jmp	atscur			; set the cursor at its new position
-wycup	endp
-
-wysub	proc	near			; Control Z  erase all unprotected
-					; also ESC ; and ESC :
-	mov	dl,mar_left		; upper left corner
-	mov	dh,mar_top
-	call	erprot			; do protected erasure
-	jmp	short wyhome		; home the cursor
-wysub	endp
-
-wyhome	proc	near			; Control ^  cursor home
-	mov	dl,mar_left		; upper left corner
-	mov	dh,mar_top
-	jmp	atscur			; set cursor
-wyhome	endp
-
-wyprtoff proc	near			; Autoprint off
-	test	anspflg,vtautop		; check state of print flag
-	jz	wyprtof1		; z = off already
-	or	anspflg,vtautop		; say auto-print enabled to toggle off
-	call	ftrnprs			; toggle mode line PRN indicator
-	and	anspflg,not (vtautop + vtcntp) ; clear all printing kinds
-wyprtof1:ret
-wyprtoff endp
-
-wyprton	proc	near			; Autoprint on
-	test	anspflg,vtautop		; is print already enabled?
-	jnz	wyprton1		; nz = yes, leave trnprs intact
-	and	anspflg,not vtautop	; say auto-print disabled to toggle on
-	call	ftrnprs			; toggle on mode line PRN indicator
-wyprton1:ret
-wyprton	endp
-
-wyesc	proc	near			; ESC processor, enter when ESC seen
-	mov	ttstate,offset wyesc1	; come here for next char
-	ret
-wyesc1:	mov	param,0
-	mov	param+2,0
-	mov	lparam,0
-	mov	bx,offset wyescf	; dispatch table
-	mov	ttstate,offset atnrm	; reset state
-	jmp	atdispat		; dispatch on char in AL
-wyesc	endp
-
-wytab0	proc	near			; ESC 0
-	mov	param,3			; clear all tab stops
-	jmp	attbc			; do it
-wytab0	endp
-
-wytab2	proc	near			; ESC 2
-	mov	param,0			; clear this tab stop
-	jmp	attbc			; do it
-wytab2	endp
-
-wy_bang	proc	near			; ESC ! attrib, set attribute on all
-	mov	ttstate,offset wy_ban1	;  unprotected chars, clear chars
-	mov	emubuf,0		; say ESC ! rather than ESC A 0
-	ret
-wy_ban1:xor	dx,dx			; home position
-	mov	ttstate,offset atnrm	; reset state
-	mov	bl,al			; save argument
-	mov	ah,scbattr		; normal background
-	mov	curattr,ah		; current attributes, update
-	mov	extattr,0		; clear extended attributes
-	test	bl,2			; set blink?
-	jz	wy_ban2			; z = no
-	test	bl,1			; and blank?
-	jnz	wy_ban2			; nz = yes, ignore blink
-	call	setblink
-wy_ban2:test	bl,4			; set reverse video bit?
-	jz	wy_ban3			; z = no
-	call	setrev
-wy_ban3:test	bl,8			; set underscore?
-	jz	wy_ban4			; z = no
-	call	setunder
-wy_ban4:test	bl,40h			; dim?
-	jz	wy_ban5			; z = no
-	call	setbold
-wy_ban5:mov	curattr,ah		; new attributes
-	mov	extattr,cl
-	mov	al,mar_right
-	sub	al,mar_left
-	inc	al			; width
-	mov	cl,mar_bot
-	sub	cl,mar_top
-	inc	cl			; rows
-	mul	cl
-	mov	cx,ax			; number of character cells to do
-	xor	dx,dx			; home position
-wy_ban6:push	cx			; save loop counter
-	call	getatch			; get video in ah, extended att in cl
-	test	cl,att_protect		; protected?
-	jnz	wy_ban7			; nz = yes, skip it
-	mov	cl,extattr
-	mov	ah,curattr
-	cmp	emubuf,0		; erase char?
-	jne	wy_ban6a		; ne = no
-	mov	al,' '			; cleared character
-wy_ban6a:call	qsetatch		; quietly update the char
-wy_ban7:pop	cx
-	inc	dl			; next column
-	cmp	dl,mar_right		; at the right margin?
-	jbe	wy_ban8			; be = no, not yet
-	mov	dl,mar_left		; wrap to left and next line
-	inc	dh			; next line down
-	cmp	dh,mar_bot		; below the window bottom?
-	ja	wy_ban9			; a = yes, all done
-wy_ban8:loop	wy_ban6			; do more chars
-wy_ban9:call	frepaint		; repaint screen
-	xor	dx,dx			; home cursor
-	cmp	emubuf,0		; erase char?
-	je	wy_ban10		; e = yes
-	mov	dx,cursor		; else replace cursor
-wy_ban10:jmp	atsetcur		; restore cursor
-wy_bang	endp
-
-wy_dot	proc	near			; ESC . CODE   clr unprotected chars
-	mov	ttstate,offset wy_dot1	;  of value code
-	ret
-wy_dot1:mov	ttstate,offset atnrm	; reset state
-	mov	emubuf,al		; save char code
-	mov	al,mar_right
-	sub	al,mar_left
-	inc	al			; width
-	mov	cl,mar_bot
-	sub	cl,mar_top
-	inc	cl			; rows
-	mul	cl
-	mov	cx,ax			; number of character cells to do
-wy_dot2:push	cx			; save loop counter
-	call	getatch			; get video in ah, extended att in cl
-	test	cl,att_protect		; protected?
-	jnz	wy_dot3			; nz = yes, skip it
-	cmp	al,emubuf		; same as code?
-	jne	wy_dot3			; ne = no
-	mov	al,' '			; char
-	mov	ah,scbattr		; normal background
-	xor	cl,cl			; clear extended attributes
-	call	qsetatch		; quietly update the char
-wy_dot3:pop	cx
-	inc	dl			; next column
-	cmp	dl,mar_right		; at the right margin?
-	jbe	wy_dot4			; be = no, not yet
-	mov	dl,mar_left		; wrap to left and next line
-	inc	dh			; next line down
-	cmp	dh,mar_bot		; below the window bottom?
-	ja	wy_dot5			; a = yes, all done
-wy_dot4:loop	wy_dot2			; do more chars
-wy_dot5:call	frepaint		; repaint screen
-	mov	dx,cursor		; reset cursor location
-	ret
-wy_dot	endp
-
-wy_8	proc	near			; ESC 8 enter STX (2) code
-	mov	al,2
-	jmp	atnrm
-wy_8	endp
-
-wy_9	proc	near			; ESC 9 enter ETX (3) code
-	mov	al,3
-	jmp	atnrm
-wy_9	endp
-
-wy_slash proc	near			; ESC /  send txt seg and cursor
-	mov	al,'0'			; text segment 0
-	call	prtbout			; send
-	jmp	wy_query		; send cursor position
-wy_slash endp
-
-wy_query proc	near			; ESC ?  send rc CR cursor report
-	mov	al,byte ptr cursor+1	; row
-	add	al,20h			; plus bias
-	call	prtbout
-	mov	al,byte ptr cursor	; column
-	add	al,20h
-	call	prtbout
-	mov	al,CR			; terminator
-	call	prtbout
-	ret
-wy_query endp
-
-wy_sa	proc	near			; ESC a rr R ccc C  cursor to row,col
-	mov	ttstate,offset wy_sa1	; get first row char
-	ret
-wy_sa1:	cmp	al,'R'			; field termination?
-	je	wy_sa2			; yes
-	push	ax
-	mov	ax,param		; ASCII decimal to binary
-	mov	cx,10
-	imul	cx
-	mov	param,ax
-	pop	ax
-	sub	al,'0'			; ccc, decimal col
-	cbw
-	add	param,ax
-	ret				; stay in this state
-wy_sa2:	mov	lparam,al		; save it
-	mov	ttstate,offset wy_sa3	; get column
-	ret
-wy_sa3:	cmp	al,'C'			; field termination?
-	je	wy_sa4			; e = yes
-	push	ax
-	mov	ax,param+2		; ASCII decimal to binary
-	mov	cx,10
-	imul	cx
-	mov	param+2,ax
-	pop	ax
-	sub	al,'0'			; ccc, decimal col
-	cbw
-	add	param+2,ax
- 	ret				; stay in this state
-wy_sa4:	mov	ttstate,offset atnrm
-	xor	ah,ah
-	xchg	ah,lparam		; get the 'R', clear lparam
-	cmp	ax,'RC'			; proper terminators?
-	jne	wy_sax			; ne = no
-	xor	ax,ax
-	xor	bx,bx
-	xchg	ax,param		; row
-	xchg	bx,param+2		; column
-	or	ax,ax			; zero now?
-	jz	wy_sa5			; z = yes
-	dec	ax			; count row from zero
-wy_sa5:	or	bx,bx			; zero now?
-	jz	wy_sa6			; z = yes
-	dec	bx			; count column from zero
-wy_sa6:	cmp	ax,24			; row, in bounds?
-	ja	wy_sax			; a = no
-	cmp	bx,132			; column, in bounds?
-	ja	wy_sax			; a = no
-	mov	dh,al			; row
-	mov	dl,bl			; column
-	jmp	atscur			; set cursor
-wy_sax:	mov	param,0
-	mov	param+2,0		; clear temps
-	ret				; ignore command
-wy_sa	endp
-
-wy_equ	proc	near			; ESC = r c  cursor to row, col
-	mov	ttstate,offset wy_equ1	; get row char
-	ret
-wy_equ1:sub	al,' '-1		; remove ASCII bias
-	cbw				; grab sign
-	mov	param,ax		; save as row
-	mov	ttstate,offset wy_equ2
-	ret
-wy_equ2:sub	al,' '-1		; remove ASCII bias
-	cbw
-	mov	param+2,ax		; save as column
-	mov	lparam,'R'		; setup R..C form
-	mov	al,'C'
-	jmp	wy_sa4			; parse completion as ESC a rr R ccc C
-wy_equ	endp
-
-wy_minus proc	near			; ESC - nrc  cursor to txt seg row col
-	and	al,1			; n can be anything (despite manual)
-	mov	ttstate,offset wy_equ	; parse rest as if ESC = r c
-	ret
-wy_minus endp
-
-wy_star	proc	near			; ESC *   ESC + 
-					; protect mode off, clear screen
-	mov	protectena,0		; disable protect mode
-	xor	dx,dx			; set cursor to home
-	mov	cursor,dx
-	jmp	ereos			; clear entire screen
-wy_star	endp
-
-wy_comma proc	near			; ESC ,  screen clear to prot'd spaces
-	mov	protectena,0		; disable protect mode
-	xor	dx,dx			; set cursor to home
-	mov	cursor,dx
-	mov	ah,scbattr		; normal background
-	mov	al,' '			; space
-	mov	cl,att_protect		; set protection bit
-wy_comm1:call	setatch			; write cell
-	inc	dl			; next column
-	cmp	dl,mar_right		; beyond right edge?
-	jbe	wy_comm1		; be = no
-	xor	dl,dl			; left edge
-	inc	dh			; next row
-	cmp	dh,mar_bot		; below bottom?
-	jbe	wy_comm1		; be = no
-	xor	dx,dx			; top left corner
-	jmp	atsetcur		; set cursor
-wy_comma endp
-
-wy_A	proc	near			; ESC A n attrib  set video attribs
-	mov	ttstate,offset wy_A1	; get field code n
-	ret
-wy_A1:	cmp	al,'0'			; entire text display?
-	jne	wy_A2			; ne = no, ignore after getting attrib
-	mov	emubuf,1		; flag to wy_bang to not erase chars
-	mov	ttstate,offset wy_ban1	; process attrib in ESC ! procedure
-	ret
-wy_A2:	mov	ttstate,offset atnorm	; ignore next byte, exit command
-	ret
-wy_A	endp
-
-wy_F	proc	near			; ESC F text CR, to message area
-	mov	ttstate,offset wy_F1
-	ret
-wy_F1:	cmp	al,CR			; end of string?
-	jne	wy_F2			; ne = no, continue discarding bytes
-	mov	ttstate,offset atnrm	; reset state
-wy_F2:	ret
-wy_F	endp
-
-wy_G	proc	near			; ESC G n  set char attributes
-	mov	ttstate,offset wy_G1	; get attribute code
-	ret
-wy_G1:	mov	ttstate,offset atnrm	; reset state
-	mov	ah,curattr		; current attributes
-	mov	bl,al			; get code
-	cmp	bl,' '			; space code?
-	je	wy_Gx			; e = yes, just ignore it
-	cmp	bl,'0'			; range check for '0' et seq
-	jb	wy_Gx			; b = out of range
-	ja	wy_G2			; a = in range
-	call	clrbold			; clear bold attribute
-	call	clrblink		; clear blink attribute
-	call	clrrev			; clear reverse video attribute
-	call	clrunder		; clear underline attribute
-	mov	atinvisible,0		; clear invisible attribute
-	mov	extattr,0		; clear extended attributes
-	jmp	short wy_Gx
-
-wy_G2:	test	bl,2			; set blink?
-	jz	wy_G3			; z = no
-	test	bl,1			; and blank?
-	jnz	wy_G3			; nz = yes, ignore blink
-	push	bx
-	call	setblink		; set blink
-	pop	bx
-wy_G3:	test	bl,4			; set reverse video bit?
-	jz	wy_G4			; z = no
-	push	bx
-	call	setrev			; set reverse video
-	pop	bx
-wy_G4:	test	bl,8			; set underscore?
-	jz	wy_G5			; z = no
-	push	bx
-	call	setunder		; set underline
-	pop	bx
-wy_G5:	cmp	bl,'p'			; dim?
-	jb	wy_Gx			; b = no
-	call	clrbold			; set dim
-wy_Gx:	mov	curattr,ah		; store new attribute byte
-;;;;;	mov	byte ptr wyse_protattr,ah ; Wyse-50 protected char attributes
-;;;;;	mov	byte ptr wyse_protattr+1,att_protect
-	mov	dx,cursor		; moves cursor left one column
-	inc	dl
-	jmp	atscur
-wy_G	endp
-
-wy_H	proc	near			; ESC H x  show graphics char
-	mov	ttstate,offset wy_H1	; setup to read x
-	ret
-wy_H1:	mov	ttstate,offset atnrm	; reset state
-	cmp	al,2			; STX (^B) enter graphics mode?
-	jne	wy_H2			; ne = no
-	jmp	atls1			; do LS1 to get graphics set
-
-wy_H2:	cmp	al,3			; ETX (^C) exit graphics mode?
-	jne	wy_H3			; ne = no
-	jmp	atls0			; do LS0 to exit graphics mode
-
-wy_H3:	mov	SSptr,offset G1set	; set Single Shift to G1 for graphics
-	jmp	atnrm			; show code
-wy_Hx:	ret
-wy_H	endp
-
-wy_I	proc	near			; ESC I  cursor back to previous tab
-	xor	ch,ch
-	cmp	cl,dl			; cursor column
-	jcxz	wy_I3			; z = at left margin
-wy_I1:	dec	dl			; tab always moves at least one column
-	push	si
-	mov	si,vtemu.vttbst		; active buffer
-	call	istabs			; returns carry set if at a tabstop
-	pop	si
-	jc	wy_I2			; c = at a tabstop
-	loop	wy_i1
-wy_I2:	call	dgsetcur		; set cursor and return
-wy_I3:	ret
-wy_I	endp
-
-wy_N	proc	near			; ESC N  turn on no-scroll mode
-	mov	wyse_scroll,1
-	ret
-wy_N	endp
-
-wy_O	proc	near			; ESC O  turn off no-scroll mode
-	mov	wyse_scroll,0
-	ret
-wy_O	endp
-
-wy_R	proc	near			; ESC R  delete line
-	call	dellin
-	xor	dl,dl			; cursor to left margin
-	jmp	atsetcur		; set cursor
-wy_R	endp
-
-wy_V	proc	near			; ESC V  mark column as protected
-	push	cursor			; remember starting cursor
-	mov	dh,mar_top		; start with this row
-	mov	cl,mar_bot
-	sub	cl,mar_top
-	inc	cl
-	xor	ch,ch			; count of rows to touch
-	call	direction		; set column in dl
-wy_V1:	push	cx
-	call	getatch			; get char to al, attrib to ah,cl
-	or	cl,att_protect		; set protected attribute
-	call	qsetatch		; quite writeback
-	pop	cx
-	inc	dh			; next row
-	loop	wy_V1
-	pop	cursor
-	mov	dx,cursor
-	jmp	atsetcur		; set cursor, just in case
-wy_V	endp
-
-wy_acc	proc	near			; ESC ` n  set screen features
-	mov	ttstate,offset wy_acc1	; setup to read "n"
-	ret
-wy_acc1:mov	ttstate,offset atnrm	; reset state
-	cmp	al,'0'			; 0, cursor off?
-	jne	wy_acc2			; ne = no
-	mov	al,4			; set cursor off code
-	jmp	wy_acc7
-wy_acc2:cmp	al,'1'			; 1, cursor on?
-	jne	wy_acc3			; ne = no
-	mov	al,atctype		; get cursor type
-	jmp	wy_acc7
-	ret
-wy_acc3:cmp	al,'2'			; 2, block cursor?
-	je	wy_acc4			; e = yes
-	cmp	al,'5'			; blinking block?
-	jne	wy_acc5			; ne = no
-wy_acc4:mov	al,2			; block cursor code
-	jmp	wy_acc7
-wy_acc5:cmp	al,'3'			; 3, blinking line?
-	je	wy_acc6			; e = yes
-	cmp	al,'4'			; 4, steady line?
-	jne	wy_acc8			; ne = no
-wy_acc6:mov	al,1			; line code
-wy_acc7:call	atsctyp			; set cursor type, remember it
-	ret
-
-wy_acc8:cmp	al,'A'			; normal protected char?
-	jne	wy_acc9			; ne = no
-	mov	cl,extattr		; running extended attribute
-	push	cx
-	mov	ah,curattr		; current attribute
-	call	getblink		; save blinking attribute
-	mov	al,ah			;  to al
-	mov	ah,scbattr		; normal attribute
-	or	ah,al			;  include blinking
-	or	cl,att_protect		; set protected extended attrib
-	and	cl,not att_uline+att_rev
-	mov	extattr,cl
-	call	setbold			; set bold
-	mov	byte ptr wyse_protattr,ah ; store attribute to write
-	mov	byte ptr wyse_protattr+1,cl
-	call	wy_setp			; set attributes on protected chars
-	pop	cx
-	mov	extattr,cl		; restore extended attribute
-	ret
-
-wy_acc9:cmp	al,'6'			; reverse protected char?
-	jne	wy_acc10		; ne = no
-	mov	cl,extattr		; running extended attribute
-	push	cx
-	mov	ah,curattr		; current attribute
-	call	getblink		; save blinking attribute
-	mov	al,ah			;  to al
-	mov	ah,scbattr		; normal attribute
-	or	ah,al			;  include blinking
-	or	cl,att_protect		; set protected extended attrib
-	and	cl,not att_uline+att_rev
-	mov	extattr,cl
-	call	clrbold			; clear bold (set dim)
-	call	setrev			; set reverse
-	mov	byte ptr wyse_protattr,ah ; store attribute to write
-	mov	byte ptr wyse_protattr+1,cl
-	call	wy_setp			; set attributes on protected chars
-	pop	cx
-	mov	extattr,cl		; restore extended attribute
-	ret
-
-wy_acc10:cmp	al,'7'			; dim protected char?
-	jne	wy_acc11		; ne = no
-	mov	cl,extattr		; running extended attribute
-	push	cx
-	mov	ah,curattr		; current attribute
-	call	getblink		; save blinking attribute
-	mov	al,ah			;  to al
-	mov	ah,scbattr		; normal attribute
-	or	ah,al			;  include blinking
-	or	cl,att_protect		; set protected extended attrib
-	and	cl,not att_uline+att_rev
-	mov	extattr,cl
-	call	clrbold			; set dim
-	mov	byte ptr wyse_protattr,ah ; store attribute to write
-	mov	byte ptr wyse_protattr+1,cl
-	call	wy_setp			; set attributes on protected chars
-	pop	cx
-	mov	extattr,cl		; restore extended attribute
-	ret
-
-wy_acc11:cmp	al,':'			; set 80 columns?
-	jne	wy_acc12
-	mov	al,3			; arg for columns set/reset
-	mov	modeset,0		; reset condition
-	jmp	atrsm6
-
-wy_acc12:cmp	al,';'			; set 132 columns?
-	jne	wy_acc14		; ne = no
-	mov	al,3			; arg for columns
-	mov	modeset,1		; set condition
-	jmp	atrsm6			; do set/reset operation
-wy_acc14:ret
-wy_acc	endp
-
-; worker for wy_acc. Set attributes of all protected characters. New
-; attributes are in word wyse_protattr.
-wy_setp	proc	near			; set protected char attributes
-	push	cursor			; remember starting cursor
-	mov	dh,mar_top		; start with this row
-	mov	cl,mar_bot
-	sub	cl,mar_top
-	inc	cl
-	xor	ch,ch			; count of rows to touch
-	xor	dl,dl			; left physical column
-wy_setp1:push	cx
-	call	getatch			; get char to al, attrib to ah,cl
-	test	cl,ATT_PROTECT		; protected?
-	jz	wy_setp2		; z = no, do nothing
-	mov	ah,byte ptr wyse_protattr ; "normal" attributes
-	mov	cl,byte ptr wyse_protattr+1 ; extended, set protected
-	call	setatch			; visible writeback
-wy_setp2:pop	cx
-	inc	dl
-	cmp	dl,mar_right		; at right margin?
-	jb	wy_setp1		; b = no, more on this row
-	xor	dl,dl			; left column
-	inc	dh			; next row
-	loop	wy_setp1
-	pop	cursor
-	mov	dx,cursor
-	jmp	atsetcur		; set cursor, just in case
-wy_setp	endp
-
-
-wy_M	proc	near			; ESC M  send to host char at cursor
-	call	getatch			; get char to al
-	call	prtbout			; send, no echo
-	ret
-wy_M	endp
-
-wy_b	proc	near			; ESC b send cursor address to host
-	mov	al,'0'			; three digits
-	call	prtbout
-	mov	al,byte ptr cursor+1	; get row
-	inc	al			; count from 1
-	cmp	al,10
-	jae	wy_b1			; ae = have two digits
-	push	ax
-	mov	al,'0'			; second leadin
-	call	prtbout
-	pop	ax
-wy_b1:	call	prtnout			; decimal ASCII
-	mov	al,'R'			; report rr R ccc C
-	call	prtbout
-	mov	al,byte ptr cursor	; column
-	inc	al			; count from 1
-	cmp	al,100			; three digits again
-	jae	wy_b2
-	push	ax
-	mov	al,'0'
-	call	prtbout
-	pop	ax
-	cmp	al,10
-	jae	wy_b2
-	push	ax
-	mov	al,'0'
-	call	prtbout
-	pop	ax
-wy_b2:	call	prtnout
-	mov	al,'C'			; terminator
-	call	prtbout
-	ret
-wy_b	endp
-
-wy_d	proc	near			; ESC d #, transparent print on
-	mov	ttstate,offset wy_d1	; get sharp sign
-	ret
-wy_d1:	cmp	al,'#'			; proper terminator?
-	je	wy_d2			; e = yes
-	jmp	atnorm			; reset state
-
-wy_d2:	mov	ttstate,offset wy_d3	; do transparent printing (Control-X)
-	and	anspflg,not vtautop	; clear single-char flag for toggling
-	call	ftrnprs			; toggle mode line PRN indicator
-	jc	wy_d2a			; c = printer failure
-	or	anspflg,vtcntp		; controller printing is on
-wy_d2a:	ret
-
-wy_d3:	cmp	al,'T'-40h		; Control-T to end printing?
-	je	wy_d4			; e = yes
-	call	fpntchr			; print char in al, ignore errors
-	ret
-
-wy_d4:	mov	ttstate,offset atnrm	; return to normal state
-	call	fpntflsh		; flush printer buffer
-	test	anspflg,vtcntp		; was printing active?
-	jz	wy_d5			; z = no
-	and	anspflg,not vtcntp	; yes, disable print controller
-	call	ftrnprs			; toggle mode line PRN indicator
-	and	anspflg,not (vtautop + vtcntp) ; clear all printing kinds
-wy_d5:	ret
-wy_d	endp
-
-wy_q	proc	near			; ESC q   turn on insert mode
-	mov	insmod,1
-	ret
-wy_q	endp
-
-wy_sr	proc	near			; ESC r  turn off insert mode
-	mov	insmod,0
-	ret
-wy_sr	endp
-
-wy_x	proc	near			; ESC x n HSR  change display format
-	mov	ttstate,offset wy_x1	; get argument n (0, 1)
-	ret
-wy_x1:	cmp	al,'1'			; 1, split screen?
-	jne	wy_x2			; ne = no
-	mov	ttstate,offset wy_x2	; get HSR screen split code
-	ret
-wy_x2:	
-	mov	ttstate,offset atnrm	; reset state
-	ret
-wy_x	endp
-
-wy_z	proc	near			; ESC z n aaaa CR  set msg to place
-	mov	ttstate,offset wy_z1	; get argument n
-	ret
-wy_z1:	cmp	al,CR			; terminator?
-	je	wy_z2			; e = yes
-	cmp	al,DEL			; or shift terminator?
-	je	wy_z2			; e = yes
-	ret				; continue to consume bytes
-wy_z2:	jmp	atnorm			; reset state, return
-wy_z	endp
+;; dgesc_M2:jmp	dgcuu			; do cursor up
+;; dgesc_M3:ret
+;; dgesc_M	endp
+
+
+;; dgesc_V	proc	near			; DG ESC V start protected area
+;; 	cmp	ninter,0		; any intermediates?
+;; 	jne	dgesc_V1		; ne = yes, not this command
+;; 	call	setprot			; protect on
+;; dgesc_V1:ret
+;; dgesc_V endp
+
+;; dgesc_W	proc	near			; DG ESC W end protected area
+;; 	cmp	ninter,0		; any intermediates?
+;; 	jne	dgesc_W1		; ne = yes, not this command
+;; 	call	clrprot			; protect off
+;; dgesc_W1:ret
+;; dgesc_W endp
+
+;; dgcsi_@	proc	near			; DG CSI Pc @  ins chars, scroll left
+;; 	cmp	inter,' '		; see if ends in space
+;; 	je	dgcsi_@1		; e = yes
+;; 	mov	cx,param		; do cx chars
+;; 	or	cx,cx			; zero?
+;; 	jnz	dgcsi_@2		; nz = no
+;; 	inc	cx			; zero means one
+;; dgcsi_@2:mov	bh,1			; insert operation
+;; 	jmp	insdel			; insert space
+;; dgcsi_@1:mov	bx,offset dgsleft	; scroll left
+;; 	jmp	dec2getn		; convert param
+;; dgcsi_@ endp
+
+;; dgcsi_A	proc	near			; DC CSI Pc A cursor up, scroll right
+;; 	cmp	inter,' '		; see if ends in space
+;; 	je	dgcsi_A2		; e = yes
+;; 	mov	cx,param		; do cx chars
+;; 	or	cx,cx			; zero?
+;; 	jnz	dgcsi_A1		; nz = no
+;; 	inc	cx			; do once
+;; dgcsi_A1:push	cx
+;; 	call	dgcuu			; cursor up
+;; 	pop	cx
+;; 	loop	dgcsi_A1
+;; 	ret
+;; dgcsi_A2:mov	bx,offset dgsright	; scroll left
+;; 	jmp	dec2getn		; convert param
+;; dgcsi_A endp
+
+;; dgcsi_B	proc	near			; DC CSI Pc B cursor down
+;; 	mov	cx,param		; do cx chars
+;; 	or	cx,cx			; zero?
+;; 	jnz	dgcsi_B1		; nz = no
+;; 	inc	cx			; do once
+;; dgcsi_B1:push	cx
+;; 	call	dgcud			; cursor down
+;; 	pop	cx
+;; 	loop	dgcsi_B1
+;; 	ret
+;; dgcsi_B endp
+
+;; dgcsi_C	proc	near			; DC CSI Pc C cursor forward
+;; 	mov	cx,param		; do cx chars
+;; 	or	cx,cx			; zero?
+;; 	jnz	dgcsi_C1		; nz = no
+;; 	inc	cx			; do once
+;; dgcsi_C1:push	cx
+;; 	call	dgcuf			; cursor forward
+;; 	pop	cx
+;; 	loop	dgcsi_C1
+;; 	ret
+;; dgcsi_C endp
+
+;; dgcsi_D	proc	near			; DC CSI Pc D cursor back
+;; 	mov	cx,param		; do cx chars
+;; 	or	cx,cx			; zero?
+;; 	jnz	dgcsi_D1		; nz = no
+;; 	inc	cx			; do once
+;; dgcsi_D1:push	cx
+;; 	call	dgcub			; cursor back
+;; 	pop	cx
+;; 	loop	dgcsi_D1
+;; 	ret
+;; dgcsi_D endp
+
+;; dgcsi_L	proc	near			; DG CSI Pc L  insert Pc lines
+;; 	push	dx			; save cursor
+;; 	call	inslin			; do insert line, can scroll
+;; 	pop	dx			; recover cursor
+;; 	jmp	atsetcur		; reset cursor
+;; dgcsi_L endp
+
+;; dgcsi_M	proc	near			; DG CSI Pc M  delete Pc lines
+;; 	push	dx			; save cursor
+;; 	call	dellin			; delete lines
+;; 	pop	dx
+;; 	jmp	atsetcur		; reset cursor
+;; dgcsi_M	endp
+
+;; dgcsi_S	proc	near			; DC CSI Pc S  scroll up
+;; 	mov	ax,param		; scroll count
+;; 	or	al,al			; zero?
+;; 	jnz	dgcsi_S1		; nz = no
+;; 	inc	al
+;; dgcsi_S1:mov	scroll,al		; scroll amount
+;; 	call	atscru			; scroll up
+;; 	ret
+;; dgcsi_S	endp
+
+;; dgcsi_T	proc	near			; DC CSI Pc T  scroll down
+;; 	mov	ax,param		; scroll count
+;; 	or	al,al			; zero?
+;; 	jnz	dgcsi_T1		; nz = no
+;; 	inc	al
+;; dgcsi_T1:mov	scroll,al		; scroll amount
+;; 	call	atscrd			; scroll down
+;; 	ret
+;; dgcsi_T	endp
+
+;; dgcsi_f	proc	near			; DG CSI row; col f
+;; 	mov	ax,param+2		; get column
+;; 	or	al,al			; zero now?
+;; 	jz	dgcsi_f1		; z = yes
+;; 	dec	al			; count from 0
+;; dgcsi_f1:mov	emubuf,al		; column
+;; 	mov	ax,param		; get row
+;; 	or	al,al			; zero now?
+;; 	jz	dgcsi_f2		; z = yes
+;; 	dec	al			; count from 0
+;; dgcsi_f2:jmp	dgwwa2			; do Control-P col row
+;; dgcsi_f endp
+
+;; dgcsi_h	proc	near			; DG CSI Pc; Pc h  set mode
+;; 	mov	modeset,1		; say setting modes
+;; 	cmp	lparam,'<'
+;; 	jne	dgcsi_h1
+;; 	mov	di,offset dgcsi_rsm	; set/reset routine
+;; 	call	atreps			; repeat for all parameters
+;; dgcsi_h1:ret
+;; dgcsi_h endp
+
+;; dgcsi_i	proc	near			; DG CSI Pc i  media copy
+;; 	cmp	lparam,'<'		; CSI < 0 ?
+;; 	jne	dgcsi_i1		; ne = no
+;; 	ret				; ignore CSI <0
+;; dgcsi_i1:mov	ax,param		; get parameter
+;; 	cmp	ax,4			; stop media copy?
+;; 	je	dgcsi_i2		; e = yes
+;; 	cmp	ax,5			; start media copy?
+;; 	je	dgcsi_i2		; e = yes
+;; 	or	ax,ax			; print window?
+;; 	je	dgcsi_i3		; e = yes
+;; 	ret				; ignore others
+;; dgcsi_i2:jmp	ansmc			; do 4, 5 as ANSI transparent print
+;; dgcsi_i3:mov	al,':'			; setup for window print
+;; 	jmp	dgprt6			; print window
+;; dgcsi_i	endp
+
+;; dgcsi_sl proc	near			; DG CSI Pc; Pc l  reset mode
+;; 	mov	modeset,0		; say resetting modes
+;; 	cmp	lparam,'<'		; this letter parameter?
+;; 	jne	dgcsi_sl1		; ne = no
+;; 	mov	di,offset dgcsi_rsm	; set/reset routine
+;; 	call	atreps			; repeat for all parameters
+;; dgcsi_sl1:
+;; 	ret
+;; dgcsi_sl endp
+
+;; ; Worker for set/reset routines. Invoke via atreps with modeset for set/reset
+;; dgcsi_rsm proc	near
+;; 	mov	ax,param[si]		; get parameter
+;; 	mov	ah,modeset		; get set (1), reset (0) mode
+;; 	cmp	al,0			; roll mode?
+;; 	jne	dgcsi_rsm1		; ne = no
+;; 	mov	dgroll,ah		; roll mode
+;; 	ret
+;; dgcsi_rsm1:cmp	al,1			; blink mode
+;; 	jne	dgcsi_rsm2		; ne = no
+;; 	neg	ah			; invert sense
+;; 	mov	blinkdis,ah		; blink disable
+;; 	ret
+;; dgcsi_rsm2:cmp	al,2			; horizontal scroll?
+;; 	jne	dgcsi_rsm3		; ne = no
+;; 	neg	ah			; invert sense
+;; 	mov	dghscrdis,ah		; horizontal scroll disable
+;; 	ret
+;; dgcsi_rsm3:cmp	al,3			; DG D470 ANSI mode?
+;; 	jne	dgcsi_rsm4		; ne = no
+;; 	mov	dgd470mode,ah		; set ANSI mode
+;; 	ret
+;; dgcsi_rsm4:cmp	al,4			; forms mode?
+;; 	jne	dgcsi_rsm5		; ne = no
+;; 	ret
+;; dgcsi_rsm5:cmp	al,5			; margins mode?
+;; 	jne	dgcsi_rsm6
+;; 	ret
+;; dgcsi_rsm6:ret
+;; dgcsi_rsm endp
+
+;; dgcsi_n	proc	near			; DC CSI Pc n  device status report
+;; 	cmp	param,5			; send ready report?
+;; 	jne	dgcsi_n1		; ne = no
+;; 	mov	al,ESCAPE		; response is Esc [ 0 n
+;; 	call	prtbout			; meaning "ready"
+;; 	mov	al,'['
+;; 	call	prtbout
+;; 	mov	al,'0'
+;; 	call	prtbout
+;; 	mov	al,'n'
+;; 	call	prtbout
+;; 	ret
+;; dgcsi_n1:cmp	param,6			; cursor position report?
+;; 	jne	dgcsi_n2		; ne = no
+;; 	mov	al,ESCAPE		; response is ESC [ row; col R
+;; 	call	prtbout
+;; 	mov	al,'['
+;; 	call	prtbout
+;; 	mov	al,byte ptr cursor+1	; get current row
+;; 	call	prtnout			; output number as decimal ASCII
+;; 	mov	al,';'
+;; 	call	prtbout
+;; 	mov	al,byte ptr cursor	; column
+;; 	call	prtnout
+;; 	mov	al,'R'
+;; 	call	prtbout
+;; dgcsi_n2:ret
+;; dgcsi_n	endp
+
+;; dgcsi_sp proc	near			; DG CSI..p  draw bar or arc
+;; 	cmp	inter,' '		; ends on space?
+;; 	je	dgcsi_sp1		; e = yes, do draw arc
+;; 	mov	bx,offset dggbar	; draw bar
+;; 	jmp	dec2getn		; convert params to <loc> form
+;; dgcsi_sp1:mov	bx,offset dggarc	; draw arc
+;; 	jmp	dec2getn		; convert params to <loc> form
+;; dgcsi_sp endp
+
+;; dgcsi_q	proc	near			; DG CSI Pc q  change attributes
+;; 	cmp	inter,' '		; read graphics cursor signature?
+;; 	je	dgcsi_q1		; e = yes
+;; 	mov	bx,offset dgchatr	; change attributes routine
+;; 	jmp	dec2getn		; convert args to DG <n> form
+;; dgcsi_q1:				; similar to RS G ? |
+;; ifndef	no_graphics
+;; 	call	dgcrossrpt		; do report via MSGIBM
+;; endif	; no_graphics
+;; 	ret
+;; dgcsi_q	endp
+
+;; dgcsi_r	proc	near			; DG CSI <space> r  read cursor att
+;; 	mov	al,Escape		; response similar to RS G @
+;; 	call	prtbout
+;; 	mov	al,'['
+;; 	call	prtbout
+;; 	mov	al,'0'			; say crosshair is off
+;; 	test	dgcross,1		; is it on?
+;; 	jz	dgcsi_r1		; z = no
+;; 	inc	al			; say '1' for on
+;; dgcsi_r1:call	prtbout			; output <v1>
+;; 	mov	al,';'
+;; 	call	prtbout
+;; 	mov	al,'0'			; <v2> is always 0 for not blinking
+;; 	call	prtbout
+;; 	mov	al,';'
+;; 	call	prtbout
+;; 	mov	al,'0'			; <v3> is 0 for short crosshair, D470
+;; 	call	prtbout
+;; 	mov	al,';'
+;; 	call	prtbout
+;; 	mov	al,dgcross		; get tracked devices
+;; 	and	al,2+4			; pick out just devices
+;; 	add	al,'0'			; bias
+;; 	call	prtbout			; output <v4>
+;; 	mov	al,'r'			; terminal character
+;; 	call	prtbout
+;; 	ret
+;; dgcsi_r	endp
+
+;; dgcsi_ss proc	near			; DG CSI Pc s read/reserve characters
+;; 	mov	ax,param		; get parameter
+;; 	or	ax,ax			; do report?
+;; 	jnz	dgcsi_ss2		; nz = no, reserve (do nothing here)
+;; 	mov	al,ESCAPE		; report is ESC [ <qty> s
+;; 	call	prtbout
+;; 	mov	al,'['
+;; 	call	prtbout
+;; 	mov	al,'2'			; say <qty> is 2000
+;; 	call	prtbout
+;; 	mov	cx,3
+;; dgcsi_ss1:push	cx
+;; 	mov	al,'0'
+;; 	call	prtbout
+;; 	pop	cx
+;; 	loop	dgcsi_ss1
+;; 	mov	al,'s'			; terminator
+;; 	call	prtbout
+;; dgcsi_ss2:ret
+;; dgcsi_ss endp
+
+;; dgcsi_st proc	near			; DG CSI Pc t  read offset/show cols
+;; 	cmp	inter,' '		; Write graphics cursor command?
+;; 	je	dgcsi_st3		; e = yes
+;; 	cmp	param,0			; read offset?
+;; 	jne	dgcsi_st1		; ne = no
+;; 	mov	al,ESCAPE		; response is Esc [ col t
+;; 	call	prtbout
+;; 	mov	al,'['
+;; 	call	prtbout
+;; 	mov	bl,dh			; get current row
+;; 	xor	bh,bh
+;; 	mov	al,linescroll[bx]	; get scroll value
+;; 	call	prtnout			; output number as decimal ASCII
+;; 	mov	al,'t'
+;; 	call	prtbout
+;; 	ret
+;; dgcsi_st1:cmp	param,1			; show columns?
+;; 	jne	dgcsi_st2		; ne = no
+;; 	mov	ax,param+2		; remove initial param
+;; 	mov	param,ax
+;; 	mov	ax,param+4
+;; 	mov	param+2,ax
+;; 	mov	nparam,2		; setup for call
+;; 	mov	bx,offset dgshcol	; show columns, RS F _
+;; 	jmp	dec2getn		; perform the routine
+;; dgcsi_st2:ret
+
+;; dgcsi_st3:mov	ax,param		; x graphics coord
+;; 	mov	bx,param+2		; y graphics coord
+;; ifndef	no_graphics
+;; 	call	dgsetcrloc		; set crosshairs to x,y
+;; endif	; no_graphics
+;; 	ret
+;; dgcsi_st endp
+
+;; dgcsi_u	proc	near			; DG CSI Pc <space> u
+;; 	cmp	inter,' '		; ends on space
+;; 	je	dgcsi_u1		; e = yes, cursor off
+;; 	mov	inter,0
+;; 	mov	ninter,0		; best to clear these
+;; 	jmp	dgcsi_f			; it's cursor row, col
+;; dgcsi_u1:jmp	dggcoff			; do RS G C  graphics cursor off
+;; dgcsi_u	endp
+
+;; dgcsi_v	proc	near			; DG CSI <space> v cursor on
+;; 	cmp	inter,' '		; proper form?
+;; 	jne	dgcsi_v1		; ne = no
+;; 	jmp	dggcon			; do RS G B  graphics cursor on
+;; dgcsi_v1:ret
+;; dgcsi_v	endp
+
+;; dgcsi_w	proc	near			; DG CSI Pn; Pc w  set margins
+;; 	cmp	inter,' '		; graphics cursor reset indicator?
+;; 	jne	dgcsi_w4		; ne = no, must be margins
+;; ifndef	no_graphics
+;; 	call	dgcrossoff		; turn off crosshair
+;; endif	; no_graphics
+;; 	mov	dgcross,0		; and no kind of tracking
+;; 	ret
+;; dgcsi_w4:mov	bx,param		; set margins
+;; 	mov	ax,param+2
+;; 	mov	param,ax
+;; 	mov	ax,param+4
+;; 	mov	param+2,ax		; remove leading param
+;; 	mov	ax,param+6
+;; 	mov	param+4,ax
+;; 	dec	nparam			; one less parameter
+;; 	cmp	bx,1			; set margins?
+;; 	je	dgcsi_w1		; e = 1 = yes, do draw arc
+;; 	ja	dgcsi_w2		; a = 2 = set alt margins
+;; 	jmp	dgrnmar			; 0 = restore normal margins
+;; dgcsi_w1:mov	bx,offset dgsetmar	; set margins
+;; 	jmp	dec2getn		; convert params to <nn> form
+;; dgcsi_w2:mov	bx,offset dgsetamar	; set alt margins
+;; 	jmp	dec2getn		; convert params to <nn> form
+;; dgcsi_w endp
+
+;; dgcsi_x	proc	near			; DG CSI Pc x   cursor track
+;; 	cmp	inter,' '		; proper form for cursor track?
+;; 	jne	dgcsi_x1		; ne = no
+;; 	mov	ax,param		; get arg
+;; 	and	al,2+4			; pick out our trackables
+;; 	and	dgcross,not (2+4)	; preserve on/of bit (1)
+;; 	or	dgcross,al		; track keypad (2) and/or mouse (4)
+;; dgcsi_x1:				; like RS C  DG Read Model ID
+;; 	mov	al,escape		; resp ESC [ <mm> <x> <y>
+;; 	call	prtbout
+;; 	mov	al,'['
+;; 	call	prtbout
+;; 	mov	al,'5'			; 5 is DG D470 in ANSI mode
+;; 	call	prtbout
+;; 	mov	al,'4'			; 4 is DG D470
+;; 	call	prtbout
+;; 	mov	al,';'
+;; 	call	prtbout
+;; 	mov	al,'0'			; two bytes here
+;; 	call	prtbout
+;; 	mov	al,'0'
+;; 	test	flags.remflg,d8bit	; using 8 bits?
+;; 	jz	dgcsi_x2		; z = no
+;; 	or	al,2			; say 8-bit mode
+;; dgcsi_x2:push	ax
+;; 	mov	ah,ioctl		; get printer status, via DOS
+;; 	mov	al,7			; status for output
+;; 	push	bx
+;; 	mov	bx,4			; std handle for system printer
+;; 	int	dos
+;; 	pop	bx
+;; 	jnc	dgcsi_x3		; nc = call succeeded
+;; 	mov	al,0ffh
+;; dgcsi_x3:cmp	al,0ffh			; code for Ready
+;; 	pop	ax
+;; 	jne	dgcsi_x4		; ne = not ready
+;; 	or	al,1			; say printer present
+;; dgcsi_x4:call	prtbout			; send composite byte
+;; 	mov	al,';'
+;; 	call	prtbout
+;; 	mov	al,'0'			; revision 0
+;; 	call	prtbout
+;; 	mov	al,';'
+;; 	call	prtbout
+;; 	mov	bl,vtemu.vtchset	; get Kermit NRC code (0-13)
+;; 	xor	bh,bh
+;; 	mov	al,nrcdgkbd[bx]		; get DG keyboard code from table
+;; 	call	prtnout
+;; 	mov	al,'x'
+;; 	call	prtbout
+;; 	ret
+;; dgcsi_x	endp
+
+;; dgdcs_F	proc	near			; DC DCS F ST  failure report
+;; 	mov	al,Escape		; report DCS F ST for no failure
+;; 	call	prtbout
+;; 	mov	al,'P'
+;; 	call	prtbout
+;; 	mov	al,'F'
+;; 	call	prtbout
+;; 	mov	al,Escape
+;; 	call	prtbout
+;; 	mov	al,'\'
+;; 	call	prtbout
+;; 	jmp	atnorm
+;; dgdcs_F	endp
+
+;; 		; End of Data General specific routines
+
+;; 		; Start Wyse-50 specific routines
+
+;; wyenq	proc	near			; Control E, ESC sp  inquire
+;; 	mov	al,'5'
+;; 	call	prtbout			; send 5 0 CR
+;; 	mov	al,'0'
+;; 	call	prtbout
+;; 	mov	al,CR
+;; 	call	prtbout
+;; 	ret
+;; wyenq	endp
+
+;; wycub	proc	near			; Control H  cursor left (back)
+;; 	sub	dl,1			; column, one to the left
+;; 	jns	wycub1			; ns = no wrap
+;; 	mov	dl,mar_right		; wrap left to right
+;; 	sub	dh,1			; up one row
+;; 	jns	wycub1			; ns = no wrap
+;; 	mov	dh,mar_bot		; wrap top to bottom
+;; wycub1:	jmp	atsetcur		; set cursor
+;; wycub	endp
+
+;; wycup	proc	near			; Control K (VT) cursor up
+;; 	mov	dx,cursor
+;; 	sub	dh,1			; compute new cursor position
+;; 	jnc	wycu1			; nc = ok
+;; 	mov	dh,mar_bot		; overflow, wrap to last line
+;; wycu1:	jmp	atscur			; set the cursor at its new position
+;; wycup	endp
+
+;; wysub	proc	near			; Control Z  erase all unprotected
+;; 					; also ESC ; and ESC :
+;; 	mov	dl,mar_left		; upper left corner
+;; 	mov	dh,mar_top
+;; 	call	erprot			; do protected erasure
+;; 	jmp	short wyhome		; home the cursor
+;; wysub	endp
+
+;; wyhome	proc	near			; Control ^  cursor home
+;; 	mov	dl,mar_left		; upper left corner
+;; 	mov	dh,mar_top
+;; 	jmp	atscur			; set cursor
+;; wyhome	endp
+
+;; wyprtoff proc	near			; Autoprint off
+;; 	test	anspflg,vtautop		; check state of print flag
+;; 	jz	wyprtof1		; z = off already
+;; 	or	anspflg,vtautop		; say auto-print enabled to toggle off
+;; 	call	ftrnprs			; toggle mode line PRN indicator
+;; 	and	anspflg,not (vtautop + vtcntp) ; clear all printing kinds
+;; wyprtof1:ret
+;; wyprtoff endp
+
+;; wyprton	proc	near			; Autoprint on
+;; 	test	anspflg,vtautop		; is print already enabled?
+;; 	jnz	wyprton1		; nz = yes, leave trnprs intact
+;; 	and	anspflg,not vtautop	; say auto-print disabled to toggle on
+;; 	call	ftrnprs			; toggle on mode line PRN indicator
+;; wyprton1:ret
+;; wyprton	endp
+
+;; wyesc	proc	near			; ESC processor, enter when ESC seen
+;; 	mov	ttstate,offset wyesc1	; come here for next char
+;; 	ret
+;; wyesc1:	mov	param,0
+;; 	mov	param+2,0
+;; 	mov	lparam,0
+;; 	mov	bx,offset wyescf	; dispatch table
+;; 	mov	ttstate,offset atnrm	; reset state
+;; 	jmp	atdispat		; dispatch on char in AL
+;; wyesc	endp
+
+;; wytab0	proc	near			; ESC 0
+;; 	mov	param,3			; clear all tab stops
+;; 	jmp	attbc			; do it
+;; wytab0	endp
+
+;; wytab2	proc	near			; ESC 2
+;; 	mov	param,0			; clear this tab stop
+;; 	jmp	attbc			; do it
+;; wytab2	endp
+
+;; wy_bang	proc	near			; ESC ! attrib, set attribute on all
+;; 	mov	ttstate,offset wy_ban1	;  unprotected chars, clear chars
+;; 	mov	emubuf,0		; say ESC ! rather than ESC A 0
+;; 	ret
+;; wy_ban1:xor	dx,dx			; home position
+;; 	mov	ttstate,offset atnrm	; reset state
+;; 	mov	bl,al			; save argument
+;; 	mov	ah,scbattr		; normal background
+;; 	mov	curattr,ah		; current attributes, update
+;; 	mov	extattr,0		; clear extended attributes
+;; 	test	bl,2			; set blink?
+;; 	jz	wy_ban2			; z = no
+;; 	test	bl,1			; and blank?
+;; 	jnz	wy_ban2			; nz = yes, ignore blink
+;; 	call	setblink
+;; wy_ban2:test	bl,4			; set reverse video bit?
+;; 	jz	wy_ban3			; z = no
+;; 	call	setrev
+;; wy_ban3:test	bl,8			; set underscore?
+;; 	jz	wy_ban4			; z = no
+;; 	call	setunder
+;; wy_ban4:test	bl,40h			; dim?
+;; 	jz	wy_ban5			; z = no
+;; 	call	setbold
+;; wy_ban5:mov	curattr,ah		; new attributes
+;; 	mov	extattr,cl
+;; 	mov	al,mar_right
+;; 	sub	al,mar_left
+;; 	inc	al			; width
+;; 	mov	cl,mar_bot
+;; 	sub	cl,mar_top
+;; 	inc	cl			; rows
+;; 	mul	cl
+;; 	mov	cx,ax			; number of character cells to do
+;; 	xor	dx,dx			; home position
+;; wy_ban6:push	cx			; save loop counter
+;; 	call	getatch			; get video in ah, extended att in cl
+;; 	test	cl,att_protect		; protected?
+;; 	jnz	wy_ban7			; nz = yes, skip it
+;; 	mov	cl,extattr
+;; 	mov	ah,curattr
+;; 	cmp	emubuf,0		; erase char?
+;; 	jne	wy_ban6a		; ne = no
+;; 	mov	al,' '			; cleared character
+;; wy_ban6a:call	qsetatch		; quietly update the char
+;; wy_ban7:pop	cx
+;; 	inc	dl			; next column
+;; 	cmp	dl,mar_right		; at the right margin?
+;; 	jbe	wy_ban8			; be = no, not yet
+;; 	mov	dl,mar_left		; wrap to left and next line
+;; 	inc	dh			; next line down
+;; 	cmp	dh,mar_bot		; below the window bottom?
+;; 	ja	wy_ban9			; a = yes, all done
+;; wy_ban8:loop	wy_ban6			; do more chars
+;; wy_ban9:call	frepaint		; repaint screen
+;; 	xor	dx,dx			; home cursor
+;; 	cmp	emubuf,0		; erase char?
+;; 	je	wy_ban10		; e = yes
+;; 	mov	dx,cursor		; else replace cursor
+;; wy_ban10:jmp	atsetcur		; restore cursor
+;; wy_bang	endp
+
+;; wy_dot	proc	near			; ESC . CODE   clr unprotected chars
+;; 	mov	ttstate,offset wy_dot1	;  of value code
+;; 	ret
+;; wy_dot1:mov	ttstate,offset atnrm	; reset state
+;; 	mov	emubuf,al		; save char code
+;; 	mov	al,mar_right
+;; 	sub	al,mar_left
+;; 	inc	al			; width
+;; 	mov	cl,mar_bot
+;; 	sub	cl,mar_top
+;; 	inc	cl			; rows
+;; 	mul	cl
+;; 	mov	cx,ax			; number of character cells to do
+;; wy_dot2:push	cx			; save loop counter
+;; 	call	getatch			; get video in ah, extended att in cl
+;; 	test	cl,att_protect		; protected?
+;; 	jnz	wy_dot3			; nz = yes, skip it
+;; 	cmp	al,emubuf		; same as code?
+;; 	jne	wy_dot3			; ne = no
+;; 	mov	al,' '			; char
+;; 	mov	ah,scbattr		; normal background
+;; 	xor	cl,cl			; clear extended attributes
+;; 	call	qsetatch		; quietly update the char
+;; wy_dot3:pop	cx
+;; 	inc	dl			; next column
+;; 	cmp	dl,mar_right		; at the right margin?
+;; 	jbe	wy_dot4			; be = no, not yet
+;; 	mov	dl,mar_left		; wrap to left and next line
+;; 	inc	dh			; next line down
+;; 	cmp	dh,mar_bot		; below the window bottom?
+;; 	ja	wy_dot5			; a = yes, all done
+;; wy_dot4:loop	wy_dot2			; do more chars
+;; wy_dot5:call	frepaint		; repaint screen
+;; 	mov	dx,cursor		; reset cursor location
+;; 	ret
+;; wy_dot	endp
+
+;; wy_8	proc	near			; ESC 8 enter STX (2) code
+;; 	mov	al,2
+;; 	jmp	atnrm
+;; wy_8	endp
+
+;; wy_9	proc	near			; ESC 9 enter ETX (3) code
+;; 	mov	al,3
+;; 	jmp	atnrm
+;; wy_9	endp
+
+;; wy_slash proc	near			; ESC /  send txt seg and cursor
+;; 	mov	al,'0'			; text segment 0
+;; 	call	prtbout			; send
+;; 	jmp	wy_query		; send cursor position
+;; wy_slash endp
+
+;; wy_query proc	near			; ESC ?  send rc CR cursor report
+;; 	mov	al,byte ptr cursor+1	; row
+;; 	add	al,20h			; plus bias
+;; 	call	prtbout
+;; 	mov	al,byte ptr cursor	; column
+;; 	add	al,20h
+;; 	call	prtbout
+;; 	mov	al,CR			; terminator
+;; 	call	prtbout
+;; 	ret
+;; wy_query endp
+
+;; wy_sa	proc	near			; ESC a rr R ccc C  cursor to row,col
+;; 	mov	ttstate,offset wy_sa1	; get first row char
+;; 	ret
+;; wy_sa1:	cmp	al,'R'			; field termination?
+;; 	je	wy_sa2			; yes
+;; 	push	ax
+;; 	mov	ax,param		; ASCII decimal to binary
+;; 	mov	cx,10
+;; 	imul	cx
+;; 	mov	param,ax
+;; 	pop	ax
+;; 	sub	al,'0'			; ccc, decimal col
+;; 	cbw
+;; 	add	param,ax
+;; 	ret				; stay in this state
+;; wy_sa2:	mov	lparam,al		; save it
+;; 	mov	ttstate,offset wy_sa3	; get column
+;; 	ret
+;; wy_sa3:	cmp	al,'C'			; field termination?
+;; 	je	wy_sa4			; e = yes
+;; 	push	ax
+;; 	mov	ax,param+2		; ASCII decimal to binary
+;; 	mov	cx,10
+;; 	imul	cx
+;; 	mov	param+2,ax
+;; 	pop	ax
+;; 	sub	al,'0'			; ccc, decimal col
+;; 	cbw
+;; 	add	param+2,ax
+;;  	ret				; stay in this state
+;; wy_sa4:	mov	ttstate,offset atnrm
+;; 	xor	ah,ah
+;; 	xchg	ah,lparam		; get the 'R', clear lparam
+;; 	cmp	ax,'RC'			; proper terminators?
+;; 	jne	wy_sax			; ne = no
+;; 	xor	ax,ax
+;; 	xor	bx,bx
+;; 	xchg	ax,param		; row
+;; 	xchg	bx,param+2		; column
+;; 	or	ax,ax			; zero now?
+;; 	jz	wy_sa5			; z = yes
+;; 	dec	ax			; count row from zero
+;; wy_sa5:	or	bx,bx			; zero now?
+;; 	jz	wy_sa6			; z = yes
+;; 	dec	bx			; count column from zero
+;; wy_sa6:	cmp	ax,24			; row, in bounds?
+;; 	ja	wy_sax			; a = no
+;; 	cmp	bx,132			; column, in bounds?
+;; 	ja	wy_sax			; a = no
+;; 	mov	dh,al			; row
+;; 	mov	dl,bl			; column
+;; 	jmp	atscur			; set cursor
+;; wy_sax:	mov	param,0
+;; 	mov	param+2,0		; clear temps
+;; 	ret				; ignore command
+;; wy_sa	endp
+
+;; wy_equ	proc	near			; ESC = r c  cursor to row, col
+;; 	mov	ttstate,offset wy_equ1	; get row char
+;; 	ret
+;; wy_equ1:sub	al,' '-1		; remove ASCII bias
+;; 	cbw				; grab sign
+;; 	mov	param,ax		; save as row
+;; 	mov	ttstate,offset wy_equ2
+;; 	ret
+;; wy_equ2:sub	al,' '-1		; remove ASCII bias
+;; 	cbw
+;; 	mov	param+2,ax		; save as column
+;; 	mov	lparam,'R'		; setup R..C form
+;; 	mov	al,'C'
+;; 	jmp	wy_sa4			; parse completion as ESC a rr R ccc C
+;; wy_equ	endp
+
+;; wy_minus proc	near			; ESC - nrc  cursor to txt seg row col
+;; 	and	al,1			; n can be anything (despite manual)
+;; 	mov	ttstate,offset wy_equ	; parse rest as if ESC = r c
+;; 	ret
+;; wy_minus endp
+
+;; wy_star	proc	near			; ESC *   ESC + 
+;; 					; protect mode off, clear screen
+;; 	mov	protectena,0		; disable protect mode
+;; 	xor	dx,dx			; set cursor to home
+;; 	mov	cursor,dx
+;; 	jmp	ereos			; clear entire screen
+;; wy_star	endp
+
+;; wy_comma proc	near			; ESC ,  screen clear to prot'd spaces
+;; 	mov	protectena,0		; disable protect mode
+;; 	xor	dx,dx			; set cursor to home
+;; 	mov	cursor,dx
+;; 	mov	ah,scbattr		; normal background
+;; 	mov	al,' '			; space
+;; 	mov	cl,att_protect		; set protection bit
+;; wy_comm1:call	setatch			; write cell
+;; 	inc	dl			; next column
+;; 	cmp	dl,mar_right		; beyond right edge?
+;; 	jbe	wy_comm1		; be = no
+;; 	xor	dl,dl			; left edge
+;; 	inc	dh			; next row
+;; 	cmp	dh,mar_bot		; below bottom?
+;; 	jbe	wy_comm1		; be = no
+;; 	xor	dx,dx			; top left corner
+;; 	jmp	atsetcur		; set cursor
+;; wy_comma endp
+
+;; wy_A	proc	near			; ESC A n attrib  set video attribs
+;; 	mov	ttstate,offset wy_A1	; get field code n
+;; 	ret
+;; wy_A1:	cmp	al,'0'			; entire text display?
+;; 	jne	wy_A2			; ne = no, ignore after getting attrib
+;; 	mov	emubuf,1		; flag to wy_bang to not erase chars
+;; 	mov	ttstate,offset wy_ban1	; process attrib in ESC ! procedure
+;; 	ret
+;; wy_A2:	mov	ttstate,offset atnorm	; ignore next byte, exit command
+;; 	ret
+;; wy_A	endp
+
+;; wy_F	proc	near			; ESC F text CR, to message area
+;; 	mov	ttstate,offset wy_F1
+;; 	ret
+;; wy_F1:	cmp	al,CR			; end of string?
+;; 	jne	wy_F2			; ne = no, continue discarding bytes
+;; 	mov	ttstate,offset atnrm	; reset state
+;; wy_F2:	ret
+;; wy_F	endp
+
+;; wy_G	proc	near			; ESC G n  set char attributes
+;; 	mov	ttstate,offset wy_G1	; get attribute code
+;; 	ret
+;; wy_G1:	mov	ttstate,offset atnrm	; reset state
+;; 	mov	ah,curattr		; current attributes
+;; 	mov	bl,al			; get code
+;; 	cmp	bl,' '			; space code?
+;; 	je	wy_Gx			; e = yes, just ignore it
+;; 	cmp	bl,'0'			; range check for '0' et seq
+;; 	jb	wy_Gx			; b = out of range
+;; 	ja	wy_G2			; a = in range
+;; 	call	clrbold			; clear bold attribute
+;; 	call	clrblink		; clear blink attribute
+;; 	call	clrrev			; clear reverse video attribute
+;; 	call	clrunder		; clear underline attribute
+;; 	mov	atinvisible,0		; clear invisible attribute
+;; 	mov	extattr,0		; clear extended attributes
+;; 	jmp	short wy_Gx
+
+;; wy_G2:	test	bl,2			; set blink?
+;; 	jz	wy_G3			; z = no
+;; 	test	bl,1			; and blank?
+;; 	jnz	wy_G3			; nz = yes, ignore blink
+;; 	push	bx
+;; 	call	setblink		; set blink
+;; 	pop	bx
+;; wy_G3:	test	bl,4			; set reverse video bit?
+;; 	jz	wy_G4			; z = no
+;; 	push	bx
+;; 	call	setrev			; set reverse video
+;; 	pop	bx
+;; wy_G4:	test	bl,8			; set underscore?
+;; 	jz	wy_G5			; z = no
+;; 	push	bx
+;; 	call	setunder		; set underline
+;; 	pop	bx
+;; wy_G5:	cmp	bl,'p'			; dim?
+;; 	jb	wy_Gx			; b = no
+;; 	call	clrbold			; set dim
+;; wy_Gx:	mov	curattr,ah		; store new attribute byte
+;; ;;;;;	mov	byte ptr wyse_protattr,ah ; Wyse-50 protected char attributes
+;; ;;;;;	mov	byte ptr wyse_protattr+1,att_protect
+;; 	mov	dx,cursor		; moves cursor left one column
+;; 	inc	dl
+;; 	jmp	atscur
+;; wy_G	endp
+
+;; wy_H	proc	near			; ESC H x  show graphics char
+;; 	mov	ttstate,offset wy_H1	; setup to read x
+;; 	ret
+;; wy_H1:	mov	ttstate,offset atnrm	; reset state
+;; 	cmp	al,2			; STX (^B) enter graphics mode?
+;; 	jne	wy_H2			; ne = no
+;; 	jmp	atls1			; do LS1 to get graphics set
+
+;; wy_H2:	cmp	al,3			; ETX (^C) exit graphics mode?
+;; 	jne	wy_H3			; ne = no
+;; 	jmp	atls0			; do LS0 to exit graphics mode
+
+;; wy_H3:	mov	SSptr,offset G1set	; set Single Shift to G1 for graphics
+;; 	jmp	atnrm			; show code
+;; wy_Hx:	ret
+;; wy_H	endp
+
+;; wy_I	proc	near			; ESC I  cursor back to previous tab
+;; 	xor	ch,ch
+;; 	cmp	cl,dl			; cursor column
+;; 	jcxz	wy_I3			; z = at left margin
+;; wy_I1:	dec	dl			; tab always moves at least one column
+;; 	push	si
+;; 	mov	si,vtemu.vttbst		; active buffer
+;; 	call	istabs			; returns carry set if at a tabstop
+;; 	pop	si
+;; 	jc	wy_I2			; c = at a tabstop
+;; 	loop	wy_i1
+;; wy_I2:	call	dgsetcur		; set cursor and return
+;; wy_I3:	ret
+;; wy_I	endp
+
+;; wy_N	proc	near			; ESC N  turn on no-scroll mode
+;; 	mov	wyse_scroll,1
+;; 	ret
+;; wy_N	endp
+
+;; wy_O	proc	near			; ESC O  turn off no-scroll mode
+;; 	mov	wyse_scroll,0
+;; 	ret
+;; wy_O	endp
+
+;; wy_R	proc	near			; ESC R  delete line
+;; 	call	dellin
+;; 	xor	dl,dl			; cursor to left margin
+;; 	jmp	atsetcur		; set cursor
+;; wy_R	endp
+
+;; wy_V	proc	near			; ESC V  mark column as protected
+;; 	push	cursor			; remember starting cursor
+;; 	mov	dh,mar_top		; start with this row
+;; 	mov	cl,mar_bot
+;; 	sub	cl,mar_top
+;; 	inc	cl
+;; 	xor	ch,ch			; count of rows to touch
+;; 	call	direction		; set column in dl
+;; wy_V1:	push	cx
+;; 	call	getatch			; get char to al, attrib to ah,cl
+;; 	or	cl,att_protect		; set protected attribute
+;; 	call	qsetatch		; quite writeback
+;; 	pop	cx
+;; 	inc	dh			; next row
+;; 	loop	wy_V1
+;; 	pop	cursor
+;; 	mov	dx,cursor
+;; 	jmp	atsetcur		; set cursor, just in case
+;; wy_V	endp
+
+;; wy_acc	proc	near			; ESC ` n  set screen features
+;; 	mov	ttstate,offset wy_acc1	; setup to read "n"
+;; 	ret
+;; wy_acc1:mov	ttstate,offset atnrm	; reset state
+;; 	cmp	al,'0'			; 0, cursor off?
+;; 	jne	wy_acc2			; ne = no
+;; 	mov	al,4			; set cursor off code
+;; 	jmp	wy_acc7
+;; wy_acc2:cmp	al,'1'			; 1, cursor on?
+;; 	jne	wy_acc3			; ne = no
+;; 	mov	al,atctype		; get cursor type
+;; 	jmp	wy_acc7
+;; 	ret
+;; wy_acc3:cmp	al,'2'			; 2, block cursor?
+;; 	je	wy_acc4			; e = yes
+;; 	cmp	al,'5'			; blinking block?
+;; 	jne	wy_acc5			; ne = no
+;; wy_acc4:mov	al,2			; block cursor code
+;; 	jmp	wy_acc7
+;; wy_acc5:cmp	al,'3'			; 3, blinking line?
+;; 	je	wy_acc6			; e = yes
+;; 	cmp	al,'4'			; 4, steady line?
+;; 	jne	wy_acc8			; ne = no
+;; wy_acc6:mov	al,1			; line code
+;; wy_acc7:call	atsctyp			; set cursor type, remember it
+;; 	ret
+
+;; wy_acc8:cmp	al,'A'			; normal protected char?
+;; 	jne	wy_acc9			; ne = no
+;; 	mov	cl,extattr		; running extended attribute
+;; 	push	cx
+;; 	mov	ah,curattr		; current attribute
+;; 	call	getblink		; save blinking attribute
+;; 	mov	al,ah			;  to al
+;; 	mov	ah,scbattr		; normal attribute
+;; 	or	ah,al			;  include blinking
+;; 	or	cl,att_protect		; set protected extended attrib
+;; 	and	cl,not att_uline+att_rev
+;; 	mov	extattr,cl
+;; 	call	setbold			; set bold
+;; 	mov	byte ptr wyse_protattr,ah ; store attribute to write
+;; 	mov	byte ptr wyse_protattr+1,cl
+;; 	call	wy_setp			; set attributes on protected chars
+;; 	pop	cx
+;; 	mov	extattr,cl		; restore extended attribute
+;; 	ret
+
+;; wy_acc9:cmp	al,'6'			; reverse protected char?
+;; 	jne	wy_acc10		; ne = no
+;; 	mov	cl,extattr		; running extended attribute
+;; 	push	cx
+;; 	mov	ah,curattr		; current attribute
+;; 	call	getblink		; save blinking attribute
+;; 	mov	al,ah			;  to al
+;; 	mov	ah,scbattr		; normal attribute
+;; 	or	ah,al			;  include blinking
+;; 	or	cl,att_protect		; set protected extended attrib
+;; 	and	cl,not att_uline+att_rev
+;; 	mov	extattr,cl
+;; 	call	clrbold			; clear bold (set dim)
+;; 	call	setrev			; set reverse
+;; 	mov	byte ptr wyse_protattr,ah ; store attribute to write
+;; 	mov	byte ptr wyse_protattr+1,cl
+;; 	call	wy_setp			; set attributes on protected chars
+;; 	pop	cx
+;; 	mov	extattr,cl		; restore extended attribute
+;; 	ret
+
+;; wy_acc10:cmp	al,'7'			; dim protected char?
+;; 	jne	wy_acc11		; ne = no
+;; 	mov	cl,extattr		; running extended attribute
+;; 	push	cx
+;; 	mov	ah,curattr		; current attribute
+;; 	call	getblink		; save blinking attribute
+;; 	mov	al,ah			;  to al
+;; 	mov	ah,scbattr		; normal attribute
+;; 	or	ah,al			;  include blinking
+;; 	or	cl,att_protect		; set protected extended attrib
+;; 	and	cl,not att_uline+att_rev
+;; 	mov	extattr,cl
+;; 	call	clrbold			; set dim
+;; 	mov	byte ptr wyse_protattr,ah ; store attribute to write
+;; 	mov	byte ptr wyse_protattr+1,cl
+;; 	call	wy_setp			; set attributes on protected chars
+;; 	pop	cx
+;; 	mov	extattr,cl		; restore extended attribute
+;; 	ret
+
+;; wy_acc11:cmp	al,':'			; set 80 columns?
+;; 	jne	wy_acc12
+;; 	mov	al,3			; arg for columns set/reset
+;; 	mov	modeset,0		; reset condition
+;; 	jmp	atrsm6
+
+;; wy_acc12:cmp	al,';'			; set 132 columns?
+;; 	jne	wy_acc14		; ne = no
+;; 	mov	al,3			; arg for columns
+;; 	mov	modeset,1		; set condition
+;; 	jmp	atrsm6			; do set/reset operation
+;; wy_acc14:ret
+;; wy_acc	endp
+
+;; ; worker for wy_acc. Set attributes of all protected characters. New
+;; ; attributes are in word wyse_protattr.
+;; wy_setp	proc	near			; set protected char attributes
+;; 	push	cursor			; remember starting cursor
+;; 	mov	dh,mar_top		; start with this row
+;; 	mov	cl,mar_bot
+;; 	sub	cl,mar_top
+;; 	inc	cl
+;; 	xor	ch,ch			; count of rows to touch
+;; 	xor	dl,dl			; left physical column
+;; wy_setp1:push	cx
+;; 	call	getatch			; get char to al, attrib to ah,cl
+;; 	test	cl,ATT_PROTECT		; protected?
+;; 	jz	wy_setp2		; z = no, do nothing
+;; 	mov	ah,byte ptr wyse_protattr ; "normal" attributes
+;; 	mov	cl,byte ptr wyse_protattr+1 ; extended, set protected
+;; 	call	setatch			; visible writeback
+;; wy_setp2:pop	cx
+;; 	inc	dl
+;; 	cmp	dl,mar_right		; at right margin?
+;; 	jb	wy_setp1		; b = no, more on this row
+;; 	xor	dl,dl			; left column
+;; 	inc	dh			; next row
+;; 	loop	wy_setp1
+;; 	pop	cursor
+;; 	mov	dx,cursor
+;; 	jmp	atsetcur		; set cursor, just in case
+;; wy_setp	endp
+
+
+;; wy_M	proc	near			; ESC M  send to host char at cursor
+;; 	call	getatch			; get char to al
+;; 	call	prtbout			; send, no echo
+;; 	ret
+;; wy_M	endp
+
+;; wy_b	proc	near			; ESC b send cursor address to host
+;; 	mov	al,'0'			; three digits
+;; 	call	prtbout
+;; 	mov	al,byte ptr cursor+1	; get row
+;; 	inc	al			; count from 1
+;; 	cmp	al,10
+;; 	jae	wy_b1			; ae = have two digits
+;; 	push	ax
+;; 	mov	al,'0'			; second leadin
+;; 	call	prtbout
+;; 	pop	ax
+;; wy_b1:	call	prtnout			; decimal ASCII
+;; 	mov	al,'R'			; report rr R ccc C
+;; 	call	prtbout
+;; 	mov	al,byte ptr cursor	; column
+;; 	inc	al			; count from 1
+;; 	cmp	al,100			; three digits again
+;; 	jae	wy_b2
+;; 	push	ax
+;; 	mov	al,'0'
+;; 	call	prtbout
+;; 	pop	ax
+;; 	cmp	al,10
+;; 	jae	wy_b2
+;; 	push	ax
+;; 	mov	al,'0'
+;; 	call	prtbout
+;; 	pop	ax
+;; wy_b2:	call	prtnout
+;; 	mov	al,'C'			; terminator
+;; 	call	prtbout
+;; 	ret
+;; wy_b	endp
+
+;; wy_d	proc	near			; ESC d #, transparent print on
+;; 	mov	ttstate,offset wy_d1	; get sharp sign
+;; 	ret
+;; wy_d1:	cmp	al,'#'			; proper terminator?
+;; 	je	wy_d2			; e = yes
+;; 	jmp	atnorm			; reset state
+
+;; wy_d2:	mov	ttstate,offset wy_d3	; do transparent printing (Control-X)
+;; 	and	anspflg,not vtautop	; clear single-char flag for toggling
+;; 	call	ftrnprs			; toggle mode line PRN indicator
+;; 	jc	wy_d2a			; c = printer failure
+;; 	or	anspflg,vtcntp		; controller printing is on
+;; wy_d2a:	ret
+
+;; wy_d3:	cmp	al,'T'-40h		; Control-T to end printing?
+;; 	je	wy_d4			; e = yes
+;; 	call	fpntchr			; print char in al, ignore errors
+;; 	ret
+
+;; wy_d4:	mov	ttstate,offset atnrm	; return to normal state
+;; 	call	fpntflsh		; flush printer buffer
+;; 	test	anspflg,vtcntp		; was printing active?
+;; 	jz	wy_d5			; z = no
+;; 	and	anspflg,not vtcntp	; yes, disable print controller
+;; 	call	ftrnprs			; toggle mode line PRN indicator
+;; 	and	anspflg,not (vtautop + vtcntp) ; clear all printing kinds
+;; wy_d5:	ret
+;; wy_d	endp
+
+;; wy_q	proc	near			; ESC q   turn on insert mode
+;; 	mov	insmod,1
+;; 	ret
+;; wy_q	endp
+
+;; wy_sr	proc	near			; ESC r  turn off insert mode
+;; 	mov	insmod,0
+;; 	ret
+;; wy_sr	endp
+
+;; wy_x	proc	near			; ESC x n HSR  change display format
+;; 	mov	ttstate,offset wy_x1	; get argument n (0, 1)
+;; 	ret
+;; wy_x1:	cmp	al,'1'			; 1, split screen?
+;; 	jne	wy_x2			; ne = no
+;; 	mov	ttstate,offset wy_x2	; get HSR screen split code
+;; 	ret
+;; wy_x2:	
+;; 	mov	ttstate,offset atnrm	; reset state
+;; 	ret
+;; wy_x	endp
+
+;; wy_z	proc	near			; ESC z n aaaa CR  set msg to place
+;; 	mov	ttstate,offset wy_z1	; get argument n
+;; 	ret
+;; wy_z1:	cmp	al,CR			; terminator?
+;; 	je	wy_z2			; e = yes
+;; 	cmp	al,DEL			; or shift terminator?
+;; 	je	wy_z2			; e = yes
+;; 	ret				; continue to consume bytes
+;; wy_z2:	jmp	atnorm			; reset state, return
+;; wy_z	endp
 
 	; Wyse-50 end
 
@@ -11551,40 +11557,40 @@ getled	proc	near
 	mov	si,offset v320leds	; VT320 ident
 	cmp	ax,ttvt320		; VT320?
 	je	getled2			; e = yes
-	mov	si,offset v220leds	; VT220 ident
-	cmp	ax,ttvt220		; VT220?
-	je	getled2			; e = yes
-	mov	si,offset v102leds	; VT102 ident
-	cmp	ax,ttvt102		; VT102 mode?
-	je	getled2			; e = yes
-	mov	si,offset v100leds
-	cmp	ax,ttvt100		; VT100?
-	je	getled2			; e = yes
-	mov	si,offset honeyleds
-	cmp	ax,tthoney		; Honeywell?
-	je	getled2			; e = yes
-	mov	si,offset ansileds
-	cmp	ax,ttansi		; ANSI-BBS?
-	je	getled2			; e = yes
-	mov	si,offset v52leds	; VT52 ident
-	cmp	ax,ttvt52		; VT52?
-	je	getled1			; e = yes, no leds
-	mov	si,offset pt20leds
-	cmp	ax,ttpt200		; Prime PT200?
-	je	getled2			; e = yes
-	mov	si,offset d217leds
-	cmp	ax,ttd217		; DG D217?
-	je	getled1			; e = yes, but no led dots
-	mov	si,offset d463leds
-	cmp	ax,ttd463		; DG D463?
-	je	getled1			; e = yes, but no led dots
-	mov	si,offset d470leds
-	cmp	ax,ttd470		; DG D470?
-	je	getled1			; e = yes, but no led dots
-	mov	si,offset wyseleds
-	cmp	ax,ttwyse		; Wyse-50?
-	je	getled1			; e = yes
-	mov	si,offset h19leds	; Heath-19 ident
+	;; mov	si,offset v220leds	; VT220 ident
+	;; cmp	ax,ttvt220		; VT220?
+	;; je	getled2			; e = yes
+	;; mov	si,offset v102leds	; VT102 ident
+	;; cmp	ax,ttvt102		; VT102 mode?
+	;; je	getled2			; e = yes
+	;; mov	si,offset v100leds
+	;; cmp	ax,ttvt100		; VT100?
+	;; je	getled2			; e = yes
+	;; mov	si,offset honeyleds
+	;; cmp	ax,tthoney		; Honeywell?
+	;; je	getled2			; e = yes
+	;; mov	si,offset ansileds
+	;; cmp	ax,ttansi		; ANSI-BBS?
+	;; je	getled2			; e = yes
+	;; mov	si,offset v52leds	; VT52 ident
+	;; cmp	ax,ttvt52		; VT52?
+	;; je	getled1			; e = yes, no leds
+	;; mov	si,offset pt20leds
+	;; cmp	ax,ttpt200		; Prime PT200?
+	;; je	getled2			; e = yes
+	;; mov	si,offset d217leds
+	;; cmp	ax,ttd217		; DG D217?
+	;; je	getled1			; e = yes, but no led dots
+	;; mov	si,offset d463leds
+	;; cmp	ax,ttd463		; DG D463?
+	;; je	getled1			; e = yes, but no led dots
+	;; mov	si,offset d470leds
+	;; cmp	ax,ttd470		; DG D470?
+	;; je	getled1			; e = yes, but no led dots
+	;; mov	si,offset wyseleds
+	;; cmp	ax,ttwyse		; Wyse-50?
+	;; je	getled1			; e = yes
+	;; mov	si,offset h19leds	; Heath-19 ident
 getled1:stc				; c = set, does not have leds 1..4
 	ret
 getled2:clc				; c = clear, has leds 1..4
