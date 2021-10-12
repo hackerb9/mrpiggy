@@ -398,22 +398,22 @@ else
 termtb	db	tttypes - 1
 endif
 	mkeyw	'VT320',ttvt320
-;	mkeyw	'VT220',ttvt220
-;	mkeyw	'VT102',ttvt102
-;	mkeyw	'VT100',ttvt100
-;	mkeyw	'VT52',ttvt52
-;	mkeyw	'Honeywell VIP7809',tthoney
-;	mkeyw	'Heath-19',ttheath
+	mkeyw	'VT220',ttvt220
+	mkeyw	'VT102',ttvt102
+	mkeyw	'VT100',ttvt100
+	mkeyw	'VT52',ttvt52
+	mkeyw	'Honeywell VIP7809',tthoney
+	mkeyw	'Heath-19',ttheath
 ifndef	no_graphics
 	mkeyw	'Tek4010',tttek
 endif
-;	mkeyw	'PT200',ttpt200
-;	mkeyw	'D217',ttd217
-;	mkeyw	'D463',ttd463
-;	mkeyw	'D470',ttd470
-;	mkeyw	'Wyse50',ttwyse
-;	mkeyw	'Ansi-BBS',ttansi
-;	mkeyw	'none',ttgenrc
+	mkeyw	'PT200',ttpt200
+	mkeyw	'D217',ttd217
+	mkeyw	'D463',ttd463
+	mkeyw	'D470',ttd470
+	mkeyw	'Wyse50',ttwyse
+	mkeyw	'Ansi-BBS',ttansi
+	mkeyw	'none',ttgenrc
 
 ifndef	no_graphics
 vttbl	db	55			; number of entries
