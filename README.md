@@ -1,6 +1,6 @@
-<img src="README.md.d/mrpiggy.jpg" width="33%" align="right">
-
 # MR Piggy
+
+<img src="README.md.d/mrpiggy.jpg" width="33%" align="right">
 
 An experimental fork of 
 [MS Kermit](https://github.com/hackerb9/mskermit). Cross compiles for
@@ -8,6 +8,8 @@ MS-DOS on modern GNU/Linux systems using no proprietary software.
 The [executable](https://github.com/hackerb9/mrpiggy/releases/download/v0.0.2/kermit.exe) 
 is 16-bit (8086) and can run on original IBM PC hardware or in an
 emulator such as [dosbox](https://dosbox.com).
+
+<br clear=all>
 
 # Compilation
 
