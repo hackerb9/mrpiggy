@@ -122,24 +122,26 @@ You can then execute the .exe file in dosbox to test it out.
 ## Todo
 
 - [x] Get it to compile under GNU/Linux
-
 - [x] Test the .EXE on an IBM PC
-
-- Reduce file size so it is more useful on retro-PCs.
-<details>
-
-  - Simple Methods
+- [x] Reduce file size so it is more useful on retro-PCs (≤ 360 KiB)
 	- [X] Look into runtime DOS executable compressors. Do any exist
           that are Free Software?
 	  - Surprisingly, Yes!
 	  - [UPX](https://github.com/upx/upx) can be installed with `apt install upx-ucl`.
 	  - Running `upx` on KERMIT.EXE cuts the size in half to 152 KB.
 	  - Noticeably slower start up time in emulation with DOSBOX.
-	- [ ] Compiler, linker flags.
-	- [ ] Investigate: why is Open Watcom executable 50 KB larger than
-          the one created by Microsoft tools in 1999. Is it Watcom's
-          standard library?
-	- [ ] Check how Open Watcom's PACKDATA works.
+ - [ ] Bundle with FreeDOS as a bootable 360KB disk image.
+ - [ ] Maybe include the numerous miscellaneous supplementary files
+       that came with the MS Kermit 3.14 distribution.
+ - [ ] Look into ways to reduce filesize that do not impact start up time  
+   <details>
+  
+	- Simple Methods
+	  - [ ] Compiler, linker flags.
+	  - [ ] Investigate: why is Open Watcom executable 50 KB larger than
+            the one created by Microsoft tools in 1999. Is it Watcom's
+            standard library?
+	  - [ ] Check how Open Watcom's PACKDATA works.
 		- Kermit 3.14 notes state that 40KB was saved by using
 			PACKDATA option of LINK.EXE. That option exists in Open
 			Watcom but produces no savings in file size.
@@ -147,9 +149,9 @@ You can then execute the .exe file in dosbox to test it out.
 			with, but I realized that since stack checking is
 			disabled, a smaller segment size might cause pointers to
 			wrap around!
-	  - [ ] What is the max size of the data structures in Kermit?
-  - Complex Methods
-	- [ ] Conditional compilation
+	    - [ ] What is the max size of the data structures in Kermit?
+   	- Complex Methods
+	  - [ ] Conditional compilation
 		- [ ] Add "Lite" versions (no NET, no GRAPHICS, neither) to Makefile.
 		- [X] What existing subsystems does CHECK command identify?
 			- IF: ???
@@ -162,13 +164,7 @@ You can then execute the .exe file in dosbox to test it out.
 			- [ ] serial port? script interpreter? H19 and other terms?
 			- [ ] weird networks like IPX
 		- [ ] Wrap them in #ifdef, same as Lite.
-	- [ ] Analyze algorithms and datastructures to trim for size.
-	- [ ] How large is Kermit's TCP/IP, DHCP, and DNS implementation? 
-		  Is [mTCP](http://www.brutman.com/mTCP/) smaller?
-</details>
-
-- [ ] Maybe include the numerous miscellaneous supplementary files
-      that came with the MS Kermit 3.14 distribution.
-
-- [ ] Bundle with FreeDOS as a bootable 360KB disk image.
-
+	  - [ ] Analyze algorithms and datastructures to trim for size.
+	  - [ ] How large is Kermit's TCP/IP, DHCP, and DNS implementation? 
+		Is [mTCP](http://www.brutman.com/mTCP/) smaller?
+   </details>
