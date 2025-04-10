@@ -134,18 +134,19 @@ You can then execute the .exe file in dosbox to test it out.
 
 - [x] Get it to compile under GNU/Linux
 - [x] Test the .EXE on an IBM PC
-- [x] Reduce file size so it is more useful on retro-PCs (≤ 360 KiB)
+- [x] Reduce file size so it is more useful on retro-PCs (currently it
+      is 322 KiB which leaves no room for documentation or DOS)
 	- [X] Look into runtime DOS executable compressors. Do any exist
           that are Free Software?
 	  - Surprisingly, Yes!
 	  - [UPX](https://github.com/upx/upx) can be installed with `apt install upx-ucl`.
 	  - Running `upx` on KERMIT.EXE cuts the size in half to 152 KB.
 	  - Noticeably slower start up time in emulation with DOSBOX.
+	 - [ ] Measure compressed start time on actual PC hardware. It
+           might be faster than uncompressed due to floppy access.
  - [ ] Bundle with FreeDOS as a bootable 360KB disk image.
  - [ ] Maybe include the numerous miscellaneous supplementary files
        that came with the MS Kermit 3.14 distribution.
- - [ ] Measure start time (including floppy access) of normal versus
-       upx EXE files on actual PC hardware.
  - [ ] Look into ways to reduce filesize that do not impact start up time
    <details>
   
