@@ -2,28 +2,29 @@
 
 <img src="README.md.d/mrpiggy.jpg" width="33%" align="right">
 
-An experimental fork of 
-[MS Kermit](https://github.com/hackerb9/mskermit). Cross compiles for
-MS-DOS on modern GNU/Linux systems using no proprietary software.
-The [executable](https://github.com/hackerb9/mrpiggy/releases/download/v0.0.2/kermit.exe) 
-is 16-bit (8086) and can run on original IBM PC hardware or in an
-emulator such as [dosbox](https://dosbox.com).
+An experimental fork of [MS Kermit][msk] with the build system ported
+to GNU make, jwasm, and Open Watcom C so that no proprietary software
+is needed to compile. The resulting [executable][exe] is 16-bit (8086)
+and can run on original IBM PC hardware or in an emulator such as
+[dosbox](https://dosbox.com).
+
+  [msk]: https://github.com/hackerb9/mskermit "MS Kermit source code"
+  [exe]: https://github.com/hackerb9/mrpiggy/releases/download/v0.0.2/kermit.exe "kermit.exe"
 
 <br clear=all>
 
 # Compilation
 
-If you have jwasm and owcc installed (see below), then you can compile
-a DOS executable of 
-[KERMIT.EXE](https://github.com/hackerb9/mrpiggy/releases/download/v0.0.2/kermit.exe)
-by simply running 'make' on your GNU/Linux box. 
+If you have jwasm and owcc installed (see below), then you can create
+a DOS executable of [kermit.exe][exe] by simply running 'make' on your
+GNU/Linux box.
 
 ## Prerequisites
 
 Compilation requires the [jwasm](https://github.com/tuxxi/masm-unix)
 assembler and
 [Open Watcom](https://github.com/open-watcom/open-watcom-v2/)
-C compiler (owcc).
+C compiler (owcc). GNU Make syntax is used in the Makefile.
 
 ### Jwasm
 
