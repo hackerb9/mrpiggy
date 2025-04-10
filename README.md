@@ -90,9 +90,11 @@ mv vi weevil
 
 Note that we've renamed the Watcom editor to `weevil` because calling
 it `vi` on a UNIX system is silly. It is clearly the love-child of
-Microsoft EDIT and `ed` plus it's a bit buggy (try Ctrl+C), thus
+Microsoft EDIT and [`ed`][ed] plus it's a bit buggy (try Ctrl+C), thus
 "weevil". 
 </details>
+
+  [ed]: https://www.gnu.org/fun/jokes/ed-msg.en.html "“Ed is the standard text editor.”"
 
 </details></ul>
 
