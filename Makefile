@@ -82,12 +82,14 @@ kermit.exe:	$(objects)
 
 ### UPX compression utility (optional)
 # Compress the kermit.exe file (from 300 KB to 152 KB).
-.PHONY: compress
+.PHONY: compress upx
 compress:	kermit.exe
-	cp -p kermit.exe kermit-tmp.exe
-	upx -qq --8086 kermit.exe
-	mv kermit-tmp.exe kermit-uncompressed.exe
-	ls -1s kermit*.exe
+	cp -p kermit.exe kerm-tmp.exe
+	upx -qq --8086 kermit.exe	# fails if already compressed
+	mv kerm-tmp.exe kermorig.exe
+	ls -1s kerm*.exe
+
+upx: compress
 
 ### These are the dependency relations (.o depends on .asm/.c and .h):
 
@@ -104,7 +106,7 @@ telnetdriver.o tcp.o ethsupport.o dns.o arp.o bootp.o icmp.o packetdriver.o netl
 
 .PHONY : clean
 clean :
-	rm kermit*.exe $(objects) *.err 2>/dev/null || true
+	rm kerm*.exe $(objects) *.err 2>/dev/null || true
 
 
 
