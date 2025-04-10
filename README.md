@@ -18,10 +18,10 @@ by simply running 'make' on your GNU/Linux box.
 
 ## Prerequisites
 
-To compile, requires the [jwasm](https://github.com/tuxxi/masm-unix)
+Compilation requires the [jwasm](https://github.com/tuxxi/masm-unix)
 assembler and
 [Open Watcom](https://github.com/open-watcom/open-watcom-v2/)
-C compiler (owcc). 
+C compiler (owcc).
 
 ### Jwasm
 
@@ -41,7 +41,7 @@ and install jwasm:</summary>
 
 ### Open Watcom C Compiler
 
-#### Install
+#### Watcom Install
 The Open Watcom v2 source code is overly large to download and git
 times out, so I had to install a prebuilt copy. 
 
@@ -93,7 +93,12 @@ Microsoft EDIT and `ed` plus it's a bit buggy (try Ctrl+C), thus
 
 </details>
 
-#### Setup
+#### Watcom Compiler Setup and Usage
+
+The [Makefile](Makefile) already does this for you, just run `make`.
+
+However, if you want to run the Watcom compiler by hand, read on.
+
 <details>
 
 To use the Watcom C compiler, you'll need to setup the compilation
@@ -105,11 +110,9 @@ export PATH+=:${WATCOM}/bin
 export INCLUDE=${WATCOM}/h
 ```
 
-You can run that at the command line or add it to the Makefile. 
-</details>
+You can run that at the command line or add it to a Makefile. To
+comile a program, you use the owcc command, like so:
 
-#### Usage
-<details>
 
 ``` bash
 owcc  -bdos  -mcmodel=s  -o myprog.exe  myprog.c
@@ -145,7 +148,7 @@ You can then execute the .exe file in dosbox to test it out.
 		- Kermit 3.14 notes state that 40KB was saved by using
 			PACKDATA option of LINK.EXE. That option exists in Open
 			Watcom but produces no savings in file size.
-   		- ** WARNING! ** I had thought PACKDATA was safe to experiment
+   		- **WARNING!** I had thought PACKDATA was safe to experiment
 			with, but I realized that since stack checking is
 			disabled, a smaller segment size might cause pointers to
 			wrap around!
