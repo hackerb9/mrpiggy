@@ -30,7 +30,7 @@ C compiler (owcc).
 I used tuxxi's [masm-unix](https://github.com/tuxxi/masm-unix) which
 made compiling jwasm on GNU/Linux straight forward. 
 
-<details><summary>Cut and paste this into a command line to compile
+<ul><details><summary>Cut and paste this into a command line to compile
 and install jwasm:</summary>
 
 ```bash
@@ -39,7 +39,7 @@ and install jwasm:</summary>
     cd masm_unix/src/JWasm
     cmake .  &&  make  &&  sudo cp -p jwasm /usr/local/bin/
 ```
-</details>
+</details></ul>
 
 ### Open Watcom C Compiler
 
@@ -47,7 +47,7 @@ and install jwasm:</summary>
 The Open Watcom v2 source code is overly large to download and git
 times out, so I had to install a prebuilt copy. 
 
-<details>
+<ul><details>
 <summary>Cut and paste these commands to install the Open Watcom v2 C compiler:</summary>
 
 ``` bash
@@ -93,17 +93,23 @@ Microsoft EDIT and `ed` plus it's a bit buggy (try Ctrl+C), thus
 "weevil". 
 </details>
 
-</details>
+</details></ul>
 
 #### Watcom Compiler Setup and Usage
 
-The [Makefile](Makefile) already does this for you, just run `make`.
+The [Makefile](Makefile) already sets up everything needed for
+compilation, presuming Watcom is installed in $HOME/ow2. To compile
+just run:
 
-However, if you want to run the Watcom compiler by hand, read on.
+```bash
+make
+```
 
-<details>
+However, if you want to use Watcom by hand, read on.
 
-To use the Watcom C compiler, you'll need to setup the compilation
+<ul><details>
+
+To use the Watcom C compiler, you'll first need to setup the compilation
 environment like so:
 
 ``` bash
@@ -113,7 +119,7 @@ export INCLUDE=${WATCOM}/h
 ```
 
 You can run that at the command line or add it to a Makefile. To
-comile a program, you use the owcc command, like so:
+compile a program, you use the owcc command, like so:
 
 
 ``` bash
@@ -122,7 +128,7 @@ owcc  -bdos  -mcmodel=s  -o myprog.exe  myprog.c
 
 You can then execute the .exe file in dosbox to test it out.
 
-</details>
+</details></ul>
 
 ## Todo
 
@@ -138,7 +144,9 @@ You can then execute the .exe file in dosbox to test it out.
  - [ ] Bundle with FreeDOS as a bootable 360KB disk image.
  - [ ] Maybe include the numerous miscellaneous supplementary files
        that came with the MS Kermit 3.14 distribution.
- - [ ] Look into ways to reduce filesize that do not impact start up time  
+ - [ ] Measure start time (including floppy access) of normal versus
+       upx EXE files on actual PC hardware.
+ - [ ] Look into ways to reduce filesize that do not impact start up time
    <details>
   
 	- Simple Methods
