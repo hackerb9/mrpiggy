@@ -2,77 +2,24 @@
 # Written by Joe R. Doupnik, 1991
 # Rejigged for GNU Make, jwasm, and Open Watcom by hackerb9, Sept 2021
 
+# Usage:   make		
+# 	  (compiles kermit.exe)
+#
+# Alternate:     make compress
+#	 	(compiles kermit.exe and compresses it with upx)
+
+
 # Define subsystems to remove
 #LITESUBSYSTEMS+=-Dno_graphics
 #LITESUBSYSTEMS+=-Dno_terminal
 #LITESUBSYSTEMS+=-Dno_tcp
 #LITESUBSYSTEMS+=-Dno_network
 
-
-######################################################################
-# OBSOLETE
-# File	MSVIBM.MAK						2 Feb 1991
-# Make file for MS Kermit using Microsoft's Make v4 and later and NMK.
-# Written by Joe R. Doupnik
-# MASM v6 or above and Microsoft C v6 or v7 are required.
-# If using MASM v6 execute this command file as
-#	NMK /f <name of this file> kermit.exe
-# or rename this file to be "makefile" and say
-#	NMK kermit.exe.
-# The final argument, kermit.exe, tells NMK which item to make.
-# NMK is smaller than NMAKE; MASM.EXE (v6) provides v5 compatibility.
-######################################################################
-
-######################################################################
-# OBSOLETE
-# MSC CL switches:
-#    /AS for small memory model (64KB code, everything else in 64KB DGROUP)
-#    /Zp1 for pack structures on one byte boundaries.
-#    /Gs to eliminate stack checking (optional, saves a little space & time).
-# and the two switches below for MSC v7
-#    /Zl to say no default library
-#    /Of for p-code quoting (supposed to be the default, but is broken)
-#    /nologo stops displaying MSC copyright notice on every compile
-######################################################################
-# OBSOLETE
-# MASM v6 switch /mx means preserve case of externals, required.
-# MASM v6 switch /Zm means use MASM v5.1 & earlier syntax. This switch is
-# implied by running v6 of MASM.EXE rather than running ML directly.
-######################################################################
-# OBSOLETE
-# The inference macros below call CL and MASM to create .o modules.
-# .c.obj:
-#  	cl /AS /Zp1 /Gs /W3 /Zl /Of /nologo -c $*.c
-# .asm.obj:
-#  	masm /mx $*.asm;
-######################################################################
-
-
 ### Set up compilation environment for Open Watcom compiler.
 # Set the WATCOM environment variable if you wish to override these defaults.
 export WATCOM ?= ${HOME}/ow2
 export PATH += :${WATCOM}/bin
 export INCLUDE ?= ${WATCOM}/h
-
-######################################################################
-# OBSOLETE
-### Testing: Maybe wcc compiler works better? Nope, no better than owcc.
-# -q		Quiet: Don't show logo at startup
-# -bt=DOS	Compile a DOS .exe file
-# -bc		Application type "console"
-# -0		16-bit 8086
-# -ms		small memory model: 64K code, 64K data group
-# -zp=1		pack structure members with alignment=1 byte
-# -s		remove stack overflow checks; optional
-# -ze		enable NEAR, FAR, EXPORT, etc
-# -zl		remove default library information
-# -ecc		Set calling convention to C (_underscore)
-# -DMSDOS	define MSDOS so netlibc.c will use _ourdiv()
-#
-#%.o : %.c
-#	wcc -q -bt=DOS -bc -0 -ms -zp=1 -s -ze -zl -ecc -DMSDOS $*.c
-######################################################################
-
 
 ### Build up command line for owcc compiler
 # Compile and link for a DOS .exe file
@@ -104,14 +51,10 @@ OWCCARGS+=-frerun-optimizer
 #OWCCARGS+=-Wl,'OPTION PACKCODE=16K'
 #OWCCARGS+=-Wl,'OPTION PACKDATA=16K'
 
+# Default to using owcc to compile C files
 %.o : %.c
 	owcc ${OWCCARGS} ${LITESUBSYSTEMS} -c $*.c
 
-
-######################################################################
-# OBSOLETE
-# Obsolete assembly method:	 masm /mx /Zm $*.asm;
-######################################################################
 
 ### JWASM args
 # -Cx  Casemap=none. Preserve case of externals, required.
@@ -137,19 +80,14 @@ kermit.exe:	$(objects)
 	owcc ${OWCCARGS} -o kermit.exe $^
 
 
-### UPX compression utility
-# UPX compress the Kermit.exe file from 300 KB to 152 KB. 
-.PHONY: upx
-upx:	kermit.exe
-	cp -p kermit.exe kermit-uncompressed.exe
-	upx --8086 kermit.exe
-
-
-### OBSOLETE
-# Here's how to link with wlink if we decide to go back to that.
-#kermit.exe:	$(objects)
-#	wlink  Option quiet  Name kermit.exe  System DOS  File { $^ }
-
+### UPX compression utility (optional)
+# Compress the kermit.exe file (from 300 KB to 152 KB).
+.PHONY: compress
+compress:	kermit.exe
+	cp -p kermit.exe kermit-tmp.exe
+	upx -qq --8086 kermit.exe
+	mv kermit-tmp.exe kermit-uncompressed.exe
+	ls -1s kermit*.exe
 
 ### These are the dependency relations (.o depends on .asm/.c and .h):
 
@@ -166,8 +104,8 @@ telnetdriver.o tcp.o ethsupport.o dns.o arp.o bootp.o icmp.o packetdriver.o netl
 
 .PHONY : clean
 clean :
-	rm kermit.exe $(objects) *.err 2>/dev/null || true
+	rm kermit*.exe $(objects) *.err 2>/dev/null || true
 
 
 
-# End of Kermit Make file.
+# End of Kermit Makefile.
