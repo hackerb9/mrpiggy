@@ -54,6 +54,8 @@ export WATCOM ?= ${HOME}/ow2
 export PATH += :${WATCOM}/bin
 export INCLUDE ?= ${WATCOM}/h
 
+######################################################################
+# OBSOLETE
 ### Testing: Maybe wcc compiler works better? Nope, no better than owcc.
 # -q		Quiet: Don't show logo at startup
 # -bt=DOS	Compile a DOS .exe file
@@ -69,6 +71,7 @@ export INCLUDE ?= ${WATCOM}/h
 #
 #%.o : %.c
 #	wcc -q -bt=DOS -bc -0 -ms -zp=1 -s -ze -zl -ecc -DMSDOS $*.c
+######################################################################
 
 
 ### Build up command line for owcc compiler
@@ -105,7 +108,10 @@ OWCCARGS+=-frerun-optimizer
 	owcc ${OWCCARGS} ${LITESUBSYSTEMS} -c $*.c
 
 
+######################################################################
+# OBSOLETE
 # Obsolete assembly method:	 masm /mx /Zm $*.asm;
+######################################################################
 
 ### JWASM args
 # -Cx  Casemap=none. Preserve case of externals, required.
@@ -133,7 +139,9 @@ kermit.exe:	$(objects)
 
 ### UPX compression utility
 # UPX compress the Kermit.exe file from 300 KB to 152 KB. 
+.PHONY: upx
 upx:	kermit.exe
+	cp -p kermit.exe kermit-uncompressed.exe
 	upx --8086 kermit.exe
 
 
