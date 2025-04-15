@@ -2,14 +2,16 @@
 
 <img src="README.md.d/mrpiggy.jpg" width="33%" align="right">
 
-An experimental fork of [MS Kermit][msk] with the build system ported
+An fork of [MS Kermit][msk] with the build system ported
 to GNU make, jwasm, and Open Watcom C so that no proprietary software
 is needed to compile. The resulting [executable][exe] is 16-bit (8086)
 and can run on original IBM PC hardware or in an emulator such as
 [dosbox](https://dosbox.com).
 
+This has been tested and works on genuine hardware as a replacement for MS Kermit.
+
   [msk]: https://github.com/hackerb9/mskermit "MS Kermit source code"
-  [exe]: https://github.com/hackerb9/mrpiggy/releases/download/v0.0.2/kermit.exe "kermit.exe"
+  [exe]: https://github.com/hackerb9/mrpiggy/releases/latest/download/kermit.exe "kermit.exe"
 
 <br clear=all>
 
@@ -149,6 +151,14 @@ pause will be shorter for faster CPUs.
 
 Or, if you have a large, fast drive, use the uncompressed executable,
 `kermit-uncompressed.exe`.
+
+## Supplementary files
+
+* [`mskermit.ini`][mskini] configuration file loaded on startup. This example file has been modified to default to using TELNET over a TCP/IP network instead of a serial connection. (This requires a packet driver for the network card has already been loaded.)
+* [`emacs.ini`][emacsini] for Emacs key bindings, currently loaded by mskermit.ini. This can take dozens of seconds to load on a floppy based system. 
+
+  [mskini]: ../../raw/main/supplemental/MSKERMIT.INI "Exampmle MS Kermit config file"
+  [emacsini]: ../../raw/main/supplemental/EMACS.INI "Rebind ALT and other keys for use with the Emacs text editor."
 
 ## Todo
 
