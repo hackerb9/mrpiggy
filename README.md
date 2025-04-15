@@ -142,14 +142,13 @@ upx-ucl`, for Debian GNU/Linux.
 
 Uncompressed, the file `kermit.exe` takes up 300 KB, which leaves no
 room for documentation or DOS on a 360 KB floppy disk. So, by default
-the Makefile will run `upx` to compress the executable down to 150 KB.
-On an IBM XT (8086 8MHz) it adds a twelve second pause while it
-uncompresses before running and saves six seconds of floppy disk
-access. This seems like a worthwhile tradeoff as the pause should be
-shorter for faster machines.
+the Makefile uses `upx` to compress the executable down to 150 KB. On
+an IBM PC (8088 4.77MHz) compression adds a twelve second pause before
+running and saves six seconds of floppy disk access. Of course, the
+pause will be shorter for faster CPUs.
 
-Or, if you have a large, fast drive, the uncompressed executable is
-compiled to file `kermit-uncompressed.exe`.
+Or, if you have a large, fast drive, use the uncompressed executable,
+`kermit-uncompressed.exe`.
 
 ## Todo
 
@@ -161,7 +160,7 @@ compiled to file `kermit-uncompressed.exe`.
           that are Free Software?
 	  - Surprisingly, Yes!
 	  - Running `upx` on KERMIT.EXE cuts the size in half to 152 KB.
-	  - Noticeably slower start up time in emulation with DOSBOX.
+ 	  - Noticeably slower start up time in emulation with DOSBOX.
 	 - [X] Measure compressed start time on actual PC hardware. It
            might be faster than uncompressed due to floppy access.
 		   (Nope! Saved six seconds of I/O and added twelve of CPU.)
@@ -203,5 +202,5 @@ compiled to file `kermit-uncompressed.exe`.
 		- [ ] Wrap them in #ifdef, same as Lite.
 	  - [ ] Analyze algorithms and datastructures to trim for size.
 	  - [ ] How large is Kermit's TCP/IP, DHCP, and DNS implementation? 
-		Is [mTCP](http://www.brutman.com/mTCP/) smaller?
+			Is [mTCP](http://www.brutman.com/mTCP/) smaller?
    </details>
