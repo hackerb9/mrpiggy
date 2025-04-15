@@ -3,11 +3,7 @@
 # Rejigged for GNU Make, jwasm, and Open Watcom by hackerb9, Sept 2021
 
 # Usage:   make		
-# 	  (compiles kermit.exe)
-#
-# Alternate:     make compress
-#	 	(compiles kermit.exe and compresses it with upx)
-
+# 	  (compiles and compresses kermit.exe)
 
 # Define subsystems to remove
 #LITESUBSYSTEMS+=-Dno_graphics
@@ -74,22 +70,16 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 	packetdriver.o netlibc.o netutil.o
 
 ### kermit.exe is the first and hence the implied target if none is specified.
+# Compress kermit-uncompressed.exe file (from 300 KB to 152 KB).
+kermit.exe:	kermit-uncompressed.exe
+	cp kermit-uncompressed.exe kermit.exe
+	upx -qq --8086 kermit.exe
+
 # OWCC serves as a nicer frontend to WLINK's wacky directives file.
 # Use -fd=directives.lnk if you wish to see the .LNK file owcc creates.
-kermit.exe:	$(objects)
-	owcc ${OWCCARGS} -o kermit.exe $^
+kermit-uncompressed.exe:	$(objects)
+	owcc ${OWCCARGS} -o kermit-uncompressed.exe $^
 
-
-### UPX compression utility (optional)
-# Compress the kermit.exe file (from 300 KB to 152 KB).
-.PHONY: compress upx
-compress:	kermit.exe
-	cp -p kermit.exe kerm-tmp.exe
-	upx -qq --8086 kermit.exe	# fails if already compressed
-	mv kerm-tmp.exe kermorig.exe
-	ls -1s kerm*.exe
-
-upx: compress
 
 ### These are the dependency relations (.o depends on .asm/.c and .h):
 
