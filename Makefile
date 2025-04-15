@@ -72,8 +72,7 @@ objects = commandparser.o communication.o filehandling.o main.o		\
 ### kermit.exe is the first and hence the implied target if none is specified.
 # Compress kermit-uncompressed.exe file (from 300 KB to 152 KB).
 kermit.exe:	kermit-uncompressed.exe
-	cp kermit-uncompressed.exe kermit.exe
-	upx -qq --8086 kermit.exe
+	upx -qq --8086 -o kermit.exe kermit-uncompressed.exe
 
 # OWCC serves as a nicer frontend to WLINK's wacky directives file.
 # Use -fd=directives.lnk if you wish to see the .LNK file owcc creates.
