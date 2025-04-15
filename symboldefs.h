@@ -37,11 +37,11 @@ endif	; no_terminal
 
 version equ	316		; master version number
 verdef	macro
-	db	' MS-DOS Kermit: 3.16 Beta 10'
+	db	' MS-DOS Kermit: 3.16 Beta 10 + Mr. Piggy'
 ifdef	nls_portuguese
 	db	' Portuguese'
 endif	; nls_portuguese
-	db	' 22 April 2001'
+	db	' 14 April 2025'
 	endm
 
 BELL	EQU	07H
