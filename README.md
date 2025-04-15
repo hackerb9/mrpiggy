@@ -25,6 +25,8 @@ Compilation requires the [jwasm](https://github.com/tuxxi/masm-unix)
 assembler and
 [Open Watcom](https://github.com/open-watcom/open-watcom-v2/)
 C compiler (owcc). GNU Make syntax is used in the Makefile.
+[UPX](https://github.com/upx/upx) is used to compress kermit.exe
+from 300KB to 150KB.
 
 ### Jwasm
 
@@ -133,23 +135,41 @@ You can then execute the .exe file in dosbox to test it out.
 
 </details></ul>
 
+### UPX
+
+[UPX](https://github.com/upx/upx) can be installed with `apt install
+upx-ucl`, for Debian GNU/Linux.
+
+Uncompressed, the file `kermit.exe` takes up 300 KB, which leaves no
+room for documentation or DOS on a 360 KB floppy disk. So, by default
+the Makefile will run `upx` to compress the executable down to 150 KB.
+On an IBM XT (8086 8MHz) it adds a twelve second pause while it
+uncompresses before running and saves six seconds of floppy disk
+access. This seems like a worthwhile tradeoff as the pause should be
+shorter for faster machines.
+
+Or, if you have a large, fast drive, the uncompressed executable is
+compiled to file `kermit-uncompressed.exe`.
+
 ## Todo
 
 - [x] Get it to compile under GNU/Linux
 - [x] Test the .EXE on an IBM PC
 - [x] Reduce file size so it is more useful on retro-PCs (currently it
-      is 322 KiB which leaves no room for documentation or DOS)
+      is 322 KiB 
 	- [X] Look into runtime DOS executable compressors. Do any exist
           that are Free Software?
 	  - Surprisingly, Yes!
-	  - [UPX](https://github.com/upx/upx) can be installed with `apt install upx-ucl`.
 	  - Running `upx` on KERMIT.EXE cuts the size in half to 152 KB.
 	  - Noticeably slower start up time in emulation with DOSBOX.
-	 - [ ] Measure compressed start time on actual PC hardware. It
+	 - [X] Measure compressed start time on actual PC hardware. It
            might be faster than uncompressed due to floppy access.
+		   (Nope! Saved six seconds of I/O and added twelve of CPU.)
  - [ ] Bundle with FreeDOS as a bootable 360KB disk image.
  - [ ] Maybe include the numerous miscellaneous supplementary files
        that came with the MS Kermit 3.14 distribution.
+ - [ ] Configure Makefile to automatically add builddate to `symboldefs.h`.
+ - [ ] Is there any benefit to using mTCP's network code instead of Kermit's?
  - [ ] Look into ways to reduce filesize that do not impact start up time
    <details>
   
